@@ -49,10 +49,6 @@ Resources:
       CodeUri: ../create_release_notes
       Handler: create_release_notes.lambda_handler
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
-      Environment:
-        Variables:
-          JIRA_TOKEN_SECRET_NAME: !Sub "${AWS::StackName}-jiraToken"
-          CONFLUENCE_TOKEN_SECRET_NAME: !Sub "${AWS::StackName}-confluenceToken"
 
   ReleaseNotesSecretsKMSKey:
     Type: AWS::KMS::Key

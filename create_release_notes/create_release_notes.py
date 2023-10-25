@@ -210,10 +210,10 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
 
         if JIRA_TOKEN is None:
-            JIRA_TOKEN = parameters.get_secret(os.getenv("JIRA_TOKEN_SECRET_NAME"))
+            JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
         if CONFLUENCE_TOKEN is None:
             CONFLUENCE_TOKEN = parameters.get_secret(
-                os.getenv("CONFLUENCE_TOKEN_SECRET_NAME")
+                "account-resources-confluenceToken"
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
