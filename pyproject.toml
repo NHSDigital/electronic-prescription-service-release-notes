@@ -1,0 +1,45 @@
+[project]
+python = "^3.11"
+
+[tool.poetry]
+name = "aws-prescriptions"
+version = "0.0.1-alpha"
+description = "Prescriptions API Definitions"
+license = "MIT"
+authors = [
+    "Anthony Brown <anthony.brown8@nhs.net>",
+    "Matthew Popat <matthew.popat1@nhs.net>",
+    "Chris Matus <chris.matus@nhs.net>",
+    "Phil Gee <phil.gee@nhs.net>",
+    "Kris Szlapa <kris.szlapa1@nhs.net>",
+    "Jack Spagnoli <jack.spagnoli1@nhs.net>",
+    "Tom Smith <tom.smith24@nhs.net>",
+    "Adam Brown <adam.brown41@nhs.net>",
+    "Sean Steberis <sean.steberis2@nhs.net>",
+    "Kate.Bobyn <kate.bobyn2@nhs.net>"
+]
+readme = "README.md"
+repository = "https://github.com/NHSDigital/electronic-prescription-service-release-notes"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+atlassian-python-api = "^3.34.0"
+pygithub = "^2.1.1"
+aws-lambda-powertools = "^2.26.0"
+fastjsonschema = "^2.18.1"
+awscliv2 = "^2.2.0"
+gitpython = "^3.1.40"
+semver = "^3.0.2"
+
+[tool.poetry.scripts]
+
+[tool.poetry.group.dev.dependencies]
+aws-sam-cli = "^1.99.0"
+pip-licenses = "^4.3.3"
+black = "^23.10.1"
+flake8 = "^6.1.0"
+pre-commit = "^3.5.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

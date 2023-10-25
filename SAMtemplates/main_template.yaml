@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Create release notes lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 50
+    MemorySize: 256
+    Architectures:
+      - x86_64
+    Runtime: python3.11
+
+Resources:
+  CreateReleaseNotesResources:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: lambda_resources.yaml
+      Parameters:
+        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
+        SplunkSubscriptionFilterRole: "n/a"
+        SplunkDeliveryStream: "n/a"
+        EnableSplunk: "false"
+        LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
+        AccessToSpine: "false"
+        LogRetentionDays: "30"
+
+  LambdaSecretsPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "allow-access-to-atlasian-secrets"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - secretsmanager:GetSecretValue
+            Resource:
+              - !GetAtt JiraToken.Id
+              - !GetAtt ConfluenceToken.Id
+      Roles:
+        - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
+
+  createReleaseNotes:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-createReleaseNotes"
+      CodeUri: ../create_release_notes
+      Handler: create_release_notes.lambda_handler
+      Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
+      Environment:
+        Variables:
+          JIRA_TOKEN_SECRET_NAME: !Sub "${AWS::StackName}-jiraToken"
+          CONFLUENCE_TOKEN_SECRET_NAME: !Sub "${AWS::StackName}-confluenceToken"
+
+  ReleaseNotesSecretsKMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Version: 2012-10-17
+        Id: key-s3
+        Statement:
+          - Sid: Enable IAM User Permissions
+            Effect: Allow
+            Principal:
+              AWS: !Join
+                - ""
+                - - "arn:aws:iam::"
+                  - !Ref "AWS::AccountId"
+                  - ":root"
+            Action: "kms:*"
+            Resource: "*"
+          - Sid: Allow Lambda logging
+            Effect: Allow
+            Principal:
+              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
+            Action:
+              - kms:Encrypt*
+              - kms:Decrypt*
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:Describe*
+            Resource: "*"
+            Condition:
+              ArnEquals:
+                kms:EncryptionContext:aws:logs:arn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+
+  JiraToken:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: jira token
+      KmsKeyId: !ImportValue account-resources:SecretsKMSKey
+      SecretString: ChangeMe
+      Name: !Sub "${AWS::StackName}-jiraToken"
+
+  ConfluenceToken:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: confluence token
+      KmsKeyId: !ImportValue account-resources:SecretsKMSKey
+      SecretString: ChangeMe
+      Name: !Sub "${AWS::StackName}-confluenceToken"
+
+  LambdaExecutionPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "allow-execution-of-release-notes-lambda"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource:
+              - !GetAtt createReleaseNotes.Arn
+      Roles:
+        - "ci-resources-CloudFormationDeployRole-1SQGXRGG0ZB5M"
+
+Outputs:
+  CreateReleaseNotesLambdaName:
+    Description: Name of the create release notes lambda
+    Value: !Ref createReleaseNotes
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "CreateReleaseNotesLambdaName"]]
