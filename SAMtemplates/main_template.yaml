@@ -37,8 +37,8 @@ Resources:
             Action:
               - secretsmanager:GetSecretValue
             Resource:
-              - !GetAtt JiraToken.Id
-              - !GetAtt ConfluenceToken.Id
+              - !ImportValue account-resources:JiraToken
+              - !ImportValue account-resources:ConfluenceToken
       Roles:
         - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
 
@@ -86,22 +86,6 @@ Resources:
               ArnEquals:
                 kms:EncryptionContext:aws:logs:arn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
 
-  JiraToken:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Description: jira token
-      KmsKeyId: !ImportValue account-resources:SecretsKMSKey
-      SecretString: ChangeMe
-      Name: !Sub "${AWS::StackName}-jiraToken"
-
-  ConfluenceToken:
-    Type: AWS::SecretsManager::Secret
-    Properties:
-      Description: confluence token
-      KmsKeyId: !ImportValue account-resources:SecretsKMSKey
-      SecretString: ChangeMe
-      Name: !Sub "${AWS::StackName}-confluenceToken"
-
   LambdaExecutionPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
@@ -115,7 +99,7 @@ Resources:
             Resource:
               - !GetAtt createReleaseNotes.Arn
       Roles:
-        - "ci-resources-CloudFormationDeployRole-1SQGXRGG0ZB5M"
+        - !ImportValue ci-resources:CloudFormationDeployRoleName
 
 Outputs:
   CreateReleaseNotesLambdaName:

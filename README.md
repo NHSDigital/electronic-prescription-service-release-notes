@@ -95,7 +95,7 @@ You will need the "Execute Analysis" permission for the project (NHSDigital_elec
 
 ### Continuous deployment for testing
 
-You can run the following command to deploy the code to AWS for testing. Once deployed you will need to set the secrets confluence token and jira token to valid tokens. See https://confluence.atlassian.com/enterprise/using-personal-access-tokens-1026032365.html on how to create these
+You can run the following command to deploy the code to AWS for testing.
 
 ```
 make sam-sync

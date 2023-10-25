@@ -45,7 +45,7 @@ jobs:
           echo ${{ inputs.COMMIT_ID }}
           export artifact_bucket=$(aws cloudformation list-exports --output json | \
             jq -r '.Exports[] | select(.Name == "account-resources:ArtifactsBucket") | .Value' |grep -o '[^:]*$')
-          export artifact_bucket_prefix=${{ inputs.ARTIFACT_BUCKET_PREFIX }}
+          export artifact_bucket_prefix=release_notes/${{ inputs.ARTIFACT_BUCKET_PREFIX }}
           export template_file=template.yaml
           export stack_name=${{ inputs.STACK_NAME }}
           export VERSION_NUMBER=${{ inputs.VERSION_NUMBER }}
