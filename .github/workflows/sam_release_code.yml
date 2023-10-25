@@ -37,7 +37,7 @@ jobs:
         name: download build artifact
         with:
           name: ${{ inputs.BUILD_ARTIFACT }}
-          path: .aws/sam
+          path: .aws-sam/build
 
       - shell: bash
         name: release code
