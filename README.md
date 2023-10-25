@@ -182,6 +182,13 @@ template.
 - `aws-configure` configures a connection to AWS
 - `aws-login` reconnects to AWS from a previously configured connection
 
+#### Create release notes
+
+- `publish-pfp-aws-release-notes-int` Creates release notes for pfp AWS layer comparing what is currently in int to what is currently in dev
+- `publish-pfp-aws-release-notes-prod` Creates release notes for pfp AWS layer comparing what is currently in prod to what is currently in dev
+- `publish-pfp-apigee-release-notes-int` Creates release notes for pfp Apigee layer comparing what is currently in int to what is currently in dev
+- `publish-pfp-apigee-release-notes-prod` Creates release notes for pfp Apigee layer comparing what is currently in prod to what is currently in dev
+
 ### Github folder
 
 This .github folder contains workflows and templates related to github
