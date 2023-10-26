@@ -113,4 +113,5 @@ deep-clean: clean
 	rm -rf .venv
 
 test:
-	@echo "NOT IMPLEMENTED"
+	poetry run python -m coverage run -m unittest
+	poetry run python -m coverage xml

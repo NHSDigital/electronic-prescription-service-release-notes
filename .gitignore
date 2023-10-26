@@ -21,3 +21,5 @@ release_notes
 lib/
 *.tsbuildinfo
 create_release_notes/requirements.txt
+.coverage
+coverage.xml
