@@ -85,7 +85,7 @@ Resources:
   LambdaExecutionPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
-      PolicyName: "allow-execution-of-release-notes-lambda"
+      PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
