@@ -1,6 +1,6 @@
 # Prescriptions API
 
-![Build](https://github.com/NHSDigital/electronic-prescription-service-release-notes/workflows/release/badge.svg?branch=main)
+![Build](https://github.com/NHSDigital/electronic-prescription-service-release-notes/actions/workflows/release.yml/badge.svg)
 
 This is the code for a lambda function to create release notes on confluence for electronic prescription service code. It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted
 
