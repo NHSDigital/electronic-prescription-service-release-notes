@@ -71,13 +71,13 @@ tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pyte
 
 [[package]]
 name = "aws-lambda-builders"
-version = "1.40.0"
+version = "1.41.0"
 description = "Python library to compile, build & package AWS Lambda functions for several runtimes & frameworks."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "aws_lambda_builders-1.40.0-py3-none-any.whl", hash = "sha256:660b1d284320172beca39971b2932549d1ae642aa94500bcf70b612771957480"},
-    {file = "aws_lambda_builders-1.40.0.tar.gz", hash = "sha256:a48f083f750d62d5a5cf0bac1fe224682b5ed83dd821d794802c791ec22e077b"},
+    {file = "aws_lambda_builders-1.41.0-py3-none-any.whl", hash = "sha256:b26280609269696d4c7ebe6ea208de5d02a8e4f14711ceac265510e28de65258"},
+    {file = "aws_lambda_builders-1.41.0.tar.gz", hash = "sha256:d48d0d9b704319cdb6bb19918a72bf6c06fd3a7012848f6bcc4b906d5686db17"},
 ]
 
 [package.dependencies]
@@ -85,7 +85,7 @@ setuptools = "*"
 wheel = "*"
 
 [package.extras]
-dev = ["black (==22.6.0)", "black (==23.9.1)", "coverage (==7.2.7)", "coverage (==7.3.2)", "flake8 (==3.3.0)", "flake8 (==3.8.4)", "isort (>=4.2.5,<5)", "parameterized (==0.9.0)", "pyelftools (>=0.30,<1.0)", "pytest (>=6.1.1)", "pytest-cov (==4.1.0)", "ruff (==0.0.292)"]
+dev = ["black (==22.6.0)", "black (==23.10.1)", "coverage (==7.2.7)", "coverage (==7.3.2)", "flake8 (==3.3.0)", "flake8 (==3.8.4)", "isort (>=4.2.5,<5)", "parameterized (==0.9.0)", "pyelftools (>=0.30,<1.0)", "pytest (>=6.1.1)", "pytest-cov (==4.1.0)", "ruff (==0.1.4)"]
 
 [[package]]
 name = "aws-lambda-powertools"
@@ -112,17 +112,17 @@ validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 
 [[package]]
 name = "aws-sam-cli"
-version = "1.101.0"
+version = "1.102.0"
 description = "AWS SAM CLI is a CLI tool for local development and testing of Serverless applications"
 optional = false
 python-versions = ">=3.8, <=4.0, !=4.0"
 files = [
-    {file = "aws-sam-cli-1.101.0.tar.gz", hash = "sha256:6121033c182dd9e597b0808cae55725a497957a6f61657810008ab6083171323"},
-    {file = "aws_sam_cli-1.101.0-py3-none-any.whl", hash = "sha256:9f5a797875175f1779599c651b4ddeb975bd4992494e3c2164b837ae6dfb828c"},
+    {file = "aws-sam-cli-1.102.0.tar.gz", hash = "sha256:64a1f61dfb1b5a3aa058456c20c1e5133b1458b4a298d0e96b671aa6452f8b42"},
+    {file = "aws_sam_cli-1.102.0-py3-none-any.whl", hash = "sha256:61e50517dcaf226d833251b6e51c0607f088eac2e32ee98c648b20285029f35e"},
 ]
 
 [package.dependencies]
-aws-lambda-builders = "1.40.0"
+aws-lambda-builders = "1.41.0"
 aws-sam-translator = "1.79.0"
 boto3 = ">=1.26.109,<2"
 boto3-stubs = {version = "1.28.80", extras = ["apigateway", "cloudformation", "ecr", "iam", "kinesis", "lambda", "s3", "schemas", "secretsmanager", "signer", "sqs", "stepfunctions", "sts", "xray"]}
@@ -3187,4 +3187,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "056b5fe7813271398933d17d222863890e41a3e1300c4e26ca2e182bd21802f2"
+content-hash = "d16fa19fea993071e3fa8be091069d0d571e24c0eb366821cde121a4361dd328"
