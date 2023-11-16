@@ -4,6 +4,7 @@ from atlassian import Jira, Confluence
 from typing import Tuple
 import traceback
 import sys
+import json
 from github import Github
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
@@ -83,6 +84,18 @@ INPUT_SCHEMA = {
             "title": "The release notes page title",
             "examples": ["Current PfP AWS layer release notes - PROD"],
         },
+        "createReleaseCandidate": {
+            "$id": "#/properties/createReleaseCandidate",
+            "type": "string",
+            "title": "Whether to create a release candidate page",
+            "examples": ["true"],
+        },
+        "releasePrefix": {
+            "$id": "#/properties/releasePrefix",
+            "type": "string",
+            "title": "Prefix for the release in jira",
+            "examples": ["Current PfP AWS layer release notes - PROD"],
+        },
     },
 }
 
@@ -126,6 +139,8 @@ def create_release_notes(
     repo_name: str,
     target_environment: str,
     product_name: str,
+    create_release_candidate: str,
+    release_name: str,
 ) -> str:
     gh = Github()
     repo = gh.get_repo(f"NHSDigital/{repo_name}")
@@ -158,6 +173,15 @@ def create_release_notes(
                 impact,
                 business_service_impact,
             ) = get_jira_details(jira, ticket_number)
+            if create_release_candidate == "true":
+                # TODO CHECK THIS WORKS
+                fields = json.loads(f'{"fixVersions": {release_name}}')
+                jira.edit_issue(
+                    issue_id_or_key=ticket_number,
+                    fields=fields,
+                )
+                # TODO GET STATUS ID
+                jira.issue_transition(issue_key=ticket_number, status=1234)
         else:
             jira_link = "n/a"
             jira_title = "n/a"
@@ -205,6 +229,8 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         product_name = event["productName"]
         release_notes_page_id = event["releaseNotesPageId"]
         release_notes_page_title = event["releaseNotesPageTitle"]
+        create_release_candidate = event["createReleaseCandidate"]
+        release_prefix = event["releasePrefix"]
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
@@ -217,14 +243,38 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-
+        release_name = ""
+        if create_release_candidate == "true":
+            # TODO CHECK THIS WORKS AND RESPONSE
+            release_name = jira.add_version(
+                project_key="AEA",
+                project_id="JJJ",
+                version=f"{release_prefix}{target_tag}",
+            )
         output = create_release_notes(
-            jira, current_tag, target_tag, repo_name, target_environment, product_name
+            jira,
+            current_tag,
+            target_tag,
+            repo_name,
+            target_environment,
+            product_name,
+            create_release_candidate,
+            release_name,
         )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
-        confluence.update_page(
-            page_id=release_notes_page_id, body=output, title=release_notes_page_title
-        )
+        if create_release_candidate == "true":
+            confluence.create_page(
+                parent_id=release_notes_page_id,
+                title=release_notes_page_title,
+                body=output,
+                space="APIMC",
+            )
+        else:
+            confluence.update_page(
+                page_id=release_notes_page_id,
+                body=output,
+                title=release_notes_page_title,
+            )
         return {"status": "OK", "statusCode": 200}
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
