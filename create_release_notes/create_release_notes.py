@@ -4,7 +4,6 @@ from atlassian import Jira, Confluence
 from typing import Tuple
 import traceback
 import sys
-import json
 from github import Github
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
@@ -174,14 +173,12 @@ def create_release_notes(
                 business_service_impact,
             ) = get_jira_details(jira, ticket_number)
             if create_release_candidate == "true":
-                # TODO CHECK THIS WORKS
-                fields = json.loads(f'{"fixVersions": {release_name}}')
+                fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
                 jira.edit_issue(
                     issue_id_or_key=ticket_number,
                     fields=fields,
                 )
-                # TODO GET STATUS ID
-                jira.issue_transition(issue_key=ticket_number, status=1234)
+                jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
             jira_link = "n/a"
             jira_title = "n/a"
@@ -248,7 +245,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             # TODO CHECK THIS WORKS AND RESPONSE
             release_name = jira.add_version(
                 project_key="AEA",
-                project_id="JJJ",
+                project_id="15116",
                 version=f"{release_prefix}{target_tag}",
             )
         output = create_release_notes(
