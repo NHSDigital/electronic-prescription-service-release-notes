@@ -15,7 +15,7 @@ install: install-python install-hooks
 publish-pfp-aws-release-notes-int:
 	dev_tag=$$(aws cloudformation describe-stacks --stack-name dev-ci --profile prescription-dev --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
 	int_tag=$$(aws cloudformation describe-stacks --stack-name int-ci --profile prescription-int --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
-	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescritpions for Patients AWS layer\", \"releaseNotesPageId\": \"693750027\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - INT\" } > /tmp/payload.json
+	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"693750027\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - INT\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
@@ -25,7 +25,7 @@ publish-pfp-aws-release-notes-int:
 publish-pfp-aws-release-notes-prod:
 	dev_tag=$$(aws cloudformation describe-stacks --stack-name dev-ci --profile prescription-dev --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
 	prod_tag=$$(aws cloudformation describe-stacks --stack-name prod-ci --profile prescription-prod --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
-	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescritpions for Patients AWS layer\", \"releaseNotesPageId\": \"693750029\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - PROD\" } > /tmp/payload.json
+	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"693750029\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
@@ -35,7 +35,7 @@ publish-pfp-aws-release-notes-prod:
 publish-pfp-apigee-release-notes-int:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
-	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescritpions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750035\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - INT\" } > /tmp/payload.json
+	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750035\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - INT\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
@@ -45,7 +45,7 @@ publish-pfp-apigee-release-notes-int:
 publish-pfp-apigee-release-notes-prod:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
 	prod_tag=$$(curl -s "https://api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
-	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescritpions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750032\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - PROD\" } > /tmp/payload.json
+	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750032\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
