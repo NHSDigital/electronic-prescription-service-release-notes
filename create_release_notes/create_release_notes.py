@@ -232,8 +232,8 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         product_name = event["productName"]
         release_notes_page_id = event["releaseNotesPageId"]
         release_notes_page_title = event["releaseNotesPageTitle"]
-        create_release_candidate = event["createReleaseCandidate"]
-        release_prefix = event["releasePrefix"]
+        create_release_candidate = event.get("createReleaseCandidate", "false")
+        release_prefix = event.get("releasePrefix")
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
