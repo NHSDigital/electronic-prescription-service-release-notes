@@ -9,6 +9,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities import parameters
+from html import escape
 
 JIRA_URL = "https://nhsd-jira.digital.nhs.uk/"
 CONFLUENCE_URL = "https://nhsd-confluence.digital.nhs.uk/"
@@ -267,18 +268,20 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
         if create_release_candidate == "true":
-            logger.info("creating RC release notes page")
+            logger.info(
+                f"creating RC release notes page under page {release_notes_page_id}"
+            )
             confluence.create_page(
                 parent_id=release_notes_page_id,
                 title=release_notes_page_title,
-                body=output,
+                body=escape(output),
                 space="APIMC",
             )
         else:
-            logger.info("updating release notes page")
+            logger.info(f"updating release notes page {release_notes_page_id}")
             confluence.update_page(
                 page_id=release_notes_page_id,
-                body=output,
+                body=escape(output),
                 title=release_notes_page_title,
             )
         return {"status": "OK", "statusCode": 200}
