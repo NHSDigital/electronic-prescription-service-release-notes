@@ -173,10 +173,16 @@ def create_release_notes(
                 business_service_impact,
             ) = get_jira_details(jira, ticket_number)
             if create_release_candidate == "true":
+                logger.info(
+                    f"Adding fix version {release_name} to ticket {ticket_number}"
+                )
                 fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
                 jira.edit_issue(
                     issue_id_or_key=ticket_number,
                     fields=fields,
+                )
+                logger.info(
+                    f"Setting status of ticket {ticket_number} to Ready for test"
                 )
                 jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
@@ -242,11 +248,12 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
         release_name = ""
         if create_release_candidate == "true":
-            # TODO CHECK THIS WORKS AND RESPONSE
-            release_name = jira.add_version(
+            release_name = f"{release_prefix}{target_tag}"
+            logger.info(f"creating release {release_name} in JIRA")
+            jira.add_version(
                 project_key="AEA",
                 project_id="15116",
-                version=f"{release_prefix}{target_tag}",
+                version=release_name,
             )
         output = create_release_notes(
             jira,
@@ -260,6 +267,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
         if create_release_candidate == "true":
+            logger.info("creating RC release notes page")
             confluence.create_page(
                 parent_id=release_notes_page_id,
                 title=release_notes_page_title,
@@ -267,6 +275,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
                 space="APIMC",
             )
         else:
+            logger.info("updating release notes page")
             confluence.update_page(
                 page_id=release_notes_page_id,
                 body=output,
