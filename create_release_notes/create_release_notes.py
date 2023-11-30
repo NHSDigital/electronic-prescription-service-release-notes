@@ -4,7 +4,7 @@ from atlassian import Jira, Confluence
 from typing import Tuple
 import traceback
 import sys
-from github import Github
+from github import Github, Auth
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
@@ -140,8 +140,10 @@ def create_release_notes(
     product_name: str,
     create_release_candidate: str,
     release_name: str,
+    github_token: str,
 ) -> str:
-    gh = Github()
+    auth = Auth.Token(github_token)
+    gh = Github(auth=auth)
     repo = gh.get_repo(f"NHSDigital/{repo_name}")
 
     output = ["This page is auto generated. Any manual modifications will be lost"]
@@ -237,6 +239,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
+        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
         if JIRA_TOKEN is None:
             JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
@@ -264,6 +267,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             product_name,
             create_release_candidate,
             release_name,
+            GITHUB_TOKEN,
         )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
         if create_release_candidate == "true":

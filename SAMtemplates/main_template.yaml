@@ -49,6 +49,10 @@ Resources:
       CodeUri: ../create_release_notes
       Handler: create_release_notes.lambda_handler
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
+      Environment:
+        Variables:
+          GITHUB_TOKEN: GITHUB_TOKEN
+
 
   ReleaseNotesSecretsKMSKey:
     Type: AWS::KMS::Key
