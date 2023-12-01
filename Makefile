@@ -17,7 +17,7 @@ publish-pfp-aws-release-notes-int:
 	int_tag=$$(aws cloudformation describe-stacks --stack-name int-ci --profile prescription-int --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
 	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"693750027\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - INT\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -25,9 +25,9 @@ publish-pfp-aws-release-notes-int:
 publish-pfp-aws-rc-release-notes-int:
 	dev_tag=$$(aws cloudformation describe-stacks --stack-name dev-ci --profile prescription-dev --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
 	int_tag=$$(aws cloudformation describe-stacks --stack-name int-ci --profile prescription-int --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
-	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"PfP-AWS-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"710051481\", \"releaseNotesPageTitle\": \"$$(date +'%d-%m-%y') [INT] PfP-AWS-$$int_tag\" } > /tmp/payload.json
+	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"PfP-AWS-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"710051481\", \"releaseNotesPageTitle\": \"PfP-AWS-$$dev_tag - Deployed to [INT] on $$(date +'%d-%m-%y')\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -37,7 +37,7 @@ publish-pfp-aws-release-notes-prod:
 	prod_tag=$$(aws cloudformation describe-stacks --stack-name prod-ci --profile prescription-prod --query "Stacks[0].Tags[?Key=='version'].Value" --output text); \
 	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptionsforpatients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescriptions for Patients AWS layer\", \"releaseNotesPageId\": \"693750029\", \"releaseNotesPageTitle\": \"Current PfP AWS layer release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -47,7 +47,7 @@ publish-pfp-apigee-release-notes-int:
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
 	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750035\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - INT\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -55,9 +55,9 @@ publish-pfp-apigee-release-notes-int:
 publish-pfp-apigee-rc-release-notes-int:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
-	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"PfP-Apigee-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"710051478\", \"releaseNotesPageTitle\": \"$$(date +'%d-%m-%y') [INT] PfP-Apigee-$$int_tag\" } > /tmp/payload.json
+	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"PfP-Apigee-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"INT\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"710051478\", \"releaseNotesPageTitle\": \"PfP-APigee-$$dev_tag - Deployed to [INT] on $$(date +'%d-%m-%y')\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -67,7 +67,7 @@ publish-pfp-apigee-release-notes-prod:
 	prod_tag=$$(curl -s "https://api.service.nhs.uk/prescriptions-for-patients/_ping" | jq --raw-output ".version"); \
 	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"prescriptions-for-patients\", \"targetEnvironment\": \"PROD\", \"productName\": \"Prescriptions for Patients Apigee layer\", \"releaseNotesPageId\": \"693750032\", \"releaseNotesPageTitle\": \"Current PfP Apigee layer release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -77,7 +77,7 @@ publish-fhir-release-notes-int:
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
 	echo { \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-api\", \"targetEnvironment\": \"INT\", \"productName\": \"FHIR API\", \"releaseNotesPageId\": \"587367089\", \"releaseNotesPageTitle\": \"Current FHIR API release notes - INT\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -85,9 +85,9 @@ publish-fhir-release-notes-int:
 publish-fhir-rc-release-notes-int:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
-	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"FHIR-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-api\", \"targetEnvironment\": \"INT\", \"productName\": \"FHIR API\", \"releaseNotesPageId\": \"587372008\", \"releaseNotesPageTitle\": \"$$(date +'%d-%m-%y') [INT] FHIR-$$int_tag\" } > /tmp/payload.json
+	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"FHIR-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-api\", \"targetEnvironment\": \"INT\", \"productName\": \"FHIR API\", \"releaseNotesPageId\": \"587372008\", \"releaseNotesPageTitle\": \"FHIR-$$dev_tag - Deployed to [INT] on $$(date +'%d-%m-%y')\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -97,7 +97,7 @@ publish-fhir-release-notes-prod:
 	prod_tag=$$(curl -s "https://api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
 	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-api\", \"targetEnvironment\": \"PROD\", \"productName\": \"FHIR API\", \"releaseNotesPageId\": \"587367100\", \"releaseNotesPageTitle\": \"Current FHIR API release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
-		--function-name "release-notes-createReleaseNotes" \
+		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
@@ -127,7 +127,10 @@ sam-deploy-package: guard-artifact_bucket guard-artifact_bucket_prefix guard-sta
 		--role-arn $$cloud_formation_execution_role \
 		--no-confirm-changeset \
 		--force-upload \
-		--tags "version=$$VERSION_NUMBER"
+		--tags "version=$$VERSION_NUMBER" \
+		--parameter-overrides \
+			GITHUB_TOKEN=$$PAT_GITHUB_TOKEN
+
 
 sam-validate: 
 	sam validate --template-file SAMtemplates/main_template.yaml --region eu-west-2

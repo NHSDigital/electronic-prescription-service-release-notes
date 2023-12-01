@@ -107,3 +107,4 @@ jobs:
       VERSION_NUMBER: ${{needs.tag_release.outputs.spec_version}}
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_DEPLOY_ROLE }}
+      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}

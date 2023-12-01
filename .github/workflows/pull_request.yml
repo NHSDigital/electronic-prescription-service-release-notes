@@ -64,3 +64,4 @@ jobs:
       VERSION_NUMBER: RELEASE-NOTES-PR-${{ needs.get_issue_number.outputs.issue_number }}
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_DEPLOY_ROLE }}
+      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}

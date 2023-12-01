@@ -2,6 +2,10 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Create release notes lambda
+Parameters:
+  GithubToken:
+    Type: String
+    Description: The github token to use
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -51,7 +55,7 @@ Resources:
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
       Environment:
         Variables:
-          GITHUB_TOKEN: GITHUB_TOKEN
+          GITHUB_TOKEN: !Ref GithubToken
 
 
   ReleaseNotesSecretsKMSKey:
