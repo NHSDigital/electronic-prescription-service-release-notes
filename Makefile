@@ -101,6 +101,15 @@ publish-fhir-release-notes-prod:
 		--cli-binary-format raw-in-base64-out \
 		--payload file:///tmp/payload.json /tmp/out.txt
 	cat /tmp/out.txt
+
+mark-jira-released: guard-release_version
+	echo { \"releaseVersion\": \"$$release_version\" } > /tmp/payload.json
+	aws lambda invoke \
+		--function-name "release-notes$${pull_request}-markJiraReleased" \
+		--cli-binary-format raw-in-base64-out \
+		--payload file:///tmp/payload.json /tmp/out.txt
+	cat /tmp/out.txt
+
 aws-login:
 	aws sso login --sso-session sso-session
 
