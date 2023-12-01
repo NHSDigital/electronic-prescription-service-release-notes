@@ -129,7 +129,7 @@ sam-deploy-package: guard-artifact_bucket guard-artifact_bucket_prefix guard-sta
 		--force-upload \
 		--tags "version=$$VERSION_NUMBER" \
 		--parameter-overrides \
-			GITHUB_TOKEN=$$PAT_GITHUB_TOKEN
+			GithubToken=$$PAT_GITHUB_TOKEN
 
 
 sam-validate: 
