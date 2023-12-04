@@ -45,6 +45,8 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
+        versions = jira.get_project_versions(key=release_version)
+        logger.info(versions)
         logger.info(f"marking {release_version} as released in Jira")
         jira.update_version(version=release_version, is_released=True)
     except SchemaValidationError as exception:
