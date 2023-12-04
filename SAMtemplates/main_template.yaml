@@ -32,6 +32,7 @@ Resources:
               - !ImportValue account-resources:ConfluenceToken
       Roles:
         - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
+        - !GetAtt MakrJiraReleasedResources.Outputs.LambdaRole
 
   CreateReleaseNotesResources:
     Type: AWS::Serverless::Application
