@@ -2,11 +2,13 @@
 
 ![Build](https://github.com/NHSDigital/electronic-prescription-service-release-notes/actions/workflows/release.yml/badge.svg)
 
-This is the code for a lambda function to create release notes on confluence for electronic prescription service code.  
-It also has functionality to create a release in Jira and set fix version on Jira tickets in the release.   
+This is the code for managing release notes in confluence and releases versions in jira.   
+It contains a lambda function to create or update a release notes on confluence for EPS repos. This lambda can also create releases in jira and mark jira tickets with the release version.     
+It also has a lambda to mark the release version as released in jira.   
 It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted
 
-- `packages/create_release_notes/` Lambda code to create the release notes.
+- `create_release_notes/` Lambda code to create the release notes.
+- `mark_jira_released/` Lambda code to mark a jira version as released.
 - `scripts/` Utilities helpful to developers of this specification.
 - `SAMtemplates/` Contains the SAM templates used to define the stack
 - `.github` Contains github workflows that are used for building and deploying from pull requests and releases
@@ -90,8 +92,11 @@ When the token expires, you may need to reauthorise using `make aws-login`
 
 ### CI Setup
 
-The GitHub Actions require a secret to exist on the repo called "SONAR_TOKEN".
-This can be obtained from [SonarCloud](https://sonarcloud.io/)
+The GitHub Actions require the following secrets to be added
+- AUTOMERGE_PAT. This is a Github personal access token with repo permissions used to auto approve and auto merge dependabot updates
+- DEV_CLOUD_FORMATION_DEPLOY_ROLE. This is the cloud formation deploy role ARN in the dev account where the lambda is deployed
+- PAT_GITHUB_TOKEN. This is a Github personal access token used by the lambda to avoid rate limits on Github api. It does not need any special permissions
+- SONAR_TOKEN. This can be obtained from [SonarCloud](https://sonarcloud.io/) 
 as described [here](https://docs.sonarsource.com/sonarqube/latest/user-guide/user-account/generating-and-using-tokens/).
 You will need the "Execute Analysis" permission for the project (NHSDigital_electronic-prescription-service-release-notes) in order for the token to work.
 
@@ -185,6 +190,10 @@ template.
 - `aws-login` reconnects to AWS from a previously configured connection
 
 #### Create release notes
+By default these all run against the deployed lambdas from the main branch. If you want to run against a lambda from a pull request, you can set the environment variable `pull_request` as `-<pull request id>` - eg
+```
+export pull_request=-pr-27
+```
 
 - `publish-pfp-aws-release-notes-int` Updates release notes for pfp AWS layer comparing what is currently in int to what is currently in dev
 - `publish-pfp-aws-rc-release-notes-int` Creates release notes for pfp AWS layer comparing what is currently in int to what is currently in dev. Also creates a release in jira and adds fix version to jira tickets found
@@ -195,6 +204,7 @@ template.
 - `publish-fhir-release-notes-int` Updates release notes for FHIR api comparing what is currently in int to what is currently in dev
 - `publish-fhir-rc-release-notes-int` Creates release notes for FHIR api comparing what is currently in int to what is currently in dev. Also creates a release in jira and adds fix version to jira tickets found
 - `publish-fhir-release-notes-prod` Creates release notes for FHIR api comparing what is currently in prod to what is currently in dev
+- `mark-jira-released` Marks a jira version as released
 
 ### Github folder
 
