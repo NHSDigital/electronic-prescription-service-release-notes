@@ -44,56 +44,59 @@ INPUT_SCHEMA = {
         "currentTag": {
             "$id": "#/properties/currentTag",
             "type": "string",
-            "title": "The current tag",
+            "title": "The current tag to search for in github",
             "examples": ["v1.0.104-beta"],
         },
         "targetTag": {
             "$id": "#/properties/targetTag",
             "type": "string",
-            "title": "The target tag",
+            "title": "The target tag to search for in github",
             "examples": ["v1.0.104-beta"],
         },
         "repoName": {
             "$id": "#/properties/repoName",
             "type": "string",
-            "title": "The repo name",
+            "title": "The repo name in github to search for tags. Should NOT have NHSDigital in front of it",
             "examples": ["prescriptionsforpatients"],
         },
         "targetEnvironment": {
             "$id": "#/properties/targetEnvironment",
             "type": "string",
-            "title": "The target environment",
+            "title": "The target environment. Used to construct details in confluence page",
             "examples": ["PROD"],
         },
         "productName": {
             "$id": "#/properties/productName",
             "type": "string",
-            "title": "The product name",
+            "title": "The product name. Used to construct details in confluence page",
             "examples": ["Prescriptions for Patients AWS layer"],
         },
         "releaseNotesPageId": {
             "$id": "#/properties/releaseNotesPageId",
             "type": "string",
-            "title": "The release notes page id",
+            "title": "The release notes page id to update (for non RC release notes pages) or create page under (for RC release notes)",
             "examples": ["693750029"],
         },
         "releaseNotesPageTitle": {
             "$id": "#/properties/releaseNotesPageTitle",
             "type": "string",
-            "title": "The release notes page title",
+            "title": "The release notes page title to update or create in confluence. This MUST be unique in the space for RC release notes",
             "examples": ["Current PfP AWS layer release notes - PROD"],
         },
         "createReleaseCandidate": {
             "$id": "#/properties/createReleaseCandidate",
             "type": "string",
-            "title": "Whether to create a release candidate page",
+            "title": "<OPTIONAL> Whether to create a release candidate page",
             "examples": ["true"],
         },
         "releasePrefix": {
             "$id": "#/properties/releasePrefix",
             "type": "string",
-            "title": "Prefix for the release in jira",
-            "examples": ["Current PfP AWS layer release notes - PROD"],
+            "title": """
+            <OPTIONAL> Prefix for the release in jira. The release created in jira has the format <releasePrefix><targetTag>.
+            Only used when createReleaseCandidate=true
+            """,
+            "examples": ["PfP-Apigee-"],
         },
     },
 }

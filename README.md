@@ -5,7 +5,8 @@
 This is the code for managing release notes in confluence and releases versions in jira.   
 It contains a lambda function to create or update a release notes on confluence for EPS repos. This lambda can also create releases in jira and mark jira tickets with the release version.     
 It also has a lambda to mark the release version as released in jira.   
-It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted
+It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted.   
+For descriptions and examples of parameters passed to the lambdas, see the schema in the source code, and the publish* targets in the Makefile
 
 - `create_release_notes/` Lambda code to create the release notes.
 - `mark_jira_released/` Lambda code to mark a jira version as released.

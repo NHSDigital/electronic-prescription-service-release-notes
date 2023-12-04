@@ -12,7 +12,7 @@ INPUT_SCHEMA = {
     "$schema": "https://json-schema.org/draft-07/schema",
     "$id": "https://example.com/example.json",
     "type": "object",
-    "title": "Sample schema",
+    "title": "root schema",
     "description": "The root schema comprises the entire JSON document.",
     "examples": [
         {
@@ -24,7 +24,7 @@ INPUT_SCHEMA = {
         "currentTag": {
             "$id": "#/properties/releaseVersion",
             "type": "string",
-            "title": "The version to mark as released",
+            "title": "The version in jira to mark as released",
             "examples": ["PfP-AWS-v1.0.243-beta"],
         },
     },
@@ -50,12 +50,12 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             filter(lambda x: x.get("name") == release_version, versions)
         )
         if len(release_versions) != 1:
+            # return 404 where no or more than 1 release version found
             message = f"can not find release version for {release_version}"
             logger.error(message)
             return {"statusCode": 404, "body": message}
 
         release_version_id = release_versions[0].get("id")
-        logger.info(versions)
         logger.info(
             f"marking {release_version} with id {release_version_id} as released in Jira"
         )
