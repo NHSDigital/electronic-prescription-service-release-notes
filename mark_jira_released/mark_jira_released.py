@@ -50,7 +50,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
-        return {"body": str(exception), "statusCode": 400}
+        return {"statusCode": 400, "body": str(exception)}
     except Exception as exception:
         logger.exception(exception)
-        return {"body": str(exception), "statusCode": 500}
+        return {"statusCode": 500, "body": str(exception)}
