@@ -45,10 +45,21 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        versions = jira.get_project_versions(key=release_version)
+        versions = jira.get_project_versions(key="AEA")
+        release_versions = list(
+            filter(lambda x: x.get("name") == release_version, versions)
+        )
+        if len(release_versions) != 1:
+            message = f"can not find release version for {release_version}"
+            logger.error(message)
+            return {"statusCode": 404, "body": message}
+
+        release_version_id = release_versions[0].get("id")
         logger.info(versions)
-        logger.info(f"marking {release_version} as released in Jira")
-        jira.update_version(version=release_version, is_released=True)
+        logger.info(
+            f"marking {release_version} with id {release_version_id} as released in Jira"
+        )
+        jira.update_version(version=release_version_id, is_released=True)
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
