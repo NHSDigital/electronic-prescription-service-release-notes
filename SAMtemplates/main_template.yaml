@@ -2,30 +2,21 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Create release notes lambda
+Parameters:
+  GithubToken:
+    Type: String
+    Description: The github token to use
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 50
+    Timeout: 300
     MemorySize: 256
     Architectures:
       - x86_64
     Runtime: python3.11
 
 Resources:
-  CreateReleaseNotesResources:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location: lambda_resources.yaml
-      Parameters:
-        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
-        SplunkSubscriptionFilterRole: "n/a"
-        SplunkDeliveryStream: "n/a"
-        EnableSplunk: "false"
-        LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
-        AccessToSpine: "false"
-        LogRetentionDays: "30"
-
   LambdaSecretsPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
@@ -41,14 +32,55 @@ Resources:
               - !ImportValue account-resources:ConfluenceToken
       Roles:
         - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
+        - !GetAtt MakrJiraReleasedResources.Outputs.LambdaRole
 
-  createReleaseNotes:
+  CreateReleaseNotesResources:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: lambda_resources.yaml
+      Parameters:
+        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
+        SplunkSubscriptionFilterRole: "n/a"
+        SplunkDeliveryStream: "n/a"
+        EnableSplunk: "false"
+        LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
+        AccessToSpine: "false"
+        LogRetentionDays: "30"
+
+
+  CreateReleaseNotes:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-createReleaseNotes"
       CodeUri: ../create_release_notes
       Handler: create_release_notes.lambda_handler
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
+      Environment:
+        Variables:
+          GITHUB_TOKEN: !Ref GithubToken
+
+
+  MakrJiraReleasedResources:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: lambda_resources.yaml
+      Parameters:
+        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
+        SplunkSubscriptionFilterRole: "n/a"
+        SplunkDeliveryStream: "n/a"
+        EnableSplunk: "false"
+        LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
+        AccessToSpine: "false"
+        LogRetentionDays: "30"
+
+
+  MarkJiraReleased:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-markJiraReleased"
+      CodeUri: ../mark_jira_released
+      Handler: mark_jira_released.lambda_handler
+      Role: !GetAtt MakrJiraReleasedResources.Outputs.LambdaRoleArn
 
   ReleaseNotesSecretsKMSKey:
     Type: AWS::KMS::Key
@@ -93,13 +125,19 @@ Resources:
             Action:
               - lambda:InvokeFunction
             Resource:
-              - !GetAtt createReleaseNotes.Arn
+              - !GetAtt CreateReleaseNotes.Arn
+              - !GetAtt MarkJiraReleased.Arn
       Roles:
         - !ImportValue ci-resources:CloudFormationDeployRoleName
 
 Outputs:
   CreateReleaseNotesLambdaName:
     Description: Name of the create release notes lambda
-    Value: !Ref createReleaseNotes
+    Value: !Ref CreateReleaseNotes
     Export:
       Name: !Join [":", [!Ref "AWS::StackName", "CreateReleaseNotesLambdaName"]]
+  MarkJiraReleasedLambdaName:
+    Description: Name of the mark jira released lambda
+    Value: !Ref MarkJiraReleased
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaName"]]

@@ -18,6 +18,8 @@ on:
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE:
         required: true
+      PAT_GITHUB_TOKEN:
+        required: true
 
 jobs:
   sam_release_code:
@@ -49,6 +51,7 @@ jobs:
           export template_file=template.yaml
           export stack_name=${{ inputs.STACK_NAME }}
           export VERSION_NUMBER=${{ inputs.VERSION_NUMBER }}
+          export PAT_GITHUB_TOKEN=${{ secrets.PAT_GITHUB_TOKEN }}
           export cloud_formation_execution_role=$(aws cloudformation list-exports --output json | \
               jq -r '.Exports[] | select(.Name == "ci-resources:CloudFormationExecutionRole") | .Value' )
           cd .aws-sam/build
