@@ -112,18 +112,18 @@ validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 
 [[package]]
 name = "aws-sam-cli"
-version = "1.104.0"
+version = "1.105.0"
 description = "AWS SAM CLI is a CLI tool for local development and testing of Serverless applications"
 optional = false
 python-versions = ">=3.8, <=4.0, !=4.0"
 files = [
-    {file = "aws-sam-cli-1.104.0.tar.gz", hash = "sha256:db1908c45267d33defe2a9c86621e5e33fb05579ab9ede5669dd36ae37bf197a"},
-    {file = "aws_sam_cli-1.104.0-py3-none-any.whl", hash = "sha256:ddfc5e32b94a490562ff65217095af8f16edb4acaa242c9188b749b2323ec9a8"},
+    {file = "aws-sam-cli-1.105.0.tar.gz", hash = "sha256:4c57b9d305214373c0ba2a745a9c55e8c6c6fa01c5e9a15ca0553aef4a14ae78"},
+    {file = "aws_sam_cli-1.105.0-py3-none-any.whl", hash = "sha256:1bff76361d3e13c488dfd54481d010af9140f4515537c9abe9bc3b9c257b11c3"},
 ]
 
 [package.dependencies]
 aws-lambda-builders = "1.43.0"
-aws-sam-translator = "1.81.0"
+aws-sam-translator = "1.82.0"
 boto3 = ">=1.26.109,<2"
 boto3-stubs = {version = "1.33.5", extras = ["apigateway", "cloudformation", "ecr", "iam", "kinesis", "lambda", "s3", "schemas", "secretsmanager", "signer", "sqs", "stepfunctions", "sts", "xray"]}
 cfn-lint = ">=0.83.4,<0.84.0"
@@ -147,18 +147,18 @@ tzlocal = "5.2"
 watchdog = "3.0.0"
 
 [package.extras]
-dev = ["black (==23.11.0)", "coverage (==7.3.2)", "filelock (==3.13.1)", "mypy (==1.7.1)", "parameterized (==0.9.0)", "psutil (==5.9.6)", "pytest (>=7.4.3,<7.5.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.6.0)", "pytest-json-report (==1.5.0)", "pytest-metadata (==2.0.4)", "pytest-rerunfailures (==13.0)", "pytest-timeout (==2.2.0)", "pytest-xdist (==3.5.0)", "ruff (==0.1.6)", "types-PyYAML (==6.0.12.12)", "types-Pygments (==2.17.0.0)", "types-chevron (==0.14.2.5)", "types-colorama (==0.4.15.12)", "types-dateparser (==1.1.4.10)", "types-docutils (==0.20.0.3)", "types-jsonschema (==4.20.0.0)", "types-psutil (==5.9.5.17)", "types-pyOpenSSL (==23.3.0.0)", "types-pywin32 (==306.0.0.6)", "types-requests (==2.31.0.6)", "types-setuptools (==68.2.0.2)", "types-urllib3 (==1.26.25.14)"]
-pre-dev = ["ruff (==0.1.6)"]
+dev = ["black (==23.11.0)", "coverage (==7.3.2)", "filelock (==3.13.1)", "mypy (==1.7.1)", "parameterized (==0.9.0)", "psutil (==5.9.6)", "pytest (>=7.4.3,<7.5.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.6.0)", "pytest-json-report (==1.5.0)", "pytest-metadata (==2.0.4)", "pytest-rerunfailures (==13.0)", "pytest-timeout (==2.2.0)", "pytest-xdist (==3.5.0)", "ruff (==0.1.7)", "types-PyYAML (==6.0.12.12)", "types-Pygments (==2.17.0.0)", "types-chevron (==0.14.2.5)", "types-colorama (==0.4.15.12)", "types-dateparser (==1.1.4.10)", "types-docutils (==0.20.0.3)", "types-jsonschema (==4.20.0.0)", "types-psutil (==5.9.5.17)", "types-pyOpenSSL (==23.3.0.0)", "types-pywin32 (==306.0.0.6)", "types-requests (==2.31.0.6)", "types-setuptools (==68.2.0.2)", "types-urllib3 (==1.26.25.14)"]
+pre-dev = ["ruff (==0.1.7)"]
 
 [[package]]
 name = "aws-sam-translator"
-version = "1.81.0"
+version = "1.82.0"
 description = "AWS SAM Translator is a library that transform SAM templates into AWS CloudFormation templates"
 optional = false
 python-versions = ">=3.7, <=4.0, !=4.0"
 files = [
-    {file = "aws-sam-translator-1.81.0.tar.gz", hash = "sha256:a5e268673d4d17cd1609f823fa9779aaf0103c47971a03a4eab6414b08c702fa"},
-    {file = "aws_sam_translator-1.81.0-py3-none-any.whl", hash = "sha256:da9afd9b1d9b6bb9bc3ee7b265af420bce4188bab4d2f97e14586d80a0372f36"},
+    {file = "aws-sam-translator-1.82.0.tar.gz", hash = "sha256:f78e58194461635aef6255d04e82a9b690e331ca9fd669d1401bf7f9a93ae49f"},
+    {file = "aws_sam_translator-1.82.0-py3-none-any.whl", hash = "sha256:29ba61f2a70b2b1cf0c76b92b78a23c7cdd19ea1b0a5992753180b56d040d20b"},
 ]
 
 [package.dependencies]
@@ -3203,4 +3203,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1466c75c5675516393e3c9244c1a250438f883e8f57f3f3434fa8580d140ed8d"
+content-hash = "5c6aab778bc046321c733c1ec53c3785ebf24632855647e2171419c02866616c"
