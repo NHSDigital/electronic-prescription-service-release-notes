@@ -114,7 +114,7 @@ Resources:
               ArnEquals:
                 kms:EncryptionContext:aws:logs:arn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
 
-  LambdaExecutionPolicy:
+  LambdaExecutionPolicyDeployRole:
     Type: "AWS::IAM::Policy"
     Properties:
       PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
@@ -129,6 +129,21 @@ Resources:
               - !GetAtt MarkJiraReleased.Arn
       Roles:
         - !ImportValue ci-resources:CloudFormationDeployRoleName
+  LambdaExecutionPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource:
+              - !GetAtt CreateReleaseNotes.Arn
+              - !GetAtt MarkJiraReleased.Arn
+      Roles:
+        - !ImportValue ci-resources:ReleaseNotesExecuteLambdaRole
 
 Outputs:
   CreateReleaseNotesLambdaName:
