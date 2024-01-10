@@ -25,11 +25,6 @@ Parameters:
   LambdaName:
     Type: String
     Description: Name of lambda we are creating for
-  AccessToSpine:
-    Type: String
-    Description: Whether to use splunk
-    Default: false
-    AllowedValues: [true, false]
   LogRetentionDays:
     Type: Number
     Description: How long to keep logs for
@@ -61,7 +56,6 @@ Parameters:
 
 Conditions:
   ShouldUseSplunk: !Equals [true, !Ref EnableSplunk]
-  AllowAccessToSpine: !Equals [true, !Ref AccessToSpine]
 
 Resources:
   LambdaRole:
@@ -75,9 +69,9 @@ Resources:
               Service: "lambda.amazonaws.com"
             Action: "sts:AssumeRole"
   LambdaPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "allow-lambda-logging"
+      Description: "allow access to logs for lambda role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -91,9 +85,9 @@ Resources:
       Roles:
         - !Ref LambdaRole
   LambdaKMSPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "allow-CloudWatchKMS-access"
+      Description: "allow access to cloudwatch KMS key for lambda role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -108,9 +102,9 @@ Resources:
       Roles:
         - !Ref LambdaRole
   LambdaSecretsKMSPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "allow-SecretsKMS-access"
+      Description: "allow access to secrets KMS key for lambda role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -119,25 +113,6 @@ Resources:
               - kms:Decrypt
             Resource:
               - !ImportValue account-resources:SecretsKMSKey
-      Roles:
-        - !Ref LambdaRole
-  LambdaSecretsPolicy:
-    Condition: AllowAccessToSpine
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: "allow-access-to-spine-secrets"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - secretsmanager:GetSecretValue
-            Resource:
-              - !ImportValue account-resources:SpinePrivateKey
-              - !ImportValue account-resources:SpinePublicCertificate
-              - !ImportValue account-resources:SpineASID
-              - !ImportValue account-resources:SpinePartyKey
-              - !ImportValue account-resources:SpineCAChain
       Roles:
         - !Ref LambdaRole
   LambdaLogGroup:
