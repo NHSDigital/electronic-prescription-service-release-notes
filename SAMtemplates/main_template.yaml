@@ -106,24 +106,13 @@ Resources:
             Resource:
               - !GetAtt CreateReleaseNotes.Arn
               - !GetAtt MarkJiraReleased.Arn
+          - Effect: Allow
+            Action:
+              - cloudformation:ListExports
+            Resource: "*"
       Roles:
         - !ImportValue ci-resources:ReleaseNotesExecuteLambdaRoleName
 
-  LambdaExecutionInlinePolicy:
-    Type: "AWS::IAM::Policy"
-    Properties:
-      PolicyName: !Sub "allow_execution_of_lambdas_on_${AWS::StackName}"
-      PolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action:
-              - lambda:InvokeFunction
-            Resource:
-              - !GetAtt CreateReleaseNotes.Arn
-              - !GetAtt MarkJiraReleased.Arn
-      Roles:
-        - !ImportValue ci-resources:ReleaseNotesExecuteLambdaRoleName
 Outputs:
   CreateReleaseNotesLambdaName:
     Description: Name of the create release notes lambda
