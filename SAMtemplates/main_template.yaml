@@ -135,3 +135,13 @@ Outputs:
     Value: !Ref MarkJiraReleased
     Export:
       Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaName"]]
+  CreateReleaseNotesLambdaArn:
+    Description: Arn of the create release notes lambda
+    Value: !GetAtt CreateReleaseNotes.Arn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "CreateReleaseNotesLambdaArn"]]
+  MarkJiraReleasedLambdaArn:
+    Description: Arn of the mark jira released lambda
+    Value: !GetAtt MarkJiraReleased.Arn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaArn"]]
