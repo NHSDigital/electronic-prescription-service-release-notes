@@ -112,7 +112,7 @@ Resources:
   LambdaExecutionInlinePolicy:
     Type: "AWS::IAM::Policy"
     Properties:
-      PolicyName: !Sub "allow_execution_of_lambdas"
+      PolicyName: !Sub "allow_execution_of_lambdas_on_${AWS::StackName}"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
