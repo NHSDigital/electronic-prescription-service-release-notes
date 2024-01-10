@@ -18,9 +18,9 @@ Globals:
 
 Resources:
   LambdaSecretsPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "allow-access-to-atlasian-secrets"
+      Description: "allow access to atlasian secrets for lambda roles"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -39,14 +39,12 @@ Resources:
     Properties:
       Location: lambda_resources.yaml
       Parameters:
-        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
-        SplunkSubscriptionFilterRole: "n/a"
-        SplunkDeliveryStream: "n/a"
-        EnableSplunk: "false"
+        CloudWatchKMSKey: !ImportValue lambda-resources:CloudWatchKMSKey
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
-        AccessToSpine: "false"
         LogRetentionDays: "30"
-
 
   CreateReleaseNotes:
     Type: AWS::Serverless::Function
@@ -59,20 +57,17 @@ Resources:
         Variables:
           GITHUB_TOKEN: !Ref GithubToken
 
-
   MakrJiraReleasedResources:
     Type: AWS::Serverless::Application
     Properties:
       Location: lambda_resources.yaml
       Parameters:
-        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
-        SplunkSubscriptionFilterRole: "n/a"
-        SplunkDeliveryStream: "n/a"
-        EnableSplunk: "false"
+        CloudWatchKMSKey: !ImportValue lambda-resources:CloudWatchKMSKey
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
-        AccessToSpine: "false"
         LogRetentionDays: "30"
-
 
   MarkJiraReleased:
     Type: AWS::Serverless::Function
@@ -82,42 +77,10 @@ Resources:
       Handler: mark_jira_released.lambda_handler
       Role: !GetAtt MakrJiraReleasedResources.Outputs.LambdaRoleArn
 
-  ReleaseNotesSecretsKMSKey:
-    Type: AWS::KMS::Key
-    Properties:
-      KeyPolicy:
-        Version: 2012-10-17
-        Id: key-s3
-        Statement:
-          - Sid: Enable IAM User Permissions
-            Effect: Allow
-            Principal:
-              AWS: !Join
-                - ""
-                - - "arn:aws:iam::"
-                  - !Ref "AWS::AccountId"
-                  - ":root"
-            Action: "kms:*"
-            Resource: "*"
-          - Sid: Allow Lambda logging
-            Effect: Allow
-            Principal:
-              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
-            Action:
-              - kms:Encrypt*
-              - kms:Decrypt*
-              - kms:ReEncrypt*
-              - kms:GenerateDataKey*
-              - kms:Describe*
-            Resource: "*"
-            Condition:
-              ArnEquals:
-                kms:EncryptionContext:aws:logs:arn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
-
   LambdaExecutionPolicyDeployRole:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
+      Description: !Sub "allow execution of release notes lambda on stack ${AWS::StackName} to deploy role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -129,10 +92,11 @@ Resources:
               - !GetAtt MarkJiraReleased.Arn
       Roles:
         - !ImportValue ci-resources:CloudFormationDeployRoleName
+
   LambdaExecutionPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
+      Description: !Sub "allow execution of release notes lambda on stack ${AWS::StackName} to execute release notes lambda role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
