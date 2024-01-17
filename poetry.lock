@@ -32,17 +32,19 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "atlassian-python-api"
-version = "3.41.4"
+version = "3.41.8"
 description = "Python Atlassian REST API Wrapper"
 optional = false
 python-versions = "*"
 files = [
-    {file = "atlassian-python-api-3.41.4.tar.gz", hash = "sha256:10e51fc2bd2d13423d6e34b1534600366758a711fd4fd8b9cdc2de658bf327fa"},
-    {file = "atlassian_python_api-3.41.4-py3-none-any.whl", hash = "sha256:4bfbf2b420addc77c636b67c3037d7056185662762a78f78d96ec1e267d0b435"},
+    {file = "atlassian-python-api-3.41.8.tar.gz", hash = "sha256:ce678d89372578db06f5f5eadd6fc2abccc424608053dc6d83e7afea5070b021"},
+    {file = "atlassian_python_api-3.41.8-py3-none-any.whl", hash = "sha256:506b3aa8325ba0df4edd6618ac4039c0aafa48795d16d143a270b6c1a68bd4fc"},
 ]
 
 [package.dependencies]
+beautifulsoup4 = "*"
 deprecated = "*"
+jmespath = "*"
 oauthlib = "*"
 requests = "*"
 requests-oauthlib = "*"
@@ -185,6 +187,27 @@ files = [
 executor = "*"
 importlib-resources = "*"
 pip = "*"
+
+[[package]]
+name = "beautifulsoup4"
+version = "4.12.3"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.6.0"
+files = [
+    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
+    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
+]
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
 
 [[package]]
 name = "binaryornot"
@@ -2870,6 +2893,17 @@ files = [
 ]
 
 [[package]]
+name = "soupsieve"
+version = "2.5"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "soupsieve-2.5-py3-none-any.whl", hash = "sha256:eaa337ff55a1579b6549dc679565eac1e3d000563bcb1c8ab0d0fefbc0c2cdc7"},
+    {file = "soupsieve-2.5.tar.gz", hash = "sha256:5663d5a7b3bfaeee0bc4372e7fc48f9cff4940b3eec54a6451cc5299f1097690"},
+]
+
+[[package]]
 name = "sympy"
 version = "1.12"
 description = "Computer algebra system (CAS) in Python"
@@ -3193,4 +3227,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ee336c4ddf4cf7fc56bbd12713c5251b01b8285d7d7fd2b0e29f87e150fc72ab"
+content-hash = "a7042171356951dc6b92bbd6b519c99b8bc95e829a74bb616fa6fc28412437b6"
