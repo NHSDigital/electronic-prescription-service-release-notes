@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from atlassian import Jira
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
@@ -59,7 +60,11 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         logger.info(
             f"marking {release_version} with id {release_version_id} as released in Jira"
         )
-        jira.update_version(version=release_version_id, is_released=True)
+        jira.update_version(
+            version=release_version_id,
+            is_released=True,
+            release_date=datetime.today().strftime("%Y-%m-%d"),
+        )
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
