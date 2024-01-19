@@ -41,7 +41,7 @@ Resources:
       Parameters:
         CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
         SplunkSubscriptionFilterRole: !ImportValue account-resources:SplunkSubscriptionFilterRole
-        SplunkDeliveryStream: !ImportValue account-resources:SplunkDeliveryStream
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
         LogRetentionDays: "30"
@@ -64,7 +64,7 @@ Resources:
       Parameters:
         CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
         SplunkSubscriptionFilterRole: !ImportValue account-resources:SplunkSubscriptionFilterRole
-        SplunkDeliveryStream: !ImportValue account-resources:SplunkDeliveryStream
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
         LogRetentionDays: "30"
