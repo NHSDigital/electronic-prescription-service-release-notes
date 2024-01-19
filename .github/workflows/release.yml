@@ -43,7 +43,7 @@ jobs:
           asdf_branch: v0.11.3
   
       - name: Cache asdf
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.asdf
@@ -107,3 +107,4 @@ jobs:
       VERSION_NUMBER: ${{needs.tag_release.outputs.spec_version}}
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_DEPLOY_ROLE }}
+      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}

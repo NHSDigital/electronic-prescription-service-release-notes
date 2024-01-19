@@ -4,7 +4,7 @@ from atlassian import Jira, Confluence
 from typing import Tuple
 import traceback
 import sys
-from github import Github
+from github import Github, Auth
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
@@ -44,44 +44,59 @@ INPUT_SCHEMA = {
         "currentTag": {
             "$id": "#/properties/currentTag",
             "type": "string",
-            "title": "The current tag",
+            "title": "The current tag to search for in github",
             "examples": ["v1.0.104-beta"],
         },
         "targetTag": {
             "$id": "#/properties/targetTag",
             "type": "string",
-            "title": "The target tag",
+            "title": "The target tag to search for in github",
             "examples": ["v1.0.104-beta"],
         },
         "repoName": {
             "$id": "#/properties/repoName",
             "type": "string",
-            "title": "The repo name",
+            "title": "The repo name in github to search for tags. Should NOT have NHSDigital in front of it",
             "examples": ["prescriptionsforpatients"],
         },
         "targetEnvironment": {
             "$id": "#/properties/targetEnvironment",
             "type": "string",
-            "title": "The target environment",
+            "title": "The target environment. Used to construct details in confluence page",
             "examples": ["PROD"],
         },
         "productName": {
             "$id": "#/properties/productName",
             "type": "string",
-            "title": "The product name",
+            "title": "The product name. Used to construct details in confluence page",
             "examples": ["Prescriptions for Patients AWS layer"],
         },
         "releaseNotesPageId": {
             "$id": "#/properties/releaseNotesPageId",
             "type": "string",
-            "title": "The release notes page id",
+            "title": "The release notes page id to update (for non RC release notes pages) or create page under (for RC release notes)",
             "examples": ["693750029"],
         },
         "releaseNotesPageTitle": {
             "$id": "#/properties/releaseNotesPageTitle",
             "type": "string",
-            "title": "The release notes page title",
+            "title": "The release notes page title to update or create in confluence. This MUST be unique in the space for RC release notes",
             "examples": ["Current PfP AWS layer release notes - PROD"],
+        },
+        "createReleaseCandidate": {
+            "$id": "#/properties/createReleaseCandidate",
+            "type": "string",
+            "title": "<OPTIONAL> Whether to create a release candidate page",
+            "examples": ["true"],
+        },
+        "releasePrefix": {
+            "$id": "#/properties/releasePrefix",
+            "type": "string",
+            "title": """
+            <OPTIONAL> Prefix for the release in jira. The release created in jira has the format <releasePrefix><targetTag>.
+            Only used when createReleaseCandidate=true
+            """,
+            "examples": ["PfP-Apigee-"],
         },
     },
 }
@@ -126,8 +141,12 @@ def create_release_notes(
     repo_name: str,
     target_environment: str,
     product_name: str,
+    create_release_candidate: str,
+    release_name: str,
+    github_token: str,
 ) -> str:
-    gh = Github()
+    auth = Auth.Token(github_token)
+    gh = Github(auth=auth)
     repo = gh.get_repo(f"NHSDigital/{repo_name}")
 
     output = ["This page is auto generated. Any manual modifications will be lost"]
@@ -158,6 +177,19 @@ def create_release_notes(
                 impact,
                 business_service_impact,
             ) = get_jira_details(jira, ticket_number)
+            if create_release_candidate == "true":
+                logger.info(
+                    f"Adding fix version {release_name} to ticket {ticket_number}"
+                )
+                fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
+                jira.edit_issue(
+                    issue_id_or_key=ticket_number,
+                    fields=fields,
+                )
+                logger.info(
+                    f"Setting status of ticket {ticket_number} to Ready for test"
+                )
+                jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
             jira_link = "n/a"
             jira_title = "n/a"
@@ -205,9 +237,12 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         product_name = event["productName"]
         release_notes_page_id = event["releaseNotesPageId"]
         release_notes_page_title = event["releaseNotesPageTitle"]
+        create_release_candidate = event.get("createReleaseCandidate", "false")
+        release_prefix = event.get("releasePrefix")
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
+        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
         if JIRA_TOKEN is None:
             JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
@@ -217,14 +252,44 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-
+        release_name = ""
+        if create_release_candidate == "true":
+            release_name = f"{release_prefix}{target_tag}"
+            logger.info(f"creating release {release_name} in JIRA")
+            jira.add_version(
+                project_key="AEA",
+                project_id="15116",
+                version=release_name,
+            )
         output = create_release_notes(
-            jira, current_tag, target_tag, repo_name, target_environment, product_name
+            jira,
+            current_tag,
+            target_tag,
+            repo_name,
+            target_environment,
+            product_name,
+            create_release_candidate,
+            release_name,
+            GITHUB_TOKEN,
         )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
-        confluence.update_page(
-            page_id=release_notes_page_id, body=output, title=release_notes_page_title
-        )
+        if create_release_candidate == "true":
+            logger.info(
+                f"creating RC release notes page under page {release_notes_page_id}"
+            )
+            confluence.create_page(
+                parent_id=release_notes_page_id,
+                title=release_notes_page_title,
+                body=output,
+                space="APIMC",
+            )
+        else:
+            logger.info(f"updating release notes page {release_notes_page_id}")
+            confluence.update_page(
+                page_id=release_notes_page_id,
+                body=output,
+                title=release_notes_page_title,
+            )
         return {"status": "OK", "statusCode": 200}
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is

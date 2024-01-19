@@ -2,34 +2,25 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   Create release notes lambda
+Parameters:
+  GithubToken:
+    Type: String
+    Description: The github token to use
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 50
+    Timeout: 300
     MemorySize: 256
     Architectures:
       - x86_64
     Runtime: python3.11
 
 Resources:
-  CreateReleaseNotesResources:
-    Type: AWS::Serverless::Application
-    Properties:
-      Location: lambda_resources.yaml
-      Parameters:
-        CloudWatchKMSKey: !GetAtt ReleaseNotesSecretsKMSKey.Arn
-        SplunkSubscriptionFilterRole: "n/a"
-        SplunkDeliveryStream: "n/a"
-        EnableSplunk: "false"
-        LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
-        AccessToSpine: "false"
-        LogRetentionDays: "30"
-
   LambdaSecretsPolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "allow-access-to-atlasian-secrets"
+      Description: "allow access to atlasian secrets for lambda roles"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -41,51 +32,55 @@ Resources:
               - !ImportValue account-resources:ConfluenceToken
       Roles:
         - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
+        - !GetAtt MakrJiraReleasedResources.Outputs.LambdaRole
 
-  createReleaseNotes:
+  CreateReleaseNotesResources:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: lambda_resources.yaml
+      Parameters:
+        CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        EnableSplunk: "true"
+        LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
+        LogRetentionDays: "30"
+
+  CreateReleaseNotes:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-createReleaseNotes"
       CodeUri: ../create_release_notes
       Handler: create_release_notes.lambda_handler
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
+      Environment:
+        Variables:
+          GITHUB_TOKEN: !Ref GithubToken
 
-  ReleaseNotesSecretsKMSKey:
-    Type: AWS::KMS::Key
+  MakrJiraReleasedResources:
+    Type: AWS::Serverless::Application
     Properties:
-      KeyPolicy:
-        Version: 2012-10-17
-        Id: key-s3
-        Statement:
-          - Sid: Enable IAM User Permissions
-            Effect: Allow
-            Principal:
-              AWS: !Join
-                - ""
-                - - "arn:aws:iam::"
-                  - !Ref "AWS::AccountId"
-                  - ":root"
-            Action: "kms:*"
-            Resource: "*"
-          - Sid: Allow Lambda logging
-            Effect: Allow
-            Principal:
-              Service: !Sub "logs.${AWS::Region}.amazonaws.com"
-            Action:
-              - kms:Encrypt*
-              - kms:Decrypt*
-              - kms:ReEncrypt*
-              - kms:GenerateDataKey*
-              - kms:Describe*
-            Resource: "*"
-            Condition:
-              ArnEquals:
-                kms:EncryptionContext:aws:logs:arn: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/*"
+      Location: lambda_resources.yaml
+      Parameters:
+        CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
+        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        EnableSplunk: "true"
+        LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
+        LogRetentionDays: "30"
 
-  LambdaExecutionPolicy:
-    Type: "AWS::IAM::Policy"
+  MarkJiraReleased:
+    Type: AWS::Serverless::Function
     Properties:
-      PolicyName: !Sub "${AWS::StackName}-allow-execution-of-release-notes-lambda"
+      FunctionName: !Sub "${AWS::StackName}-markJiraReleased"
+      CodeUri: ../mark_jira_released
+      Handler: mark_jira_released.lambda_handler
+      Role: !GetAtt MakrJiraReleasedResources.Outputs.LambdaRoleArn
+
+  LambdaExecutionPolicyDeployRole:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: !Sub "allow execution of release notes lambda on stack ${AWS::StackName} to deploy role"
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -93,13 +88,49 @@ Resources:
             Action:
               - lambda:InvokeFunction
             Resource:
-              - !GetAtt createReleaseNotes.Arn
+              - !GetAtt CreateReleaseNotes.Arn
+              - !GetAtt MarkJiraReleased.Arn
       Roles:
         - !ImportValue ci-resources:CloudFormationDeployRoleName
+
+  LambdaExecutionPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      Description: !Sub "allow execution of release notes lambda on stack ${AWS::StackName} to execute release notes lambda role"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - lambda:InvokeFunction
+            Resource:
+              - !GetAtt CreateReleaseNotes.Arn
+              - !GetAtt MarkJiraReleased.Arn
+          - Effect: Allow
+            Action:
+              - cloudformation:ListExports
+            Resource: "*"
+      Roles:
+        - !ImportValue ci-resources:ReleaseNotesExecuteLambdaRoleName
 
 Outputs:
   CreateReleaseNotesLambdaName:
     Description: Name of the create release notes lambda
-    Value: !Ref createReleaseNotes
+    Value: !Ref CreateReleaseNotes
     Export:
       Name: !Join [":", [!Ref "AWS::StackName", "CreateReleaseNotesLambdaName"]]
+  MarkJiraReleasedLambdaName:
+    Description: Name of the mark jira released lambda
+    Value: !Ref MarkJiraReleased
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaName"]]
+  CreateReleaseNotesLambdaArn:
+    Description: Arn of the create release notes lambda
+    Value: !GetAtt CreateReleaseNotes.Arn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "CreateReleaseNotesLambdaArn"]]
+  MarkJiraReleasedLambdaArn:
+    Description: Arn of the mark jira released lambda
+    Value: !GetAtt MarkJiraReleased.Arn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaArn"]]
