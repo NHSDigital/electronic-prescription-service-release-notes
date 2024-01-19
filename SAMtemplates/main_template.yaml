@@ -40,7 +40,7 @@ Resources:
       Location: lambda_resources.yaml
       Parameters:
         CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
-        SplunkSubscriptionFilterRole: !ImportValue account-resources:SplunkSubscriptionFilterRole
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
         SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
@@ -62,8 +62,8 @@ Resources:
     Properties:
       Location: lambda_resources.yaml
       Parameters:
-        CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
-        SplunkSubscriptionFilterRole: !ImportValue account-resources:SplunkSubscriptionFilterRole
+        CloudWatchKMSKey: !ImportValue lambda-resources:CloudwatchLogsKmsKeyArn
+        SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
         SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
