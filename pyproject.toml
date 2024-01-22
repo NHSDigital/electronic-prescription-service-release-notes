@@ -45,7 +45,7 @@ fastjsonschema = "^2.19.1"
 
 [tool.poetry.group.dev.dependencies]
 aws-sam-cli = "^1.107.0"
-pip-licenses = "^4.3.3"
+pip-licenses = "^4.3.4"
 black = "^23.12.1"
 flake8 = "^7.0.0"
 pre-commit = "^3.6.0"
