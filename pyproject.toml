@@ -23,29 +23,29 @@ repository = "https://github.com/NHSDigital/electronic-prescription-service-rele
 
 [tool.poetry.dependencies]
 python = "^3.11"
-atlassian-python-api = "^3.41.8"
+atlassian-python-api = "^3.41.9"
 pygithub = "^2.1.1"
-aws-lambda-powertools = "^2.31.0"
+aws-lambda-powertools = "^2.32.0"
 fastjsonschema = "^2.19.1"
 
 [tool.poetry.group.release_notes.dependencies]
 python = "^3.11"
-atlassian-python-api = "^3.41.8"
+atlassian-python-api = "^3.41.9"
 pygithub = "^2.1.1"
-aws-lambda-powertools = "^2.31.0"
+aws-lambda-powertools = "^2.32.0"
 fastjsonschema = "^2.19.1"
 
 [tool.poetry.group.mark_released.dependencies]
 python = "^3.11"
-atlassian-python-api = "^3.41.8"
-aws-lambda-powertools = "^2.31.0"
+atlassian-python-api = "^3.41.9"
+aws-lambda-powertools = "^2.32.0"
 fastjsonschema = "^2.19.1"
 
 [tool.poetry.scripts]
 
 [tool.poetry.group.dev.dependencies]
 aws-sam-cli = "^1.107.0"
-pip-licenses = "^4.3.3"
+pip-licenses = "^4.3.4"
 black = "^23.12.1"
 flake8 = "^7.0.0"
 pre-commit = "^3.6.0"
