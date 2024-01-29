@@ -257,10 +257,10 @@ def create_release_notes(
             tags_without_jira = tags_without_jira + tag_output
 
     if create_release_candidate:
-        tags_with_jira_header = ["<h3 id=jira_changes>Changes with jira tickets</h3>"]
+        tags_with_jira_header = ["<h3 id='jira_changes'>Changes with jira tickets</h3>"]
         tags_withouut_jira_header = [
             "<p>***</p>",
-            "<h3 id=non_jira_changes>Changes without jira tickets</h3>",
+            "<h3 id='non_jira_changes'>Changes without jira tickets</h3>",
         ]
     else:
         tags_with_jira_header = []
