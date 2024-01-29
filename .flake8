@@ -2,4 +2,4 @@
 max-line-length = 160
 per-file-ignores =
     # line too long
-    tests/test_create_release_notes.py: E501,
+    tests/common.py: E501,

@@ -1,40 +1,7 @@
 import unittest
 from unittest.mock import patch
 from create_release_notes import create_release_notes
-
-
-def mocked_jira_get_issue(*args, **kwargs):
-    if args[0] == "TEST-123":
-        return {
-            "fields": {
-                "summary": "Test Summary",
-                "description": "User story\nTest User Story\nBackground: Test Background",
-                "components": [{"name": "Component1"}, {"name": "Component2"}],
-                "customfield_26905": {"value": "High"},
-                "customfield_13618": "Service Impact",
-            }
-        }
-    elif args[0] == "TEST-124":
-        return {
-            "fields": {
-                "summary": "Test Summary",
-                "description": "Background: Test Background",
-                "components": [{"name": "Component1"}, {"name": "Component2"}],
-                "customfield_26905": {"value": "High"},
-                "customfield_13618": "Service Impact",
-            }
-        }
-    elif args[0] == "TEST-125":
-        return {
-            "fields": {
-                "summary": "Test Summary",
-                "description": "User story\nTest User Story\nBackground: Test Background",
-                "components": [{"name": "Component1"}, {"name": "Component2"}],
-                "customfield_13618": "Service Impact",
-            }
-        }
-    else:
-        raise (Exception)
+from tests.common import mocked_jira_get_issue
 
 
 class TestGetJiraDetails(unittest.TestCase):
@@ -42,7 +9,7 @@ class TestGetJiraDetails(unittest.TestCase):
     def test_get_jira_details_success(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
-        jira_details = create_release_notes.get_jira_details(mock_jira, "TEST-123")
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-123")
 
         self.assertEqual(jira_details.jira_title, "Test Summary")
         self.assertEqual(jira_details.user_story, "Test User Story")
@@ -54,7 +21,7 @@ class TestGetJiraDetails(unittest.TestCase):
     def test_get_jira_details_no_user_story(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
-        jira_details = create_release_notes.get_jira_details(mock_jira, "TEST-124")
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-124")
 
         self.assertEqual(jira_details.jira_title, "Test Summary")
         self.assertEqual(jira_details.user_story, "can not find user story")
@@ -66,7 +33,7 @@ class TestGetJiraDetails(unittest.TestCase):
     def test_get_jira_details_no_impact(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
-        jira_details = create_release_notes.get_jira_details(mock_jira, "TEST-125")
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-125")
 
         self.assertEqual(jira_details.jira_title, "Test Summary")
         self.assertEqual(jira_details.user_story, "Test User Story")
@@ -78,10 +45,10 @@ class TestGetJiraDetails(unittest.TestCase):
     def test_get_jira_details_exception(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
-        jira_details = create_release_notes.get_jira_details(mock_jira, "TEST-126")
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-126")
 
         self.assertEqual(
-            jira_details.jira_title, "can not find jira ticket for TEST-126"
+            jira_details.jira_title, "can not find jira ticket for AEA-126"
         )
         self.assertEqual(jira_details.user_story, "")
         self.assertEqual(jira_details.components, [])
