@@ -362,14 +362,14 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             confluence.create_page(
                 parent_id=release_notes_page_id,
                 title=release_notes_page_title,
-                body=output,
+                body="\n".join(output),
                 space="APIMC",
             )
         else:
             logger.info(f"updating release notes page {release_notes_page_id}")
             confluence.update_page(
                 page_id=release_notes_page_id,
-                body=output,
+                body="\n".join(output),
                 title=release_notes_page_title,
             )
         return {"status": "OK", "statusCode": 200}
