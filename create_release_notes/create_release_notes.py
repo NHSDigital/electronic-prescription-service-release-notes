@@ -176,9 +176,10 @@ def create_release_notes(
     tags_with_jira: list[str] = []
     tags_without_jira: list[str] = []
     if create_release_candidate:
-        header.append(
-            f"Release url: <a class='external-link' href='{release_url}' rel='nofollow'>{release_url}</a>"
-        )
+        if release_url:
+            header.append(
+                f"Azure or github release run URL: <a class='external-link' href='{release_url}' rel='nofollow'>{release_url}</a>"
+            )
     else:
         header.append(
             "This page is auto generated. Any manual modifications will be lost"

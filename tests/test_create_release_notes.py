@@ -166,7 +166,7 @@ class TestGetJiraDetails(unittest.TestCase):
         )
 
         expected_release_notes = [
-            "Release url: <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696</a>",
+            "Azure or github release run URL: <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696</a>",
             "<h1 id='Currentreleasenotestag_3-plannedreleasetotagtag_3'>EPS FHIR API planned release to dev of tag tag_3</h1>",
             "<h2 id='Currentreleasenotestag_3-Changessincecurrentlyreleasedtagtag_1'>Changes since currently released tag tag_1</h2>",
             "<h3 id='jira_changes'>Changes with jira tickets</h3>",
