@@ -276,9 +276,7 @@ def create_release_notes(
     return output
 
 
-def to_bool(value) -> bool:
-    """Convert string value to boolean."""
-
+def to_boolean(value) -> bool:
     valid = {
         "true": True,
         "t": True,
@@ -300,22 +298,71 @@ def to_bool(value) -> bool:
         raise ValueError('invalid literal for boolean: "%s"' % value)
 
 
+def process_event(event: dict, jira: Jira, gh: Github, confluence: Confluence) -> None:
+    validate(event=event, schema=INPUT_SCHEMA)
+    current_tag = event["currentTag"]
+    target_tag = event["targetTag"]
+    repo_name = event["repoName"]
+    target_environment = event["targetEnvironment"]
+    product_name = event["productName"]
+    release_notes_page_id = event["releaseNotesPageId"]
+    release_notes_page_title = event["releaseNotesPageTitle"]
+    create_release_candidate = to_boolean(event.get("createReleaseCandidate", "false"))
+    release_prefix = event.get("releasePrefix")
+    release_url = event.get("releaseURL")
+
+    repo = gh.get_repo(f"NHSDigital/{repo_name}")
+
+    diff = repo.compare(base=current_tag, head=target_tag)
+    tags = repo.get_tags()
+
+    release_name = ""
+    if create_release_candidate:
+        release_name = f"{release_prefix}{target_tag}"
+        logger.info(f"creating release {release_name} in JIRA")
+        # jira.add_version(
+        #    project_key="AEA",
+        #    project_id="15116",
+        #    version=release_name,
+        # )
+    output = create_release_notes(
+        jira,
+        current_tag,
+        target_tag,
+        target_environment,
+        product_name,
+        create_release_candidate,
+        release_name,
+        release_url,
+        diff,
+        tags,
+        repo_name,
+    )
+
+    if create_release_candidate:
+        logger.info(
+            f"creating RC release notes page under page {release_notes_page_id}"
+        )
+        confluence.create_page(
+            parent_id=release_notes_page_id,
+            title=release_notes_page_title,
+            body="\n".join(output),
+            space="APIMC",
+        )
+    else:
+        logger.info(f"updating release notes page {release_notes_page_id}")
+        confluence.update_page(
+            page_id=release_notes_page_id,
+            body="\n".join(output),
+            title=release_notes_page_title,
+        )
+
+
 # Enrich logging with contextual information from Lambda
 @logger.inject_lambda_context()
 def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
         logger.info(event)
-        validate(event=event, schema=INPUT_SCHEMA)
-        current_tag = event["currentTag"]
-        target_tag = event["targetTag"]
-        repo_name = event["repoName"]
-        target_environment = event["targetEnvironment"]
-        product_name = event["productName"]
-        release_notes_page_id = event["releaseNotesPageId"]
-        release_notes_page_title = event["releaseNotesPageTitle"]
-        create_release_candidate = to_bool(event.get("createReleaseCandidate", "false"))
-        release_prefix = event.get("releasePrefix")
-        release_url = event.get("releaseURL")
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
@@ -329,54 +376,14 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        auth = Auth.Token(str(GITHUB_TOKEN))
-        gh = Github(auth=auth)
-        repo = gh.get_repo(f"NHSDigital/{repo_name}")
-
-        diff = repo.compare(base=current_tag, head=target_tag)
-        tags = repo.get_tags()
-
-        release_name = ""
-        if create_release_candidate:
-            release_name = f"{release_prefix}{target_tag}"
-            logger.info(f"creating release {release_name} in JIRA")
-            # jira.add_version(
-            #    project_key="AEA",
-            #    project_id="15116",
-            #    version=release_name,
-            # )
-        output = create_release_notes(
-            jira,
-            current_tag,
-            target_tag,
-            target_environment,
-            product_name,
-            create_release_candidate,
-            release_name,
-            release_url,
-            diff,
-            tags,
-            repo_name,
-        )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
-        if create_release_candidate:
-            logger.info(
-                f"creating RC release notes page under page {release_notes_page_id}"
-            )
-            confluence.create_page(
-                parent_id=release_notes_page_id,
-                title=release_notes_page_title,
-                body="\n".join(output),
-                space="APIMC",
-            )
-        else:
-            logger.info(f"updating release notes page {release_notes_page_id}")
-            confluence.update_page(
-                page_id=release_notes_page_id,
-                body="\n".join(output),
-                title=release_notes_page_title,
-            )
+        github_auth = Auth.Token(str(GITHUB_TOKEN))
+        gh = Github(auth=github_auth)
+
+        process_event(event=event, jira=jira, gh=gh, confluence=confluence)
+
         return {"status": "OK", "statusCode": 200}
+
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
