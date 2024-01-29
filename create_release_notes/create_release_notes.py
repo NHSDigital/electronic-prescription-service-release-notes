@@ -210,15 +210,15 @@ def create_release_notes(
                 logger.info(
                     f"Adding fix version {release_name} to ticket {ticket_number}"
                 )
-                fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
-                jira.edit_issue(
-                    issue_id_or_key=ticket_number,
-                    fields=fields,
-                )
+                # fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
+                # jira.edit_issue(
+                #    issue_id_or_key=ticket_number,
+                #    fields=fields,
+                # )
                 logger.info(
                     f"Setting status of ticket {ticket_number} to Ready for test"
                 )
-                jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
+                # jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
             jira_details = JiraDetails("n/a", "n/a", [], "n/a", "n/a")
             found_jira = False
@@ -336,11 +336,11 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         if create_release_candidate:
             release_name = f"{release_prefix}{target_tag}"
             logger.info(f"creating release {release_name} in JIRA")
-            jira.add_version(
-                project_key="AEA",
-                project_id="15116",
-                version=release_name,
-            )
+            # jira.add_version(
+            #    project_key="AEA",
+            #    project_id="15116",
+            #    version=release_name,
+            # )
         output = create_release_notes(
             jira,
             current_tag,
