@@ -108,15 +108,15 @@ INPUT_SCHEMA = {
             <OPTIONAL> URL for the release workflow.
             Only used when createReleaseCandidate=true
             """,
-            "examples": ["PfP-Apigee-"],
+            "examples": [
+                "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696"
+            ],
         },
     },
 }
 
 
 class JiraDetails(NamedTuple):
-    """a docstring"""
-
     jira_title: str
     user_story: str
     components: list[str]
@@ -170,18 +170,18 @@ def create_release_notes(
     diff: Comparison.Comparison,
     tags: PaginatedList.PaginatedList[Tag.Tag],
     repo_name: str,
-) -> str:
+) -> list[str]:
     output: list[str] = []
     header: list[str] = []
     tags_with_jira: list[str] = []
     tags_without_jira: list[str] = []
     if create_release_candidate:
         header.append(
-            "This page is auto generated. Any manual modifications will be lost"
+            f"Release url: <a class='external-link' href='{release_url}' rel='nofollow'>{release_url}</a>"
         )
     else:
         header.append(
-            f"Release url: <a class='external-link' href='{release_url}' rel='nofollow'>{release_url}</a>"
+            "This page is auto generated. Any manual modifications will be lost"
         )
 
     header.append(
@@ -194,7 +194,7 @@ def create_release_notes(
     for commit in diff.commits:
         tag_output = []
         found_jira = False
-        release_tags = [tag.name for tag in tags if tag.commit == commit]
+        release_tags = [tag.name for tag in tags if tag.commit.sha == commit.sha]
         if len(release_tags) == 0:
             release_tag = "can not find release tag"
         else:
@@ -221,6 +221,8 @@ def create_release_notes(
                 jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
             jira_details = JiraDetails("n/a", "n/a", [], "n/a", "n/a")
+            found_jira = False
+            jira_link = "n/a"
         user_story = jira_details.user_story.replace("\n", "\n<br/>")
         github_link = (
             f"https://github.com/NHSDigital/{repo_name}/releases/tag/{release_tag}"
@@ -229,11 +231,11 @@ def create_release_notes(
 
         if jira_link == "n/a":
             tag_output.append(
-                f"<br/>jira link               :  {jira_link}"
+                f"<br/>jira link               : {jira_link}"
             )  # noqa: E501
         else:
             tag_output.append(
-                f"<br/>jira link               :  <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
+                f"<br/>jira link               : <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
             )  # noqa: E501
         tag_output.append(f"<br/>jira title              : {jira_details.jira_title}")
         tag_output.append(f"<br/>user story              : {user_story}")
@@ -254,8 +256,20 @@ def create_release_notes(
         else:
             tags_without_jira = tags_without_jira + tag_output
 
-    output = header + tags_with_jira + tags_without_jira
-    return "\n".join(output)
+    if create_release_candidate:
+        tags_with_jira_header = ["Changes with jira tickets"]
+        tags_withouut_jira_header = ["Changes without jira tickets"]
+    else:
+        tags_with_jira_header = []
+        tags_withouut_jira_header = []
+    output = (
+        header
+        + tags_with_jira_header
+        + tags_with_jira
+        + tags_withouut_jira_header
+        + tags_without_jira
+    )
+    return output
 
 
 def to_bool(value) -> bool:
