@@ -4,7 +4,7 @@ from atlassian import Jira, Confluence  # type: ignore
 from typing import NamedTuple
 import traceback
 import sys
-from github import Github, Auth, Comparison, PaginatedList, Tag
+from github import Github, Auth, Comparison, PaginatedList, Tag, Repository
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
@@ -298,8 +298,9 @@ def to_boolean(value) -> bool:
         raise ValueError('invalid literal for boolean: "%s"' % value)
 
 
-def process_event(event: dict, jira: Jira, gh: Github, confluence: Confluence) -> None:
-    validate(event=event, schema=INPUT_SCHEMA)
+def process_event(
+    event: dict, jira: Jira, repo: Repository.Repository, confluence: Confluence
+) -> None:
     current_tag = event["currentTag"]
     target_tag = event["targetTag"]
     repo_name = event["repoName"]
@@ -310,8 +311,6 @@ def process_event(event: dict, jira: Jira, gh: Github, confluence: Confluence) -
     create_release_candidate = to_boolean(event.get("createReleaseCandidate", "false"))
     release_prefix = event.get("releasePrefix")
     release_url = event.get("releaseURL")
-
-    repo = gh.get_repo(f"NHSDigital/{repo_name}")
 
     diff = repo.compare(base=current_tag, head=target_tag)
     tags = repo.get_tags()
@@ -363,6 +362,7 @@ def process_event(event: dict, jira: Jira, gh: Github, confluence: Confluence) -
 def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
         logger.info(event)
+        validate(event=event, schema=INPUT_SCHEMA)
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
@@ -379,8 +379,10 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
         github_auth = Auth.Token(str(GITHUB_TOKEN))
         gh = Github(auth=github_auth)
+        repo_name = event["repoName"]
+        repo = gh.get_repo(f"NHSDigital/{repo_name}")
 
-        process_event(event=event, jira=jira, gh=gh, confluence=confluence)
+        process_event(event=event, jira=jira, repo=repo, confluence=confluence)
 
         return {"status": "OK", "statusCode": 200}
 

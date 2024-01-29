@@ -6,6 +6,8 @@ from tests.common import (
     mocked_jira_get_issue,
     expected_release_notes,
     expected_rc_release_notes,
+    mocked_compare,
+    mocked_get_tags,
 )
 
 
@@ -19,25 +21,7 @@ class TestGetJiraDetails(unittest.TestCase):
         tag_3 = Tag.Tag(None, None, {"name": "tag_3", "commit": {"sha": "sha_3"}}, True)
         tags = [tag_1, tag_2, tag_3]
 
-        comparison_details = {
-            "url": "https://api.github.com/repos/NHSDigital/electronic-prescription-service-api/compare/v1.0.1692-beta...v1.0.1693-beta",
-            "commits": [
-                {
-                    "sha": "sha_1",
-                    "commit": {"message": "AEA-123"},
-                },
-                {
-                    "sha": "sha_2",
-                    "commit": {"message": "no jira"},
-                },
-                {
-                    "sha": "sha_3",
-                    "commit": {"message": "AEA-124"},
-                },
-            ],
-        }
-
-        diff = Comparison.Comparison("", None, comparison_details, True)
+        diff = mocked_compare()
 
         release_notes = create_release_notes.create_release_notes(
             jira=mock_jira,
@@ -59,10 +43,7 @@ class TestGetJiraDetails(unittest.TestCase):
     def test_create_rc_release_notes(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
-        tag_1 = Tag.Tag(None, None, {"name": "tag_1", "commit": {"sha": "sha_1"}}, True)
-        tag_2 = Tag.Tag(None, None, {"name": "tag_2", "commit": {"sha": "sha_2"}}, True)
-        tag_3 = Tag.Tag(None, None, {"name": "tag_3", "commit": {"sha": "sha_3"}}, True)
-        tags = [tag_1, tag_2, tag_3]
+        tags = mocked_get_tags()
 
         comparison_details = {
             "url": "https://api.github.com/repos/NHSDigital/electronic-prescription-service-api/compare/v1.0.1692-beta...v1.0.1693-beta",
@@ -88,7 +69,7 @@ class TestGetJiraDetails(unittest.TestCase):
             jira=mock_jira,
             current_tag="tag_1",
             target_tag="tag_3",
-            target_environment="dev",
+            target_environment="INT",
             product_name="EPS FHIR API",
             create_release_candidate=True,
             release_name="v1.0.442-beta ",
