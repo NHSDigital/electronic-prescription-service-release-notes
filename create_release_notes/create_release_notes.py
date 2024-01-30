@@ -352,8 +352,8 @@ def process_event(
         logger.info(f"updating release notes page {release_notes_page_id}")
         confluence.update_page(
             page_id=release_notes_page_id,
-            body="\n".join(output),
             title=release_notes_page_title,
+            body="\n".join(output),
         )
 
 
