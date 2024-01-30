@@ -31,7 +31,7 @@ param_list = [
 ]
 
 
-class TestGetJiraDetails(unittest.TestCase):
+class TestCreateReleaseNotes(unittest.TestCase):
     @patch("create_release_notes.create_release_notes.Jira")
     def test_create_release_notes(self, mock_jira):
         tags = mocked_get_tags()

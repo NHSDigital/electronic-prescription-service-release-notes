@@ -4,9 +4,9 @@ from datetime import datetime
 from mark_jira_released import mark_jira_released
 
 
-class TestMarkJiraReleased(unittest.TestCase):
+class TestProcessEvent(unittest.TestCase):
     @patch("mark_jira_released.mark_jira_released.Jira")
-    def test_get_mark_jira_released_success(self, mock_jira):
+    def test_mark_jira_released_success(self, mock_jira):
         mock_jira.get_project_versions.return_value = [
             {"name": "test_release", "id": "1234"},
             {"name": "another_release", "id": "5678"},
@@ -25,7 +25,7 @@ class TestMarkJiraReleased(unittest.TestCase):
         )
 
     @patch("mark_jira_released.mark_jira_released.Jira")
-    def test_get_mark_jira_released_no_release(self, mock_jira):
+    def test_mark_jira_released_no_release(self, mock_jira):
         mock_jira.get_project_versions.return_value = [
             {"name": "test_release", "id": "1234"},
             {"name": "another_release", "id": "5678"},

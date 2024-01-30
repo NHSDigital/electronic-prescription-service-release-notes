@@ -33,7 +33,6 @@ INPUT_SCHEMA = {
 
 
 def process_event(event, jira: Jira):
-    validate(event=event, schema=INPUT_SCHEMA)
     release_version = event["releaseVersion"]
 
     versions = jira.get_project_versions(key="AEA")
@@ -62,6 +61,7 @@ def process_event(event, jira: Jira):
 def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
         logger.info(event)
+        validate(event=event, schema=INPUT_SCHEMA)
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         if JIRA_TOKEN is None:
             JIRA_TOKEN = str(parameters.get_secret("account-resources-jiraToken"))
