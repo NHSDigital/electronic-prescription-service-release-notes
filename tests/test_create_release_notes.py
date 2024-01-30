@@ -16,16 +16,16 @@ param_list = [
         "rc release notes with release url",
         True,
         "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696",
-        0,
-        0,
+        2,
+        2,
         expected_rc_release_notes_with_release_run_link,
     ),
     (
         "rc release notes without release url",
         True,
         None,
-        0,
-        0,
+        2,
+        2,
         expected_rc_release_notes_with_no_release_run_link,
     ),
 ]
@@ -34,8 +34,6 @@ param_list = [
 class TestGetJiraDetails(unittest.TestCase):
     @patch("create_release_notes.create_release_notes.Jira")
     def test_create_release_notes(self, mock_jira):
-        mock_jira.get_issue.side_effect = mocked_jira_get_issue
-
         tags = mocked_get_tags()
         diff = mocked_compare()
         for (
@@ -49,6 +47,8 @@ class TestGetJiraDetails(unittest.TestCase):
             with self.subTest(
                 msg=scenario,
             ):
+                mock_jira.reset_mock()
+                mock_jira.get_issue.side_effect = mocked_jira_get_issue
                 release_notes = create_release_notes.create_release_notes(
                     jira=mock_jira,
                     current_tag="tag_1",

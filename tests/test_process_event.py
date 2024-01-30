@@ -48,6 +48,13 @@ class TestProcessEvent(unittest.TestCase):
             body="\n".join(expected_rc_release_notes_with_release_run_link),
             space="APIMC",
         )
+        mock_jira.add_version.assert_called()
+        mock_jira.edit_issue.assert_called()
+        mock_jira.issue_transition.assert_called()
+
+        self.assertEqual(mock_jira.add_version.call_count, 1)
+        self.assertEqual(mock_jira.edit_issue.call_count, 2)
+        self.assertEqual(mock_jira.issue_transition.call_count, 2)
 
     @patch("create_release_notes.create_release_notes.Jira")
     @patch("create_release_notes.create_release_notes.Confluence")
@@ -84,6 +91,13 @@ class TestProcessEvent(unittest.TestCase):
             body="\n".join(expected_rc_release_notes_with_no_release_run_link),
             space="APIMC",
         )
+        mock_jira.add_version.assert_called()
+        mock_jira.edit_issue.assert_called()
+        mock_jira.issue_transition.assert_called()
+
+        self.assertEqual(mock_jira.add_version.call_count, 1)
+        self.assertEqual(mock_jira.edit_issue.call_count, 2)
+        self.assertEqual(mock_jira.issue_transition.call_count, 2)
 
     @patch("create_release_notes.create_release_notes.Jira")
     @patch("create_release_notes.create_release_notes.Confluence")
@@ -117,6 +131,9 @@ class TestProcessEvent(unittest.TestCase):
             title="TEST Current PfP AWS layer release notes - INT",
             body="\n".join(expected_release_notes),
         )
+        mock_jira.add_version.assert_not_called()
+        mock_jira.edit_issue.assert_not_called()
+        mock_jira.issue_transition.assert_not_called()
 
 
 if __name__ == "__main__":
