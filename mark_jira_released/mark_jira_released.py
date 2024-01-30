@@ -32,39 +32,44 @@ INPUT_SCHEMA = {
 }
 
 
+def process_event(event, jira: Jira):
+    validate(event=event, schema=INPUT_SCHEMA)
+    release_version = event["releaseVersion"]
+
+    versions = jira.get_project_versions(key="AEA")
+    release_versions = list(
+        filter(lambda x: x.get("name") == release_version, versions)
+    )
+    if len(release_versions) != 1:
+        # return 404 where no or more than 1 release version found
+        message = f"can not find release version for {release_version}"
+        logger.error(message)
+        raise Exception(message)
+
+    release_version_id = release_versions[0].get("id")
+    logger.info(
+        f"marking {release_version} with id {release_version_id} as released in Jira"
+    )
+    jira.update_version(
+        version=release_version_id,
+        is_released=True,
+        release_date=datetime.today().strftime("%Y-%m-%d"),
+    )
+
+
 # Enrich logging with contextual information from Lambda
 @logger.inject_lambda_context()
 def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
         logger.info(event)
-        validate(event=event, schema=INPUT_SCHEMA)
-        release_version = event["releaseVersion"]
-
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
-
         if JIRA_TOKEN is None:
-            JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
+            JIRA_TOKEN = str(parameters.get_secret("account-resources-jiraToken"))
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        versions = jira.get_project_versions(key="AEA")
-        release_versions = list(
-            filter(lambda x: x.get("name") == release_version, versions)
-        )
-        if len(release_versions) != 1:
-            # return 404 where no or more than 1 release version found
-            message = f"can not find release version for {release_version}"
-            logger.error(message)
-            return {"statusCode": 404, "body": message}
+        process_event(event=event, jira=jira)
 
-        release_version_id = release_versions[0].get("id")
-        logger.info(
-            f"marking {release_version} with id {release_version_id} as released in Jira"
-        )
-        jira.update_version(
-            version=release_version_id,
-            is_released=True,
-            release_date=datetime.today().strftime("%Y-%m-%d"),
-        )
+        return {"status": "OK", "statusCode": 200}
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
