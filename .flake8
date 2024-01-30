@@ -1,2 +1,5 @@
 [flake8]
 max-line-length = 160
+per-file-ignores =
+    # line too long
+    tests/common.py: E501,

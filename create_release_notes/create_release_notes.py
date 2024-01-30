@@ -1,10 +1,10 @@
 import os
 import re
-from atlassian import Jira, Confluence
-from typing import Tuple
+from atlassian import Jira, Confluence  # type: ignore
+from typing import NamedTuple
 import traceback
 import sys
-from github import Github, Auth
+from github import Github, Auth, Comparison, PaginatedList, Tag, Repository
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
@@ -29,6 +29,7 @@ INPUT_SCHEMA = {
             "productName": "Prescriptions for Patients AWS layer",
             "releaseNotesPageId": "693750029",
             "releaseNotesPageTitle": "Current PfP AWS layer release notes - PROD",
+            "releaseURL": "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7081875172",
         }
     ],
     "required": [
@@ -96,15 +97,34 @@ INPUT_SCHEMA = {
             <OPTIONAL> Prefix for the release in jira. The release created in jira has the format <releasePrefix><targetTag>.
             Only used when createReleaseCandidate=true
             """,
-            "examples": ["PfP-Apigee-"],
+            "examples": [
+                "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7081875172"
+            ],
+        },
+        "releaseURL": {
+            "$id": "#/properties/releaseURL",
+            "type": "string",
+            "title": """
+            <OPTIONAL> URL for the release workflow.
+            Only used when createReleaseCandidate=true
+            """,
+            "examples": [
+                "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696"
+            ],
         },
     },
 }
 
 
-def get_jira_details(
-    jira: Jira, jira_ticket_number: str
-) -> Tuple[str, str, str, str, str]:
+class JiraDetails(NamedTuple):
+    jira_title: str
+    user_story: str
+    components: list[str]
+    impact: str
+    business_service_impact: str
+
+
+def get_jira_details(jira: Jira, jira_ticket_number: str) -> JiraDetails:
     try:
         jira_ticket = jira.get_issue(jira_ticket_number)
         jira_title = jira_ticket["fields"]["summary"]
@@ -127,40 +147,55 @@ def get_jira_details(
         else:
             impact = ""
         business_service_impact = jira_ticket["fields"].get("customfield_13618")
-        return jira_title, user_story, components, impact, business_service_impact
+        return JiraDetails(
+            jira_title, user_story, components, impact, business_service_impact
+        )
     except:  # noqa: E722
         logger.error(traceback.format_exception(*sys.exc_info()))
         logger.error(f"problem getting details for {jira_ticket_number}")
-        return f"can not find jira ticket for {jira_ticket_number}", "", "", "", ""
+        return JiraDetails(
+            f"can not find jira ticket for {jira_ticket_number}", "", [], "", ""
+        )
 
 
 def create_release_notes(
     jira: Jira,
     current_tag: str,
     target_tag: str,
-    repo_name: str,
     target_environment: str,
     product_name: str,
-    create_release_candidate: str,
+    create_release_candidate: bool,
     release_name: str,
-    github_token: str,
-) -> str:
-    auth = Auth.Token(github_token)
-    gh = Github(auth=auth)
-    repo = gh.get_repo(f"NHSDigital/{repo_name}")
+    release_url: str | None,
+    diff: Comparison.Comparison,
+    tags: PaginatedList.PaginatedList[Tag.Tag],
+    repo_name: str,
+) -> list[str]:
+    output: list[str] = []
+    header: list[str] = []
+    tags_with_jira: list[str] = []
+    tags_without_jira: list[str] = []
+    if create_release_candidate:
+        if release_url:
+            header.append(
+                f"Azure or github release run URL: <a class='external-link' href='{release_url}' rel='nofollow'>{release_url}</a>"
+            )
+    else:
+        header.append(
+            "This page is auto generated. Any manual modifications will be lost"
+        )
 
-    output = ["This page is auto generated. Any manual modifications will be lost"]
-    output.append(
+    header.append(
         f"<h1 id='Currentreleasenotes{target_tag}-plannedreleasetotag{target_tag}'>{product_name} planned release to {target_environment} of tag {target_tag}</h1>",  # NOQA ES01
     )  # noqa: E501
-    output.append(
+    header.append(
         f"<h2 id='Currentreleasenotes{target_tag}-Changessincecurrentlyreleasedtag{current_tag}'>Changes since currently released tag {current_tag}</h2>",
     )  # noqa: E501
 
-    diff = repo.compare(base=current_tag, head=target_tag)
-    tags = repo.get_tags()
     for commit in diff.commits:
-        release_tags = [tag.name for tag in tags if tag.commit == commit]
+        tag_output = []
+        found_jira = False
+        release_tags = [tag.name for tag in tags if tag.commit.sha == commit.sha]
         if len(release_tags) == 0:
             release_tag = "can not find release tag"
         else:
@@ -168,16 +203,11 @@ def create_release_notes(
         first_commit_line = commit.commit.message.splitlines()[0]
         match = re.search(r"(AEA[- ]\d*)", first_commit_line, re.IGNORECASE)
         if match:
+            found_jira = True
             ticket_number = match.group(1).replace(" ", "-").upper()
             jira_link = f"https://nhsd-jira.digital.nhs.uk/browse/{ticket_number}"
-            (
-                jira_title,
-                user_story,
-                components,
-                impact,
-                business_service_impact,
-            ) = get_jira_details(jira, ticket_number)
-            if create_release_candidate == "true":
+            jira_details = get_jira_details(jira, ticket_number)
+            if create_release_candidate:
                 logger.info(
                     f"Adding fix version {release_name} to ticket {ticket_number}"
                 )
@@ -191,37 +221,140 @@ def create_release_notes(
                 )
                 jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
         else:
+            jira_details = JiraDetails("n/a", "n/a", [], "n/a", "n/a")
+            found_jira = False
             jira_link = "n/a"
-            jira_title = "n/a"
-            user_story = "n/a"
-            components = "n/a"
-            impact = "n/a"
-            business_service_impact = "n/a"
-        user_story = user_story.replace("\n", "\n<br/>")
+        user_story = jira_details.user_story.replace("\n", "\n<br/>")
         github_link = (
             f"https://github.com/NHSDigital/{repo_name}/releases/tag/{release_tag}"
         )
-        output.append("<p>***")
+        tag_output.append("<p>***")
 
         if jira_link == "n/a":
-            output.append(f"<br/>jira link               :  {jira_link}")  # noqa: E501
-        else:
-            output.append(
-                f"<br/>jira link               :  <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
+            tag_output.append(
+                f"<br/>jira link               : {jira_link}"
             )  # noqa: E501
-        output.append(f"<br/>jira title              : {jira_title}")
-        output.append(f"<br/>user story              : {user_story}")
-        output.append(f"<br/>commit title            : {first_commit_line}")
-        output.append(f"<br/>release tag             : {release_tag}")
-        output.append(
+        else:
+            tag_output.append(
+                f"<br/>jira link               : <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
+            )  # noqa: E501
+        tag_output.append(f"<br/>jira title              : {jira_details.jira_title}")
+        tag_output.append(f"<br/>user story              : {user_story}")
+        tag_output.append(f"<br/>commit title            : {first_commit_line}")
+        tag_output.append(f"<br/>release tag             : {release_tag}")
+        tag_output.append(
             f"<br/>github release          : <a class='external-link' href='{github_link}' rel='nofollow'>{github_link}</a>",
         )  # noqa: E501
-        output.append(f"<br/>Area affected           : {components}")
-        output.append(f"<br/>Impact                  : {impact}")
-        output.append(f"<br/>Business/Service Impact : {business_service_impact}")
-        output.append("</p>")
+        tag_output.append(f"<br/>Area affected           : {jira_details.components}")
+        tag_output.append(f"<br/>Impact                  : {jira_details.impact}")
+        tag_output.append(
+            f"<br/>Business/Service Impact : {jira_details.business_service_impact}"
+        )
+        tag_output.append("</p>")
 
-    return "\n".join(output)
+        if create_release_candidate and found_jira:
+            tags_with_jira = tags_with_jira + tag_output
+        else:
+            tags_without_jira = tags_without_jira + tag_output
+
+    if create_release_candidate:
+        tags_with_jira_header = ["<h3 id='jira_changes'>Changes with jira tickets</h3>"]
+        tags_withouut_jira_header = [
+            "<p>***</p>",
+            "<h3 id='non_jira_changes'>Changes without jira tickets</h3>",
+        ]
+    else:
+        tags_with_jira_header = []
+        tags_withouut_jira_header = []
+    output = (
+        header
+        + tags_with_jira_header
+        + tags_with_jira
+        + tags_withouut_jira_header
+        + tags_without_jira
+    )
+    return output
+
+
+def to_boolean(value) -> bool:
+    valid = {
+        "true": True,
+        "t": True,
+        "1": True,
+        "false": False,
+        "f": False,
+        "0": False,
+    }
+    if isinstance(value, bool):
+        return value
+
+    if not isinstance(value, str):
+        raise ValueError("invalid literal for boolean. Not a string.")
+
+    lower_value = value.lower()
+    if lower_value in valid:
+        return valid[lower_value]
+    else:
+        raise ValueError('invalid literal for boolean: "%s"' % value)
+
+
+def process_event(
+    event: dict, jira: Jira, repo: Repository.Repository, confluence: Confluence
+) -> None:
+    current_tag = event["currentTag"]
+    target_tag = event["targetTag"]
+    repo_name = event["repoName"]
+    target_environment = event["targetEnvironment"]
+    product_name = event["productName"]
+    release_notes_page_id = event["releaseNotesPageId"]
+    release_notes_page_title = event["releaseNotesPageTitle"]
+    create_release_candidate = to_boolean(event.get("createReleaseCandidate", "false"))
+    release_prefix = event.get("releasePrefix")
+    release_url = event.get("releaseURL")
+
+    diff = repo.compare(base=current_tag, head=target_tag)
+    tags = repo.get_tags()
+
+    release_name = ""
+    if create_release_candidate:
+        release_name = f"{release_prefix}{target_tag}"
+        logger.info(f"creating release {release_name} in JIRA")
+        jira.add_version(
+            project_key="AEA",
+            project_id="15116",
+            version=release_name,
+        )
+    output = create_release_notes(
+        jira,
+        current_tag,
+        target_tag,
+        target_environment,
+        product_name,
+        create_release_candidate,
+        release_name,
+        release_url,
+        diff,
+        tags,
+        repo_name,
+    )
+
+    if create_release_candidate:
+        logger.info(
+            f"creating RC release notes page under page {release_notes_page_id}"
+        )
+        confluence.create_page(
+            parent_id=release_notes_page_id,
+            title=release_notes_page_title,
+            body="\n".join(output),
+            space="APIMC",
+        )
+    else:
+        logger.info(f"updating release notes page {release_notes_page_id}")
+        confluence.update_page(
+            page_id=release_notes_page_id,
+            title=release_notes_page_title,
+            body="\n".join(output),
+        )
 
 
 # Enrich logging with contextual information from Lambda
@@ -230,67 +363,29 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
     try:
         logger.info(event)
         validate(event=event, schema=INPUT_SCHEMA)
-        current_tag = event["currentTag"]
-        target_tag = event["targetTag"]
-        repo_name = event["repoName"]
-        target_environment = event["targetEnvironment"]
-        product_name = event["productName"]
-        release_notes_page_id = event["releaseNotesPageId"]
-        release_notes_page_title = event["releaseNotesPageTitle"]
-        create_release_candidate = event.get("createReleaseCandidate", "false")
-        release_prefix = event.get("releasePrefix")
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
         GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
         if JIRA_TOKEN is None:
-            JIRA_TOKEN = parameters.get_secret("account-resources-jiraToken")
+            JIRA_TOKEN = str(parameters.get_secret("account-resources-jiraToken"))
         if CONFLUENCE_TOKEN is None:
-            CONFLUENCE_TOKEN = parameters.get_secret(
-                "account-resources-confluenceToken"
+            CONFLUENCE_TOKEN = str(
+                parameters.get_secret("account-resources-confluenceToken")
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        release_name = ""
-        if create_release_candidate == "true":
-            release_name = f"{release_prefix}{target_tag}"
-            logger.info(f"creating release {release_name} in JIRA")
-            jira.add_version(
-                project_key="AEA",
-                project_id="15116",
-                version=release_name,
-            )
-        output = create_release_notes(
-            jira,
-            current_tag,
-            target_tag,
-            repo_name,
-            target_environment,
-            product_name,
-            create_release_candidate,
-            release_name,
-            GITHUB_TOKEN,
-        )
         confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
-        if create_release_candidate == "true":
-            logger.info(
-                f"creating RC release notes page under page {release_notes_page_id}"
-            )
-            confluence.create_page(
-                parent_id=release_notes_page_id,
-                title=release_notes_page_title,
-                body=output,
-                space="APIMC",
-            )
-        else:
-            logger.info(f"updating release notes page {release_notes_page_id}")
-            confluence.update_page(
-                page_id=release_notes_page_id,
-                body=output,
-                title=release_notes_page_title,
-            )
+        github_auth = Auth.Token(str(GITHUB_TOKEN))
+        gh = Github(auth=github_auth)
+        repo_name = event["repoName"]
+        repo = gh.get_repo(f"NHSDigital/{repo_name}")
+
+        process_event(event=event, jira=jira, repo=repo, confluence=confluence)
+
         return {"status": "OK", "statusCode": 200}
+
     except SchemaValidationError as exception:
         # SchemaValidationError indicates where a data mismatch is
         logger.exception(exception)
