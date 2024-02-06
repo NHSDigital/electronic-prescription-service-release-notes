@@ -18,7 +18,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
     @patch("create_release_notes.create_release_notes.Jira")
-    def test_get_jira_details_user_story_seperate_field(self, mock_jira):
+    def test_get_jira_details_user_story_separate_field_populated(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
         jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-126")
@@ -27,6 +27,36 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(
             jira_details.user_story,
             "This is the user story that should be used\nover two lines",
+        )
+        self.assertEqual(jira_details.components, ["Component1", "Component2"])
+        self.assertEqual(jira_details.impact, "High")
+        self.assertEqual(jira_details.business_service_impact, "Service Impact")
+
+    @patch("create_release_notes.create_release_notes.Jira")
+    def test_get_jira_details_user_story_separate_field_blank(self, mock_jira):
+        mock_jira.get_issue.side_effect = mocked_jira_get_issue
+
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-127")
+
+        self.assertEqual(jira_details.jira_title, "Test Summary")
+        self.assertEqual(
+            jira_details.user_story,
+            "it should use this user story",
+        )
+        self.assertEqual(jira_details.components, ["Component1", "Component2"])
+        self.assertEqual(jira_details.impact, "High")
+        self.assertEqual(jira_details.business_service_impact, "Service Impact")
+
+    @patch("create_release_notes.create_release_notes.Jira")
+    def test_get_jira_details_user_story_separate_field_none(self, mock_jira):
+        mock_jira.get_issue.side_effect = mocked_jira_get_issue
+
+        jira_details = create_release_notes.get_jira_details(mock_jira, "AEA-128")
+
+        self.assertEqual(jira_details.jira_title, "Test Summary")
+        self.assertEqual(
+            jira_details.user_story,
+            "it should use this user story",
         )
         self.assertEqual(jira_details.components, ["Component1", "Component2"])
         self.assertEqual(jira_details.impact, "High")

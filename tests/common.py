@@ -42,6 +42,28 @@ def mocked_jira_get_issue(*args, **kwargs):
                 "customfield_17101": "This is the user story that should be used\nover two lines",
             }
         }
+    elif args[0] == "AEA-127":
+        return {
+            "fields": {
+                "summary": "Test Summary",
+                "description": "User story\nit should use this user story\nBackground: Test Background",
+                "components": [{"name": "Component1"}, {"name": "Component2"}],
+                "customfield_26905": {"value": "High"},
+                "customfield_13618": "Service Impact",
+                "customfield_17101": "",
+            }
+        }
+    elif args[0] == "AEA-128":
+        return {
+            "fields": {
+                "summary": "Test Summary",
+                "description": "User story\nit should use this user story\nBackground: Test Background",
+                "components": [{"name": "Component1"}, {"name": "Component2"}],
+                "customfield_26905": {"value": "High"},
+                "customfield_13618": "Service Impact",
+                "customfield_17101": None,
+            }
+        }
     else:
         raise (Exception)
 
