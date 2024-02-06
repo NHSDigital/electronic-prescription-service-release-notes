@@ -155,7 +155,7 @@ test-publish-account-resources-release-notes-int:
 publish-account-resources-rc-release-notes-int:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
 	int_tag=$$(curl -s "https://int.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
-	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"AWS-account-resources-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-account-resources\", \"targetEnvironment\": \"INT\", \"productName\": \"AWS account resources\", \"releaseNotesPageId\": \"749733675\", \"releaseNotesPageTitle\": \"FHIR-$$dev_tag - Deployed to [INT] on $$(date +'%d-%m-%y')\" } > /tmp/payload.json
+	echo { \"createReleaseCandidate\": \"true\", \"releasePrefix\": \"AWS-account-resources-\", \"currentTag\": \"$$int_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-account-resources\", \"targetEnvironment\": \"INT\", \"productName\": \"AWS account resources\", \"releaseNotesPageId\": \"749733675\", \"releaseNotesPageTitle\": \"AWS-account-resources-$$dev_tag - Deployed to [INT] on $$(date +'%d-%m-%y')\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
@@ -165,7 +165,7 @@ publish-account-resources-rc-release-notes-int:
 publish-account-resources-release-notes-prod:
 	dev_tag=$$(curl -s "https://internal-dev.api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
 	prod_tag=$$(curl -s "https://api.service.nhs.uk/electronic-prescriptions/_ping" | jq --raw-output ".version"); \
-	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-account-resources\", \"targetEnvironment\": \"PROD\", \"productName\": \"AWS account resources\", \"releaseNotesPageId\": \"749733670\", \"releaseNotesPageTitle\": \"Current FHIR API release notes - PROD\" } > /tmp/payload.json
+	echo { \"currentTag\": \"$$prod_tag\", \"targetTag\": \"$$dev_tag\", \"repoName\": \"electronic-prescription-service-account-resources\", \"targetEnvironment\": \"PROD\", \"productName\": \"AWS account resources\", \"releaseNotesPageId\": \"749733670\", \"releaseNotesPageTitle\": \"Current AWS account resources release notes - PROD\" } > /tmp/payload.json
 	aws lambda invoke \
 		--function-name "release-notes$${pull_request}-createReleaseNotes" \
 		--cli-binary-format raw-in-base64-out \
