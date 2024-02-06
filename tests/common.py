@@ -1,4 +1,4 @@
-from github import Tag, Comparison
+from github import Tag, Comparison, Requester
 
 
 def mocked_jira_get_issue(*args, **kwargs):
@@ -44,8 +44,21 @@ def mocked_get_tags(*args, **kwargs):
 
 
 def mocked_compare(*args, **kwargs):
-    comparison_details = {
-        "url": "https://api.github.com/repos/NHSDigital/electronic-prescription-service-api/compare/v1.0.1692-beta...v1.0.1693-beta",
+    requester = Requester.Requester(
+        auth=None,
+        base_url="https://fake_url",
+        timeout=1,
+        user_agent="user agent",
+        per_page=123,
+        verify=False,
+        retry=3,
+        pool_size=5,
+        seconds_between_requests=1.2,
+        seconds_between_writes=3.4,
+    )
+    commits_raw = {
+        "url": "https://fake_url",
+        "total_commits": 3,
         "commits": [
             {
                 "sha": "sha_1",
@@ -62,7 +75,7 @@ def mocked_compare(*args, **kwargs):
         ],
     }
 
-    diff = Comparison.Comparison("", None, comparison_details, True)
+    diff = Comparison.Comparison(requester, {"header": "value"}, commits_raw, True)
     return diff
 
 
