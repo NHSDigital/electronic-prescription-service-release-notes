@@ -196,15 +196,30 @@ By default these all run against the deployed lambdas from the main branch. If y
 export pull_request=-pr-27
 ```
 
-- `publish-pfp-aws-release-notes-int` Updates release notes for pfp AWS layer comparing what is currently in int to what is currently in dev
-- `publish-pfp-aws-rc-release-notes-int` Creates release notes for pfp AWS layer comparing what is currently in int to what is currently in dev. Also creates a release in jira and adds fix version to jira tickets found
-- `publish-pfp-aws-release-notes-prod` Updates release notes for pfp AWS layer comparing what is currently in prod to what is currently in dev
-- `publish-pfp-apigee-release-notes-int` Updates release notes for pfp Apigee layer comparing what is currently in int to what is currently in dev
-- `publish-pfp-apigee-rc-release-notes-int` Creates release notes for pfp Apigee layer comparing what is currently in int to what is currently in dev. Also creates a release in jira and adds fix version to jira tickets found
-- `publish-pfp-apigee-release-notes-prod` Creates release notes for pfp Apigee layer comparing what is currently in prod to what is currently in dev
-- `publish-fhir-release-notes-int` Updates release notes for FHIR api comparing what is currently in int to what is currently in dev
-- `publish-fhir-rc-release-notes-int` Creates release notes for FHIR api comparing what is currently in int to what is currently in dev. Also creates a release in jira and adds fix version to jira tickets found
-- `publish-fhir-release-notes-prod` Creates release notes for FHIR api comparing what is currently in prod to what is currently in dev
+You must also set environment variables dev_tag, int_tag, prod_tag.
+
+**THE RC RELEASE NOTES CALLS ALSO MODIFY TICKETS IN JIRA BY CHANGING STATUS AND ADDING A FIX SO SHOULD BE USED CAREFULLY**
+
+- `publish-pfp-aws-release-notes-int` Updates release notes for pfp AWS layer showing what is between int_tag and dev_tag
+- `publish-pfp-aws-rc-release-notes-int` Creates release notes for pfp AWS layer showing what is between int_tag and dev_tag. Also creates a release in jira and adds fix version to jira tickets found
+- `publish-pfp-aws-release-notes-prod` Updates release notes for pfp AWS layer showing what is between prod_tag and dev_tag
+- `test-publish-pfp-aws-release-notes-int` Updates test release notes in testing location for pfp AWS layer showing what is between int_tag and dev_tag
+
+- `publish-pfp-apigee-release-notes-int` Updates release notes for pfp Apigee layer showing what is between int_tag and dev_tag
+- `publish-pfp-apigee-rc-release-notes-int` Creates release notes for pfp Apigee layer showing what is between int_tag and dev_tag. Also creates a release in jira and adds fix version to jira tickets found
+- `publish-pfp-apigee-release-notes-prod` Creates release notes for pfp Apigee layer showing what is between prod_tag and dev_tag
+- `test-publish-pfp-apigee-release-notes-int` Updates test release notes in testing location for pfp Apigee layer showing what is between int_tag and dev_tag
+
+- `publish-fhir-release-notes-int` Updates release notes for FHIR api showing what is between int_tag and dev_tag
+- `publish-fhir-rc-release-notes-int` Creates release notes for FHIR api showing what is between int_tag and dev_tag. Also creates a release in jira and adds fix version to jira tickets found
+- `publish-fhir-release-notes-prod` Creates release notes for FHIR api showing what is between prod_tag and dev_tag
+- `publish-fhir-release-notes-int` Updates test release notes in testing location for FHIR api showing what is between int_tag and dev_tag
+
+- `publish-account-resources-release-notes-int` Updates release notes for FHIR api showing what is between int_tag and dev_tag
+- `publish-account-resources-rc-release-notes-int` Creates release notes for FHIR api showing what is between int_tag and dev_tag. Also creates a release in jira and adds fix version to jira tickets found
+- `publish-account-resources-release-notes-prod` Creates release notes for FHIR api showing what is between prod_tag and dev_tag
+- `publish-account-resources-release-notes-int` Updates test release notes in testing location for FHIR api showing what is between int_tag and dev_tag
+
 - `mark-jira-released` Marks a jira version as released
 
 ### Github folder

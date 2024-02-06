@@ -132,18 +132,17 @@ def get_jira_details(jira: Jira, jira_ticket_number: str) -> JiraDetails:
         components = [
             component["name"] for component in jira_ticket["fields"]["components"]
         ]
-        user_story = jira_ticket["fields"].get("customfield_17101")
-        if user_story is None:
+        user_story = jira_ticket["fields"].get("customfield_17101", "").strip()
+        if user_story == "":
             match = match = re.search(
                 r"(user story)(.*?)background",
                 jira_description,
                 re.IGNORECASE | re.MULTILINE | re.DOTALL,
             )
             if match:
-                user_story = match.group(2).replace("*", "").replace("h3.", "")
+                user_story = match.group(2).replace("*", "").replace("h3.", "").strip()
             else:
                 user_story = "can not find user story"
-        user_story = user_story.strip()
         impact_field = jira_ticket.get("fields", {}).get("customfield_26905", {})
         if impact_field:
             impact = impact_field.get("value", "")
