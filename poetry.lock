@@ -32,13 +32,13 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "atlassian-python-api"
-version = "3.41.9"
+version = "3.41.10"
 description = "Python Atlassian REST API Wrapper"
 optional = false
 python-versions = "*"
 files = [
-    {file = "atlassian-python-api-3.41.9.tar.gz", hash = "sha256:3682b9539c1e31fe53b020bdcbce532ca5655fc2cc98cc0e7f9572d92afcc13b"},
-    {file = "atlassian_python_api-3.41.9-py3-none-any.whl", hash = "sha256:818294e2a89222dbda2fae03332317b2a770858e62fae4b62e6b579e0b31109b"},
+    {file = "atlassian-python-api-3.41.10.tar.gz", hash = "sha256:2a0592c5f7db6abeafdabd86b68de2e85aa3396fdcd4d721e9787532fa497ffe"},
+    {file = "atlassian_python_api-3.41.10-py3-none-any.whl", hash = "sha256:cab50e8796b01033a6d69233d4edf35273e280e57b07744e7cc76c74b8e6aa90"},
 ]
 
 [package.dependencies]
@@ -91,13 +91,13 @@ dev = ["black (==22.6.0)", "black (==23.11.0)", "coverage (==7.2.7)", "coverage 
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.33.0"
+version = "2.33.1"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
-python-versions = ">=3.7.4,<4.0.0"
+python-versions = ">=3.8,<4.0.0"
 files = [
-    {file = "aws_lambda_powertools-2.33.0-py3-none-any.whl", hash = "sha256:8325631527e3a37f0e0d6aa1a47e804f4d262e7c4efb14d518050fd66764b92f"},
-    {file = "aws_lambda_powertools-2.33.0.tar.gz", hash = "sha256:e11ef66722d8217dedeb0824d09437e61bdcc78998ef0a71d5c2b7a0b475d05f"},
+    {file = "aws_lambda_powertools-2.33.1-py3-none-any.whl", hash = "sha256:f3796733ed345cdf6aa51583465ffd685c34c48a9427083db74bcf7af4f14fa8"},
+    {file = "aws_lambda_powertools-2.33.1.tar.gz", hash = "sha256:443846fbd46d4ab1a3a4b3bfc753131f86e0f5e52a79949ecc90201b09661c79"},
 ]
 
 [package.dependencies]
@@ -3238,4 +3238,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "0dfef49478a03b22e6c936386b45788e35617c4af5cdd2a255eb219e1a9428ee"
+content-hash = "91c3e3a4bfa46e5acd660b0d49831f48b29dbfc24ffa773e28dcee1eb0d734cb"
