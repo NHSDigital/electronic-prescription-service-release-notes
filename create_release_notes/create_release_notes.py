@@ -305,6 +305,8 @@ def process_event(
     event: dict, jira: Jira, repo: Repository.Repository, confluence: Confluence
 ) -> None:
     current_tag = event["currentTag"]
+    if current_tag == "":
+        current_tag = "v1.0.1724-beta"
     target_tag = event["targetTag"]
     repo_name = event["repoName"]
     target_environment = event["targetEnvironment"]
