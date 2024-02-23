@@ -52,7 +52,7 @@ pre-commit = "^3.6.2"
 semver = "^3.0.2"
 awscliv2 = "^2.2.0"
 gitpython = "^3.1.42"
-coverage = "^7.4.2"
+coverage = "^7.4.3"
 
 
 [build-system]
