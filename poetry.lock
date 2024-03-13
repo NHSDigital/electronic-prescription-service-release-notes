@@ -115,21 +115,21 @@ validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 
 [[package]]
 name = "aws-sam-cli"
-version = "1.111.0"
+version = "1.112.0"
 description = "AWS SAM CLI is a CLI tool for local development and testing of Serverless applications"
 optional = false
 python-versions = ">=3.8, <=4.0, !=4.0"
 files = [
-    {file = "aws-sam-cli-1.111.0.tar.gz", hash = "sha256:e9b4dfa4c11b34f96618fc9f4a5311be8aa5d02b3e30b33dc99937ac34859550"},
-    {file = "aws_sam_cli-1.111.0-py3-none-any.whl", hash = "sha256:c12618d6b3e73d5f0d5ead3b8ab844990c2497a2f3bd9f87f9c24beffc085067"},
+    {file = "aws-sam-cli-1.112.0.tar.gz", hash = "sha256:c45aa225380bee8d508d03c4ae5ee98a55669daea7361a235da9e8b023c50cbe"},
+    {file = "aws_sam_cli-1.112.0-py3-none-any.whl", hash = "sha256:02fb2459aaa55a33221760df9e8ea36a9befff28acf39272c6e41df62da44b28"},
 ]
 
 [package.dependencies]
 aws-lambda-builders = "1.47.0"
-aws-sam-translator = "1.85.0"
+aws-sam-translator = "1.86.0"
 boto3 = ">=1.29.2,<2"
-boto3-stubs = {version = "1.34.52", extras = ["apigateway", "cloudformation", "ecr", "iam", "kinesis", "lambda", "s3", "schemas", "secretsmanager", "signer", "sqs", "stepfunctions", "sts", "xray"]}
-cfn-lint = ">=0.85.2,<0.86.0"
+boto3-stubs = {version = "1.34.58", extras = ["apigateway", "cloudformation", "ecr", "iam", "kinesis", "lambda", "s3", "schemas", "secretsmanager", "signer", "sqs", "stepfunctions", "sts", "xray"]}
+cfn-lint = ">=0.86.0,<0.87.0"
 chevron = ">=0.12,<1.0"
 click = ">=8.1,<9.0"
 cookiecutter = ">=2.6.0,<2.7.0"
@@ -142,26 +142,26 @@ pyopenssl = ">=24.0.0,<24.1.0"
 PyYAML = ">=6.0.1,<7.0"
 regex = "!=2021.10.8"
 requests = ">=2.31.0,<2.32.0"
-rich = ">=13.7.0,<13.8.0"
+rich = ">=13.7.1,<13.8.0"
 ruamel-yaml = ">=0.18.6,<0.19.0"
-tomlkit = "0.12.3"
+tomlkit = "0.12.4"
 typing-extensions = ">=4.4.0,<5"
 tzlocal = "5.2"
 watchdog = "4.0.0"
 
 [package.extras]
-dev = ["black (==24.2.0)", "coverage (==7.4.3)", "filelock (==3.13.1)", "mypy (==1.8.0)", "parameterized (==0.9.0)", "psutil (==5.9.8)", "pytest (>=8.0.1,<8.1.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.6.0)", "pytest-json-report-wip (==1.5.1)", "pytest-metadata (==3.1.1)", "pytest-rerunfailures (==13.0)", "pytest-timeout (==2.2.0)", "pytest-xdist (==3.5.0)", "ruff (==0.2.2)", "types-PyYAML (==6.0.12.12)", "types-Pygments (==2.17.0.20240106)", "types-chevron (==0.14.2.20240106)", "types-colorama (==0.4.15.20240205)", "types-dateparser (==1.1.4.20240106)", "types-docutils (==0.20.0.20240227)", "types-jsonschema (==4.21.0.20240118)", "types-psutil (==5.9.5.20240205)", "types-pyOpenSSL (==24.0.0.20240228)", "types-pywin32 (==306.0.0.20240130)", "types-requests (==2.31.0.6)", "types-setuptools (==69.1.0.20240229)", "types-urllib3 (==1.26.25.14)"]
-pre-dev = ["ruff (==0.2.2)"]
+dev = ["black (==24.2.0)", "coverage (==7.4.3)", "filelock (==3.13.1)", "mypy (==1.8.0)", "parameterized (==0.9.0)", "psutil (==5.9.8)", "pytest (>=8.0.1,<8.1.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.6.0)", "pytest-json-report-wip (==1.5.1)", "pytest-metadata (==3.1.1)", "pytest-rerunfailures (==13.0)", "pytest-timeout (==2.3.1)", "pytest-xdist (==3.5.0)", "ruff (==0.3.1)", "types-PyYAML (==6.0.12.12)", "types-Pygments (==2.17.0.20240106)", "types-chevron (==0.14.2.20240106)", "types-colorama (==0.4.15.20240205)", "types-dateparser (==1.1.4.20240106)", "types-docutils (==0.20.0.20240308)", "types-jsonschema (==4.21.0.20240118)", "types-psutil (==5.9.5.20240205)", "types-pyOpenSSL (==24.0.0.20240228)", "types-pywin32 (==306.0.0.20240130)", "types-requests (==2.31.0.6)", "types-setuptools (==69.1.0.20240308)", "types-urllib3 (==1.26.25.14)"]
+pre-dev = ["ruff (==0.3.1)"]
 
 [[package]]
 name = "aws-sam-translator"
-version = "1.85.0"
+version = "1.86.0"
 description = "AWS SAM Translator is a library that transform SAM templates into AWS CloudFormation templates"
 optional = false
 python-versions = ">=3.8, <=4.0, !=4.0"
 files = [
-    {file = "aws-sam-translator-1.85.0.tar.gz", hash = "sha256:e41938affa128fb5bde5e1989b260bf539a96369bba3faf316ce66651351df39"},
-    {file = "aws_sam_translator-1.85.0-py3-none-any.whl", hash = "sha256:e8c69a4db7279421ff6c3579cd4d43395fe9b6781f50416528e984be68e25481"},
+    {file = "aws-sam-translator-1.86.0.tar.gz", hash = "sha256:a748dcd7886024cb7586abbbdbabe8c787c44c6547bb6602879d7bb8a6934d05"},
+    {file = "aws_sam_translator-1.86.0-py3-none-any.whl", hash = "sha256:97a44e5ac8b0d141c31f4ed35c57aa94429a0e6cef7fe989831c9a1c40455473"},
 ]
 
 [package.dependencies]
@@ -300,13 +300,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "boto3-stubs"
-version = "1.34.52"
-description = "Type annotations for boto3 1.34.52 generated with mypy-boto3-builder 7.23.2"
+version = "1.34.58"
+description = "Type annotations for boto3 1.34.58 generated with mypy-boto3-builder 7.23.2"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-stubs-1.34.52.tar.gz", hash = "sha256:823c41059f836d6877daaa1cbd20f813c8f1a78b9fdf290bc0b853127e127ba3"},
-    {file = "boto3_stubs-1.34.52-py3-none-any.whl", hash = "sha256:644381a404fb5884154f7dcc40bb819f0c7f37de21b7a7b493585277b51c9a5f"},
+    {file = "boto3-stubs-1.34.58.tar.gz", hash = "sha256:14ea85a355f984bd7dc17e39237bfc24c3a55479fbcb87f17c00269bd95a2b44"},
+    {file = "boto3_stubs-1.34.58-py3-none-any.whl", hash = "sha256:f164e520361d6aa39d295ac09588a6dc6b8efbc4058ada0b796d3bfb0e6e6e98"},
 ]
 
 [package.dependencies]
@@ -371,7 +371,7 @@ bedrock-agent = ["mypy-boto3-bedrock-agent (>=1.34.0,<1.35.0)"]
 bedrock-agent-runtime = ["mypy-boto3-bedrock-agent-runtime (>=1.34.0,<1.35.0)"]
 bedrock-runtime = ["mypy-boto3-bedrock-runtime (>=1.34.0,<1.35.0)"]
 billingconductor = ["mypy-boto3-billingconductor (>=1.34.0,<1.35.0)"]
-boto3 = ["boto3 (==1.34.52)", "botocore (==1.34.52)"]
+boto3 = ["boto3 (==1.34.58)", "botocore (==1.34.58)"]
 braket = ["mypy-boto3-braket (>=1.34.0,<1.35.0)"]
 budgets = ["mypy-boto3-budgets (>=1.34.0,<1.35.0)"]
 ce = ["mypy-boto3-ce (>=1.34.0,<1.35.0)"]
@@ -833,17 +833,17 @@ files = [
 
 [[package]]
 name = "cfn-lint"
-version = "0.85.2"
+version = "0.86.0"
 description = "Checks CloudFormation templates for practices and behaviour that could potentially be improved"
 optional = false
 python-versions = ">=3.8, <=4.0, !=4.0"
 files = [
-    {file = "cfn-lint-0.85.2.tar.gz", hash = "sha256:f8a5cc55daeaaa747b8d776dcf62fe1b6bfb8cb46ae60950cbe627601facccd7"},
-    {file = "cfn_lint-0.85.2-py3-none-any.whl", hash = "sha256:e7a0aafb9ad93dbe5db54cbefca92a94f2d173309218273ef997ecb048125d89"},
+    {file = "cfn-lint-0.86.0.tar.gz", hash = "sha256:7216e9c10dd27af73821d0ae79b17406cd89f5dfbc25feb5d2ba756eb6e9a651"},
+    {file = "cfn_lint-0.86.0-py3-none-any.whl", hash = "sha256:70cefa0ab91e35698cd8c03a2f99a367d71d848da5a62123192552937652d542"},
 ]
 
 [package.dependencies]
-aws-sam-translator = ">=1.84.0"
+aws-sam-translator = ">=1.85.0"
 jschema-to-python = ">=1.2.3,<1.3.0"
 jsonpatch = "*"
 jsonschema = ">=3.0,<5"
@@ -2623,13 +2623,13 @@ rsa = ["oauthlib[signedtoken] (>=3.0.0)"]
 
 [[package]]
 name = "rich"
-version = "13.7.0"
+version = "13.7.1"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "rich-13.7.0-py3-none-any.whl", hash = "sha256:6da14c108c4866ee9520bbffa71f6fe3962e193b7da68720583850cd4548e235"},
-    {file = "rich-13.7.0.tar.gz", hash = "sha256:5cb5123b5cf9ee70584244246816e9114227e0b98ad9176eede6ad54bf5403fa"},
+    {file = "rich-13.7.1-py3-none-any.whl", hash = "sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222"},
+    {file = "rich-13.7.1.tar.gz", hash = "sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432"},
 ]
 
 [package.dependencies]
@@ -2943,13 +2943,13 @@ files = [
 
 [[package]]
 name = "tomlkit"
-version = "0.12.3"
+version = "0.12.4"
 description = "Style preserving TOML library"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "tomlkit-0.12.3-py3-none-any.whl", hash = "sha256:b0a645a9156dc7cb5d3a1f0d4bab66db287fcb8e0430bdd4664a095ea16414ba"},
-    {file = "tomlkit-0.12.3.tar.gz", hash = "sha256:75baf5012d06501f07bee5bf8e801b9f343e7aac5a92581f20f80ce632e6b5a4"},
+    {file = "tomlkit-0.12.4-py3-none-any.whl", hash = "sha256:5cd82d48a3dd89dee1f9d64420aa20ae65cfbd00668d6f094d7578a78efbb77b"},
+    {file = "tomlkit-0.12.4.tar.gz", hash = "sha256:7ca1cfc12232806517a8515047ba66a19369e71edf2439d0f5824f91032b6cc3"},
 ]
 
 [[package]]
@@ -3242,4 +3242,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "b3531a69210d3d3eecb51949476e5ed281e7c54d0aab38ce1775415a994be6d7"
+content-hash = "b3b792741efb116ad0882ce70e67e44ef10da658de61bc30ec5e2a7fc81935d0"
