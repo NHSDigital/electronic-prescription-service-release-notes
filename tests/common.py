@@ -202,7 +202,7 @@ expected_release_notes_with_no_tag = [
     "<br/>user story              : Test User Story",
     "<br/>commit title            : AEA-123",
     "<br/>release tag             : can not find release tag",
-    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/commits/sha_4' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/commits/sha_4</a>",
+    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/commit/sha_4' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/commit/sha_4</a>",
     "<br/>Area affected           : ['Component1', 'Component2']",
     "<br/>Impact                  : High",
     "<br/>Business/Service Impact : Service Impact",
