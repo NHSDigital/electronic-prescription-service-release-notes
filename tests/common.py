@@ -76,7 +76,7 @@ def mocked_get_tags(*args, **kwargs):
     return tags
 
 
-def mocked_compare(*args, **kwargs):
+def mocked_compare(final_commit="sha_3", *args, **kwargs):
     requester = Requester.Requester(
         auth=None,
         base_url="https://fake_url",
@@ -107,6 +107,14 @@ def mocked_compare(*args, **kwargs):
             },
         ],
     }
+    if final_commit == "sha_4":
+        commits_raw["total_commits"] = 4
+        commits_raw["commits"].append(
+            {
+                "sha": "sha_4",
+                "commit": {"message": "AEA-123"},
+            }
+        )
 
     diff = Comparison.Comparison(requester, {"header": "value"}, commits_raw, True)
     return diff
@@ -145,6 +153,56 @@ expected_release_notes = [
     "<br/>commit title            : AEA-124",
     "<br/>release tag             : tag_3",
     "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_3' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_3</a>",
+    "<br/>Area affected           : ['Component1', 'Component2']",
+    "<br/>Impact                  : High",
+    "<br/>Business/Service Impact : Service Impact",
+    "</p>",
+]
+
+expected_release_notes_with_no_tag = [
+    "This page is auto generated. Any manual modifications will be lost",
+    "<h1 id='Currentreleasenotestag_3-plannedreleasetotagtag_3'>EPS FHIR API planned release to INT of tag tag_3</h1>",
+    "<h2 id='Currentreleasenotestag_3-Changessincecurrentlyreleasedtagtag_1'>Changes since currently released tag tag_1</h2>",
+    "<p>***",
+    "<br/>jira link               : <a class='external-link' href='https://nhsd-jira.digital.nhs.uk/browse/AEA-123' rel='nofollow'>https://nhsd-jira.digital.nhs.uk/browse/AEA-123</a>",
+    "<br/>jira title              : Test Summary",
+    "<br/>user story              : Test User Story",
+    "<br/>commit title            : AEA-123",
+    "<br/>release tag             : tag_1",
+    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_1' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_1</a>",
+    "<br/>Area affected           : ['Component1', 'Component2']",
+    "<br/>Impact                  : High",
+    "<br/>Business/Service Impact : Service Impact",
+    "</p>",
+    "<p>***",
+    "<br/>jira link               : n/a",
+    "<br/>jira title              : n/a",
+    "<br/>user story              : n/a",
+    "<br/>commit title            : no jira",
+    "<br/>release tag             : tag_2",
+    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_2' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_2</a>",
+    "<br/>Area affected           : []",
+    "<br/>Impact                  : n/a",
+    "<br/>Business/Service Impact : n/a",
+    "</p>",
+    "<p>***",
+    "<br/>jira link               : <a class='external-link' href='https://nhsd-jira.digital.nhs.uk/browse/AEA-124' rel='nofollow'>https://nhsd-jira.digital.nhs.uk/browse/AEA-124</a>",
+    "<br/>jira title              : Test Summary",
+    "<br/>user story              : can not find user story",
+    "<br/>commit title            : AEA-124",
+    "<br/>release tag             : tag_3",
+    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_3' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/releases/tag/tag_3</a>",
+    "<br/>Area affected           : ['Component1', 'Component2']",
+    "<br/>Impact                  : High",
+    "<br/>Business/Service Impact : Service Impact",
+    "</p>",
+    "<p>***",
+    "<br/>jira link               : <a class='external-link' href='https://nhsd-jira.digital.nhs.uk/browse/AEA-123' rel='nofollow'>https://nhsd-jira.digital.nhs.uk/browse/AEA-123</a>",
+    "<br/>jira title              : Test Summary",
+    "<br/>user story              : Test User Story",
+    "<br/>commit title            : AEA-123",
+    "<br/>release tag             : can not find release tag",
+    "<br/>github release          : <a class='external-link' href='https://github.com/NHSDigital/prescriptionsforpatients/commits/sha_4' rel='nofollow'>https://github.com/NHSDigital/prescriptionsforpatients/commits/sha_4</a>",
     "<br/>Area affected           : ['Component1', 'Component2']",
     "<br/>Impact                  : High",
     "<br/>Business/Service Impact : Service Impact",
