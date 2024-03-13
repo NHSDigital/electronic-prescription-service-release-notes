@@ -4,6 +4,7 @@ from create_release_notes import create_release_notes
 from tests.common import (
     mocked_jira_get_issue,
     expected_release_notes,
+    expected_release_notes_with_no_tag,
     expected_rc_release_notes_with_release_run_link,
     expected_rc_release_notes_with_no_release_run_link,
     mocked_compare,
@@ -11,7 +12,7 @@ from tests.common import (
 )
 
 param_list = [
-    ("normal release notes", False, None, 0, 0, expected_release_notes),
+    ("normal release notes", False, None, 0, 0, expected_release_notes, "sha_3"),
     (
         "rc release notes with release url",
         True,
@@ -19,6 +20,7 @@ param_list = [
         2,
         2,
         expected_rc_release_notes_with_release_run_link,
+        "sha_3",
     ),
     (
         "rc release notes without release url",
@@ -27,6 +29,16 @@ param_list = [
         2,
         2,
         expected_rc_release_notes_with_no_release_run_link,
+        "sha_3",
+    ),
+    (
+        "normal release notes with no tag",
+        False,
+        None,
+        0,
+        0,
+        expected_release_notes_with_no_tag,
+        "sha_4",
     ),
 ]
 
@@ -35,7 +47,6 @@ class TestCreateReleaseNotes(unittest.TestCase):
     @patch("create_release_notes.create_release_notes.Jira")
     def test_create_release_notes(self, mock_jira):
         tags = mocked_get_tags()
-        diff = mocked_compare()
         for (
             scenario,
             create_release_candidate,
@@ -43,10 +54,12 @@ class TestCreateReleaseNotes(unittest.TestCase):
             edit_issue_call_count,
             issue_transition_call_count,
             expected_output,
+            final_commit,
         ) in param_list:
             with self.subTest(
                 msg=scenario,
             ):
+                diff = mocked_compare(final_commit)
                 mock_jira.reset_mock()
                 mock_jira.get_issue.side_effect = mocked_jira_get_issue
                 release_notes = create_release_notes.create_release_notes(
