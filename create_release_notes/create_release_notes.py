@@ -230,7 +230,7 @@ def create_release_notes(
         user_story = jira_details.user_story.replace("\n", "\n<br/>")
         if release_tag == "can not find release tag":
             github_link = (
-                f"https://github.com/NHSDigital/{repo_name}/commits/{commit.sha}"
+                f"https://github.com/NHSDigital/{repo_name}/commit/{commit.sha}"
             )
         else:
             github_link = (
