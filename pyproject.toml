@@ -44,7 +44,7 @@ fastjsonschema = "^2.19.1"
 [tool.poetry.scripts]
 
 [tool.poetry.group.dev.dependencies]
-aws-sam-cli = "^1.112.0"
+aws-sam-cli = "^1.113.0"
 pip-licenses = "^4.3.4"
 black = "^24.3.0"
 flake8 = "^7.0.0"
