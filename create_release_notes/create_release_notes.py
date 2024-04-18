@@ -211,18 +211,24 @@ def create_release_notes(
             jira_link = f"https://nhsd-jira.digital.nhs.uk/browse/{ticket_number}"
             jira_details = get_jira_details(jira, ticket_number)
             if create_release_candidate:
-                logger.info(
-                    f"Adding fix version {release_name} to ticket {ticket_number}"
-                )
-                fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
-                jira.edit_issue(
-                    issue_id_or_key=ticket_number,
-                    fields=fields,
-                )
-                logger.info(
-                    f"Setting status of ticket {ticket_number} to Ready for test"
-                )
-                jira.issue_transition(issue_key=ticket_number, status="Ready for Test")
+                try:
+                    logger.info(
+                        f"Adding fix version {release_name} to ticket {ticket_number}"
+                    )
+                    fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
+                    jira.edit_issue(
+                        issue_id_or_key=ticket_number,
+                        fields=fields,
+                    )
+                    logger.info(
+                        f"Setting status of ticket {ticket_number} to Ready for test"
+                    )
+                    jira.issue_transition(
+                        issue_key=ticket_number, status="Ready for Test"
+                    )
+                except:  # noqa: E722
+                    logger.error(traceback.format_exception(*sys.exc_info()))
+                    logger.error(f"problem adding fix version for {ticket_number}")
         else:
             jira_details = JiraDetails("n/a", "n/a", [], "n/a", "n/a")
             found_jira = False
