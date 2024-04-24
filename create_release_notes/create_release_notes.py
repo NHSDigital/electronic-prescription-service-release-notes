@@ -221,10 +221,10 @@ def create_release_notes(
                         fields=fields,
                     )
                     logger.info(
-                        f"Setting status of ticket {ticket_number} to Ready for test"
+                        f"Setting status of ticket {ticket_number} to Ready for Acceptance"
                     )
                     jira.issue_transition(
-                        issue_key=ticket_number, status="Ready for Test"
+                        issue_key=ticket_number, status="Ready for Acceptance"
                     )
                 except:  # noqa: E722
                     logger.error(traceback.format_exception(*sys.exc_info()))
