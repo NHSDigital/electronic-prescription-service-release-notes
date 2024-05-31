@@ -351,7 +351,7 @@ def process_event(
         tags,
         repo_name,
     )
-
+    logger.info("\n".join(output))
     if create_release_candidate:
         logger.info(
             f"creating RC release notes page under page {release_notes_page_id}"
