@@ -9,6 +9,7 @@ from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.validation import SchemaValidationError, validate
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities import parameters
+from html import escape
 
 JIRA_URL = "https://nhsd-jira.digital.nhs.uk/"
 CONFLUENCE_URL = "https://nhsd-confluence.digital.nhs.uk/"
@@ -252,17 +253,21 @@ def create_release_notes(
             tag_output.append(
                 f"<br/>jira link               : <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
             )  # noqa: E501
-        tag_output.append(f"<br/>jira title              : {jira_details.jira_title}")
-        tag_output.append(f"<br/>user story              : {user_story}")
-        tag_output.append(f"<br/>commit title            : {first_commit_line}")
+        tag_output.append(
+            f"<br/>jira title              : {escape(jira_details.jira_title)}"
+        )
+        tag_output.append(f"<br/>user story              : {escape(user_story)}")
+        tag_output.append(f"<br/>commit title            : {escape(first_commit_line)}")
         tag_output.append(f"<br/>release tag             : {release_tag}")
         tag_output.append(
             f"<br/>github release          : <a class='external-link' href='{github_link}' rel='nofollow'>{github_link}</a>",
         )  # noqa: E501
         tag_output.append(f"<br/>Area affected           : {jira_details.components}")
-        tag_output.append(f"<br/>Impact                  : {jira_details.impact}")
         tag_output.append(
-            f"<br/>Business/Service Impact : {jira_details.business_service_impact}"
+            f"<br/>Impact                  : {escape(jira_details.impact)}"
+        )
+        tag_output.append(
+            f"<br/>Business/Service Impact : {escape(jira_details.business_service_impact)}"
         )
         tag_output.append("</p>")
 
