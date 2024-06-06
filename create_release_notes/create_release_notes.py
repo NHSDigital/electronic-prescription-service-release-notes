@@ -150,7 +150,7 @@ def get_jira_details(jira: Jira, jira_ticket_number: str) -> JiraDetails:
             impact = impact_field.get("value", "")
         else:
             impact = ""
-        business_service_impact = jira_ticket["fields"].get("customfield_13618")
+        business_service_impact = jira_ticket["fields"].get("customfield_13618") or ""
         return JiraDetails(
             jira_title, user_story, components, impact, business_service_impact
         )
