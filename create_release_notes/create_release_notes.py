@@ -267,7 +267,7 @@ def create_release_notes(
             f"<br/>Impact                  : {escape(jira_details.impact)}"
         )
         tag_output.append(
-            f"<br/>Business/Service Impact : {escape(jira_details.business_service_impact)}"
+            f"<br/>Business/Service Impact : {escape(jira_details.business_service_impact or '')}"
         )
         tag_output.append("</p>")
 
