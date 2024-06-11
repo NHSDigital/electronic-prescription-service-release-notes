@@ -1,5 +1,5 @@
 [project]
-python = "^3.11"
+python = "^3.12"
 
 [tool.poetry]
 name = "aws-prescriptions"
@@ -22,21 +22,21 @@ readme = "README.md"
 repository = "https://github.com/NHSDigital/electronic-prescription-service-release-notes"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 atlassian-python-api = "^3.41.13"
 pygithub = "^2.3.0"
 aws-lambda-powertools = "^2.38.1"
 fastjsonschema = "^2.19.1"
 
 [tool.poetry.group.release_notes.dependencies]
-python = "^3.11"
+python = "^3.12"
 atlassian-python-api = "^3.41.13"
 pygithub = "^2.3.0"
 aws-lambda-powertools = "^2.38.1"
 fastjsonschema = "^2.19.1"
 
 [tool.poetry.group.mark_released.dependencies]
-python = "^3.11"
+python = "^3.12"
 atlassian-python-api = "^3.41.13"
 aws-lambda-powertools = "^2.38.1"
 fastjsonschema = "^2.19.1"
