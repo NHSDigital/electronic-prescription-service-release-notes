@@ -42,6 +42,13 @@ jobs:
         run: |
           make install
 
+      - name: show versions
+        run: |
+          python --version
+          poetry --version
+          shellcheck --version
+          jq --version
+
       - name: run check-licenses
         run: make check-licenses
 
