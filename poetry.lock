@@ -92,13 +92,13 @@ dev = ["black (==24.4.2)", "coverage (==7.5.1)", "flake8 (==3.8.4)", "parameteri
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.39.1"
+version = "2.40.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "aws_lambda_powertools-2.39.1-py3-none-any.whl", hash = "sha256:92529ab5efd79d0d313c4f303c5ad3671a00a8e477c19404f11af64b3ba233e0"},
-    {file = "aws_lambda_powertools-2.39.1.tar.gz", hash = "sha256:122b5b03949efc4cb88981be356e70d8fecbf8b40185d1e7cba52fa8e0d3115a"},
+    {file = "aws_lambda_powertools-2.40.0-py3-none-any.whl", hash = "sha256:1b95febbf4a909695d53a8fa53eeb8dfd5ef487ae4bee8c44fbaaef9be7c3295"},
+    {file = "aws_lambda_powertools-2.40.0.tar.gz", hash = "sha256:abe42f154334ab3d4f4972f7a260103cdcc555cb3c398604c6256241d7b0e1e3"},
 ]
 
 [package.dependencies]
@@ -3057,4 +3057,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "3e2455feaa3c6e0b9830fe8a76c09758874fee64632221a1f2df0806013b460e"
+content-hash = "863bd2ea11c6028f10b6b478c029e22b9968dc259a99fc428df9fd7bf999520c"
