@@ -24,3 +24,4 @@ create_release_notes/requirements.txt
 mark_jira_released/requirements.txt
 .coverage
 coverage.xml
+cfn_guard_output/

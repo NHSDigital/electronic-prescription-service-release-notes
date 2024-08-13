@@ -239,3 +239,6 @@ deep-clean: clean
 test:
 	poetry run python -m coverage run -m unittest
 	poetry run python -m coverage xml
+
+cfn-guard:
+	./scripts/run_cfn_guard.sh
