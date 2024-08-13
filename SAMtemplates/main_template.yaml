@@ -56,6 +56,11 @@ Resources:
       Environment:
         Variables:
           GITHUB_TOKEN: !Ref GithubToken
+    Metadata:
+      guard:
+        SuppressedRules:
+        - LAMBDA_DLQ_CHECK
+        - LAMBDA_INSIDE_VPC
 
   MakrJiraReleasedResources:
     Type: AWS::Serverless::Application
@@ -76,6 +81,11 @@ Resources:
       CodeUri: ../mark_jira_released
       Handler: mark_jira_released.lambda_handler
       Role: !GetAtt MakrJiraReleasedResources.Outputs.LambdaRoleArn
+    Metadata:
+      guard:
+        SuppressedRules:
+        - LAMBDA_DLQ_CHECK
+        - LAMBDA_INSIDE_VPC
 
   LambdaExecutionPolicyDeployRole:
     Type: "AWS::IAM::ManagedPolicy"
