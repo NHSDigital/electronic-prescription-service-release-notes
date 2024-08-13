@@ -11,9 +11,10 @@ mkdir -p cfn_guard_output
 
 while IFS= read -r -d '' file
 do
-    echo "checking $file"
+    echo "Checking SAM template $file"
     mkdir -p "$(dirname cfn_guard_output/"$file")"
 
+    # transform the SAM template to cloudformation and then run through cfn-guard
     sam validate -t "$file" --region eu-west-2 --debug 2>&1 | \
     grep -Pazo '(?s)AWSTemplateFormatVersion.*\n\n' | \
     tr -d '\0' | \
