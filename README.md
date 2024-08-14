@@ -179,6 +179,7 @@ template.
 - `lint-python` runs lint for python code
 - `lint-samtemplates` runs lint for SAM templates
 - `test` runs unit tests for all code
+- `cfn-guard` runs cfn-guard for sam and cloudformation templates
 
 
 #### Check licenses
