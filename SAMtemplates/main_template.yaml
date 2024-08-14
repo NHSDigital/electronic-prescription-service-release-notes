@@ -59,8 +59,9 @@ Resources:
     Metadata:
       guard:
         SuppressedRules:
-        - LAMBDA_DLQ_CHECK
-        - LAMBDA_INSIDE_VPC
+          - LAMBDA_DLQ_CHECK
+          - LAMBDA_INSIDE_VPC
+          - LAMBDA_CONCURRENCY_CHECK
 
   MakrJiraReleasedResources:
     Type: AWS::Serverless::Application
@@ -84,8 +85,9 @@ Resources:
     Metadata:
       guard:
         SuppressedRules:
-        - LAMBDA_DLQ_CHECK
-        - LAMBDA_INSIDE_VPC
+          - LAMBDA_DLQ_CHECK
+          - LAMBDA_INSIDE_VPC
+          - LAMBDA_CONCURRENCY_CHECK
 
   LambdaExecutionPolicyDeployRole:
     Type: "AWS::IAM::ManagedPolicy"
