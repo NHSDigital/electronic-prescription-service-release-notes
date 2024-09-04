@@ -177,13 +177,13 @@ dev = ["black (==24.3.0)", "boto3 (>=1.23,<2)", "boto3-stubs[appconfig,serverles
 
 [[package]]
 name = "awscliv2"
-version = "2.3.0"
+version = "2.3.1"
 description = "Wrapper for AWS CLI v2"
 optional = false
 python-versions = "<4.0,>=3.7"
 files = [
-    {file = "awscliv2-2.3.0-py3-none-any.whl", hash = "sha256:75db306b83f4b01c098922b79bd82f97361aa8e96ccdc31c2952813c24fa62da"},
-    {file = "awscliv2-2.3.0.tar.gz", hash = "sha256:508617da0f9cd72ab2707ce9366bbd05c7cb2328f668a6f23ef1e73a06d423d7"},
+    {file = "awscliv2-2.3.1-py3-none-any.whl", hash = "sha256:ab4bc182b0cfba0f6872061cbb1bd6abfbfc1e4016fa5de40b7a2d564eca267e"},
+    {file = "awscliv2-2.3.1.tar.gz", hash = "sha256:5fbbf104bcd7796b7af104bd6af99f6e153208883399aeff830d97b3ea34f7ae"},
 ]
 
 [package.dependencies]
@@ -3084,4 +3084,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "079feaa0dfdbae498eac1d75863836d9e03c7369c6638ebedd63afadc74ff531"
+content-hash = "0d23e40a685a7ecb827f3150fe28120d59b7887c3cb6395e3aed70f478cc2c05"
