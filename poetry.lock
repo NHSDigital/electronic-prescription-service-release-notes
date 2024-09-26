@@ -32,13 +32,13 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "atlassian-python-api"
-version = "3.41.15"
+version = "3.41.16"
 description = "Python Atlassian REST API Wrapper"
 optional = false
 python-versions = "*"
 files = [
-    {file = "atlassian_python_api-3.41.15-py3-none-any.whl", hash = "sha256:1c271ca9b1688acdaef09ad6f763570868a381394530d1fba49b5b104fffe54a"},
-    {file = "atlassian_python_api-3.41.15.tar.gz", hash = "sha256:3c852f38ad8645887fbfe1526c12f2c1951ba06a24a1bbb36bdf7ccdc6d7b1ac"},
+    {file = "atlassian_python_api-3.41.16-py3-none-any.whl", hash = "sha256:99e5587233a96d22c45a61b19523dd98e8266c620ba2d289f23e4ea35c9cf316"},
+    {file = "atlassian_python_api-3.41.16.tar.gz", hash = "sha256:dc0144ff8b8884562bb2af650586292524ad25f120cd21940df80f0d2ac64411"},
 ]
 
 [package.dependencies]
@@ -92,13 +92,13 @@ dev = ["black (==24.4.2)", "coverage (==7.5.1)", "flake8 (==3.8.4)", "parameteri
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "2.43.1"
+version = "3.0.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "aws_lambda_powertools-2.43.1-py3-none-any.whl", hash = "sha256:48116250c1771c7b8d4977ad2d475271074d86964107ccfd3fc6775e51984d88"},
-    {file = "aws_lambda_powertools-2.43.1.tar.gz", hash = "sha256:5c371a0c0430cf7bca1696748cb0d85079aac2c51056cbee10e5435029b35ca4"},
+    {file = "aws_lambda_powertools-3.0.0-py3-none-any.whl", hash = "sha256:0769ca6b6ee7d4a6fc2978f91bcfa39c963c694bd8f5a7407543bc72722247ed"},
+    {file = "aws_lambda_powertools-3.0.0.tar.gz", hash = "sha256:b171e393858b7c45c08811e280304b9ff29e4fdc9b7b1aa896b49342451677f9"},
 ]
 
 [package.dependencies]
@@ -106,11 +106,11 @@ jmespath = ">=1.0.1,<2.0.0"
 typing-extensions = ">=4.11.0,<5.0.0"
 
 [package.extras]
-all = ["aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "pydantic (>=1.8.2,<2.0.0)"]
-aws-sdk = ["boto3 (>=1.26.164,<2.0.0)"]
+all = ["aws-encryption-sdk (>=3.1.1,<4.0.0)", "aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "jsonpath-ng (>=1.6.0,<2.0.0)", "pydantic (>=2.0.3,<3.0.0)"]
+aws-sdk = ["boto3 (>=1.34.32,<2.0.0)"]
 datadog = ["datadog-lambda (>=4.77,<7.0)"]
 datamasking = ["aws-encryption-sdk (>=3.1.1,<4.0.0)", "jsonpath-ng (>=1.6.0,<2.0.0)"]
-parser = ["pydantic (>=1.8.2,<2.0.0)"]
+parser = ["pydantic (>=2.0.3,<3.0.0)"]
 redis = ["redis (>=4.4,<6.0)"]
 tracer = ["aws-xray-sdk (>=2.8.0,<3.0.0)"]
 validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
@@ -177,13 +177,13 @@ dev = ["black (==24.3.0)", "boto3 (>=1.23,<2)", "boto3-stubs[appconfig,serverles
 
 [[package]]
 name = "awscliv2"
-version = "2.3.0"
+version = "2.3.1"
 description = "Wrapper for AWS CLI v2"
 optional = false
 python-versions = "<4.0,>=3.7"
 files = [
-    {file = "awscliv2-2.3.0-py3-none-any.whl", hash = "sha256:75db306b83f4b01c098922b79bd82f97361aa8e96ccdc31c2952813c24fa62da"},
-    {file = "awscliv2-2.3.0.tar.gz", hash = "sha256:508617da0f9cd72ab2707ce9366bbd05c7cb2328f668a6f23ef1e73a06d423d7"},
+    {file = "awscliv2-2.3.1-py3-none-any.whl", hash = "sha256:ab4bc182b0cfba0f6872061cbb1bd6abfbfc1e4016fa5de40b7a2d564eca267e"},
+    {file = "awscliv2-2.3.1.tar.gz", hash = "sha256:5fbbf104bcd7796b7af104bd6af99f6e153208883399aeff830d97b3ea34f7ae"},
 ]
 
 [package.dependencies]
