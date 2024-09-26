@@ -8,7 +8,6 @@ Parameters:
   CloudWatchKMSKey:
     Type: String
     Description: Cloudwatch KMS key
-    Default: none
   SplunkSubscriptionFilterRole:
     Type: String
     Description: Subscription filter role for sending logs to splunk
@@ -120,7 +119,7 @@ Resources:
     Metadata:
       guard:
         SuppressedRules:
-        - CW_LOGGROUP_RETENTION_PERIOD_CHECK    
+          - CW_LOGGROUP_RETENTION_PERIOD_CHECK
     Properties:
       LogGroupName: !Sub "/aws/lambda/${LambdaName}"
       RetentionInDays: !Ref LogRetentionDays
