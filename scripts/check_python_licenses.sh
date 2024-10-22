@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # known packages with dual licensing
-IGNORE_PACKAGES="PyGithub chardet text-unidecode"
-LICENSES=$(poetry run pip-licenses  --ignore-packages ${IGNORE_PACKAGES})
+IGNORE_PACKAGES=("PyGithub" "chardet" "text-unidecode")
+LICENSES=$(poetry run pip-licenses --ignore-packages "${IGNORE_PACKAGES[@]}")
 INCOMPATIBLE_LIBS=$(echo "$LICENSES" | grep 'GPL' || true)
 
 if [[ -z $INCOMPATIBLE_LIBS ]]; then
