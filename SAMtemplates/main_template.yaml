@@ -39,12 +39,12 @@ Resources:
     Properties:
       Location: lambda_resources.yaml
       Parameters:
-        CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
+        CloudWatchKMSKeyId: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
         SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
-        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        SplunkDeliveryStreamArn: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-createReleaseNotes"
-        LogRetentionDays: "30"
+        LogRetentionInDays: "30"
 
   CreateReleaseNotes:
     Type: AWS::Serverless::Function
@@ -68,12 +68,12 @@ Resources:
     Properties:
       Location: lambda_resources.yaml
       Parameters:
-        CloudWatchKMSKey: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
+        CloudWatchKMSKeyId: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
         SplunkSubscriptionFilterRole: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
-        SplunkDeliveryStream: !ImportValue lambda-resources:SplunkDeliveryStream
+        SplunkDeliveryStreamArn: !ImportValue lambda-resources:SplunkDeliveryStream
         EnableSplunk: "true"
         LambdaName: !Sub "${AWS::StackName}-markJiraReleased"
-        LogRetentionDays: "30"
+        LogRetentionInDays: "30"
 
   MarkJiraReleased:
     Type: AWS::Serverless::Function
