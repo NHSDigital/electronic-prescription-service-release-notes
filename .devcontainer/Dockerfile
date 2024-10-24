@@ -32,6 +32,7 @@ ENV PATH="$PATH:/home/vscode/.asdf/bin/:/workspaces/electronic-prescription-serv
 RUN asdf plugin add python; \
     asdf plugin add poetry https://github.com/asdf-community/asdf-poetry.git; \
     asdf plugin add shellcheck https://github.com/luizm/asdf-shellcheck.git; \
+    asdf plugin add actionlint; \
     asdf plugin-add jq; 
 
 
