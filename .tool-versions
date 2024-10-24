@@ -2,3 +2,4 @@ python 3.12.4
 poetry 1.8.3
 shellcheck 0.10.0
 jq 1.7.1
+actionlint 1.6.26
