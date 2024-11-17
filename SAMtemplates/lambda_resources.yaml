@@ -48,42 +48,12 @@ Parameters:
         3653,
       ]
 
-  CloudWatchKMSKeyId:
-    Type: String
-
-  EnableSplunk:
-    Type: String
-
-  SplunkSubscriptionFilterRole:
-    Type: String
-    Default: none
-
-  SplunkDeliveryStreamArn:
-    Type: String
-    Default: none
-
 Conditions:
-  ShouldUseSplunk: !Equals
-    - true
-    - !Ref EnableSplunk
-
   ShouldIncludeAdditionalPolicies: !Equals
     - true
     - !Ref IncludeAdditionalPolicies
 
 Resources:
-  ExecuteLambdaManagedPolicy:
-    Type: AWS::IAM::ManagedPolicy
-    Properties:
-      PolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Action:
-              - lambda:InvokeFunction
-            Resource:
-              - !Sub ${LambdaArn}*
-
   LambdaRole:
     Type: AWS::IAM::Role
     Properties:
@@ -133,16 +103,15 @@ Resources:
     Properties:
       LogGroupName: !Sub /aws/lambda/${LambdaName}
       RetentionInDays: !Ref LogRetentionInDays
-      KmsKeyId: !Ref CloudWatchKMSKeyId
+      KmsKeyId: !ImportValue account-resources:CloudwatchLogsKmsKeyArn
 
   LambdaSplunkSubscriptionFilter:
-    Condition: ShouldUseSplunk
     Type: AWS::Logs::SubscriptionFilter
     Properties:
-      RoleArn: !Ref SplunkSubscriptionFilterRole
+      RoleArn: !ImportValue lambda-resources:SplunkSubscriptionFilterRole
       LogGroupName: !Ref LambdaLogGroup
       FilterPattern: ""
-      DestinationArn: !Ref SplunkDeliveryStreamArn
+      DestinationArn: !ImportValue lambda-resources:SplunkDeliveryStream
 
 Outputs:
   LambdaRoleArn:
