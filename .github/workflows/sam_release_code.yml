@@ -15,6 +15,9 @@ on:
       VERSION_NUMBER:
         required: true
         type: string
+      COMMIT_ID:
+        required: false
+        type: string
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE:
         required: true
@@ -45,14 +48,21 @@ jobs:
         name: release code
         run: |
           echo ${{ inputs.COMMIT_ID }}
-          export artifact_bucket=$(aws cloudformation list-exports --output json | \
+          artifact_bucket=$(aws cloudformation list-exports --output json | \
             jq -r '.Exports[] | select(.Name == "account-resources:ArtifactsBucket") | .Value' |grep -o '[^:]*$')
-          export artifact_bucket_prefix=release_notes/${{ inputs.ARTIFACT_BUCKET_PREFIX }}
+          export artifact_bucket
+          
+          artifact_bucket_prefix=release_notes/${{ inputs.ARTIFACT_BUCKET_PREFIX }}
+          export artifact_bucket_prefix
+          
           export template_file=template.yaml
           export stack_name=${{ inputs.STACK_NAME }}
           export VERSION_NUMBER=${{ inputs.VERSION_NUMBER }}
           export PAT_GITHUB_TOKEN=${{ secrets.PAT_GITHUB_TOKEN }}
-          export cloud_formation_execution_role=$(aws cloudformation list-exports --output json | \
+          
+          cloud_formation_execution_role=$(aws cloudformation list-exports --output json | \
               jq -r '.Exports[] | select(.Name == "ci-resources:CloudFormationExecutionRole") | .Value' )
-          cd .aws-sam/build
+          export cloud_formation_execution_role
+
+              cd .aws-sam/build
           make sam-deploy-package
