@@ -92,13 +92,13 @@ dev = ["black (==24.10.0)", "black (==24.8.0)", "coverage (==7.6.1)", "coverage 
 
 [[package]]
 name = "aws-lambda-powertools"
-version = "3.1.0"
+version = "3.3.0"
 description = "Powertools for AWS Lambda (Python) is a developer toolkit to implement Serverless best practices and increase developer velocity."
 optional = false
 python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "aws_lambda_powertools-3.1.0-py3-none-any.whl", hash = "sha256:fdc834678d131e230052ccd684f969be417ce0165d65ee35c053e1a966e46e4c"},
-    {file = "aws_lambda_powertools-3.1.0.tar.gz", hash = "sha256:758a8e5d668ae759051d064d542decff777d9c7a0a5612f0c05ab78fb6f20365"},
+    {file = "aws_lambda_powertools-3.3.0-py3-none-any.whl", hash = "sha256:b9275080ebda666c3861c2f3dc018edb5034165c8da25b4277537cfe885770c1"},
+    {file = "aws_lambda_powertools-3.3.0.tar.gz", hash = "sha256:848f684299081ec5257730012d520a038a3dd287dc68113a153bc7ee5b2129d9"},
 ]
 
 [package.dependencies]
@@ -106,11 +106,11 @@ jmespath = ">=1.0.1,<2.0.0"
 typing-extensions = ">=4.11.0,<5.0.0"
 
 [package.extras]
-all = ["aws-encryption-sdk (>=3.1.1,<4.0.0)", "aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "jsonpath-ng (>=1.6.0,<2.0.0)", "pydantic (>=2.0.3,<3.0.0)"]
+all = ["aws-encryption-sdk (>=3.1.1,<4.0.0)", "aws-xray-sdk (>=2.8.0,<3.0.0)", "fastjsonschema (>=2.14.5,<3.0.0)", "jsonpath-ng (>=1.6.0,<2.0.0)", "pydantic (>=2.4.0,<3.0.0)", "pydantic-settings (>=2.6.1,<3.0.0)"]
 aws-sdk = ["boto3 (>=1.34.32,<2.0.0)"]
 datadog = ["datadog-lambda (>=4.77,<7.0)"]
 datamasking = ["aws-encryption-sdk (>=3.1.1,<4.0.0)", "jsonpath-ng (>=1.6.0,<2.0.0)"]
-parser = ["pydantic (>=2.0.3,<3.0.0)"]
+parser = ["pydantic (>=2.4.0,<3.0.0)"]
 redis = ["redis (>=4.4,<6.0)"]
 tracer = ["aws-xray-sdk (>=2.8.0,<3.0.0)"]
 validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
@@ -3075,4 +3075,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "7e6288d5cab029d6549a286d675ce30dc191cc6b4bee63c330f97148d3775421"
+content-hash = "d3ba907d20547cbd20c2bbbbc40c8c561c6b9c4f53653c6f84ff792c4c907508"
