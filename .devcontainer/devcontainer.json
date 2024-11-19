@@ -53,11 +53,24 @@
         "editor.formatOnType": false, // required
         "editor.formatOnSave": true, // optional
         "editor.formatOnSaveMode": "file",
-        "cSpell.words": ["fhir", "Formik", "pino", "serialisation", "powertools", "prescriptionsforpatients", "Currentreleasenotes", "plannedreleasetotag", "Changessincecurrentlyreleasedtag"]
+        "cSpell.words": [
+          "fhir",
+          "Formik",
+          "pino",
+          "serialisation",
+          "powertools",
+          "prescriptionsforpatients",
+          "Currentreleasenotes",
+          "plannedreleasetotag",
+          "Changessincecurrentlyreleasedtag"
+        ]
       }
     }
   },
-  "postCreateCommand": "rm -f ~/.docker/config.json; git config --global --add safe.directory /workspaces/electronic-prescription-service-release-notes; make install"
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "postCreateCommand": "rm -f ~/.docker/config.json; git config --global --add safe.directory /workspaces/electronic-prescription-service-release-notes; make install; docker build -f https://raw.githubusercontent.com/NHSDigital/eps-workflow-quality-checks/refs/heads/main/dockerfiles/nhsd-git-secrets.dockerfile -t git-secrets ."
   // "features": {},
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

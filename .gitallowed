@@ -1,0 +1,7 @@
+.*secrets.GITHUB_TOKEN.*
+.*poetry\.lock.*
+.*pyproject\.toml.*
+.*mindsdb==23.12.4.1.*
+.*JIRA_TOKEN.*
+.*CONFLUENCE_TOKEN.*
+.*id-token: write.*
