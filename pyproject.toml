@@ -26,20 +26,20 @@ python = "^3.12"
 atlassian-python-api = "^3.41.16"
 pygithub = "^2.5.0"
 aws-lambda-powertools = "^3.3.0"
-fastjsonschema = "^2.20.0"
+fastjsonschema = "^2.21.0"
 
 [tool.poetry.group.release_notes.dependencies]
 python = "^3.12"
 atlassian-python-api = "^3.41.16"
 pygithub = "^2.5.0"
 aws-lambda-powertools = "^3.3.0"
-fastjsonschema = "^2.20.0"
+fastjsonschema = "^2.21.0"
 
 [tool.poetry.group.mark_released.dependencies]
 python = "^3.12"
 atlassian-python-api = "^3.41.16"
 aws-lambda-powertools = "^3.3.0"
-fastjsonschema = "^2.20.0"
+fastjsonschema = "^2.21.0"
 
 [tool.poetry.scripts]
 
