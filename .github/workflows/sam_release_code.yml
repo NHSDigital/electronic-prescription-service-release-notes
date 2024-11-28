@@ -36,7 +36,7 @@ jobs:
         with:
           aws-region: eu-west-2
           role-to-assume: ${{ secrets.CLOUD_FORMATION_DEPLOY_ROLE }}
-          role-session-name: github-actions
+          role-session-name: release-notes-repo-releaese-code
 
       - uses: actions/download-artifact@v4
         name: download build artifact
