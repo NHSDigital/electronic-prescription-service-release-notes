@@ -14,7 +14,7 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   get_issue_number:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: quality_checks
     outputs:
       issue_number: ${{steps.get_issue_number.outputs.result}}
@@ -41,7 +41,7 @@ jobs:
           result-encoding: string
 
   get_commit_id:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     outputs:
       commit_id: ${{ steps.commit_id.outputs.commit_id }}
     steps:
