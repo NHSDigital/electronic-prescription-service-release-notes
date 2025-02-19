@@ -117,13 +117,13 @@ validation = ["fastjsonschema (>=2.14.5,<3.0.0)"]
 
 [[package]]
 name = "aws-sam-cli"
-version = "1.133.0"
+version = "1.134.0"
 description = "AWS SAM CLI is a CLI tool for local development and testing of Serverless applications"
 optional = false
 python-versions = "!=4.0,<=4.0,>=3.9"
 files = [
-    {file = "aws_sam_cli-1.133.0-py3-none-any.whl", hash = "sha256:a366d7f736d8cbb703920ded9f9c1f7dfb2d985ef85ccdca7f2a0828b89a97eb"},
-    {file = "aws_sam_cli-1.133.0.tar.gz", hash = "sha256:db4bffe87593368173dcc41808f8d1c756c69b0672b4e4bb3665399ef05b7827"},
+    {file = "aws_sam_cli-1.134.0-py3-none-any.whl", hash = "sha256:80195970ea60f047b947a522583cc9787f3c092a4bf28984873ea538e3467172"},
+    {file = "aws_sam_cli-1.134.0.tar.gz", hash = "sha256:247cd8b9ff64d146cd95e10a51b7c5b44f5c5e404149fd0b0fab183b412a69ef"},
 ]
 
 [package.dependencies]
@@ -152,8 +152,8 @@ tzlocal = "5.2"
 watchdog = "4.0.2"
 
 [package.extras]
-dev = ["black (==24.10.0)", "black (==24.8.0)", "coverage (==7.6.1)", "coverage (==7.6.10)", "filelock (==3.16.1)", "filelock (==3.17.0)", "mypy (==1.14.1)", "parameterized (==0.9.0)", "psutil (==6.1.1)", "pytest (==8.3.4)", "pytest-cov (==5.0.0)", "pytest-cov (==6.0.0)", "pytest-forked (==1.6.0)", "pytest-json-report-wip (==1.5.1)", "pytest-metadata (==3.1.1)", "pytest-rerunfailures (==14.0)", "pytest-rerunfailures (==15.0)", "pytest-timeout (==2.3.1)", "pytest-xdist (==3.6.1)", "ruff (==0.9.3)", "types-PyYAML (==6.0.12.20241230)", "types-Pygments (==2.19.0.20250107)", "types-chevron (==0.14.2.20250103)", "types-colorama (==0.4.15.20240311)", "types-dateparser (==1.2.0.20240420)", "types-docutils (==0.21.0.20241128)", "types-jsonschema (==4.23.0.20241208)", "types-psutil (==6.1.0.20241221)", "types-pyOpenSSL (==24.1.0.20240722)", "types-pywin32 (==308.0.0.20241221)", "types-pywin32 (==308.0.0.20250128)", "types-requests (==2.31.0.6)", "types-requests (==2.32.0.20241016)", "types-setuptools (==75.8.0.20250110)", "types-urllib3 (==1.26.25.14)"]
-pre-dev = ["ruff (==0.9.3)"]
+dev = ["black (==24.10.0)", "black (==24.8.0)", "coverage (==7.6.1)", "coverage (==7.6.10)", "filelock (==3.16.1)", "filelock (==3.17.0)", "mypy (==1.14.1)", "parameterized (==0.9.0)", "psutil (==6.1.1)", "pytest (==8.3.4)", "pytest-cov (==5.0.0)", "pytest-cov (==6.0.0)", "pytest-forked (==1.6.0)", "pytest-json-report-wip (==1.5.1)", "pytest-metadata (==3.1.1)", "pytest-rerunfailures (==14.0)", "pytest-rerunfailures (==15.0)", "pytest-timeout (==2.3.1)", "pytest-xdist (==3.6.1)", "ruff (==0.9.6)", "types-PyYAML (==6.0.12.20241230)", "types-Pygments (==2.19.0.20250107)", "types-chevron (==0.14.2.20250103)", "types-colorama (==0.4.15.20240311)", "types-dateparser (==1.2.0.20250208)", "types-docutils (==0.21.0.20241128)", "types-jsonschema (==4.23.0.20241208)", "types-psutil (==6.1.0.20241221)", "types-pyOpenSSL (==24.1.0.20240722)", "types-pywin32 (==308.0.0.20241221)", "types-pywin32 (==308.0.0.20250128)", "types-requests (==2.31.0.6)", "types-requests (==2.32.0.20241016)", "types-setuptools (==75.8.0.20250210)", "types-urllib3 (==1.26.25.14)"]
+pre-dev = ["ruff (==0.9.6)"]
 
 [[package]]
 name = "aws-sam-translator"
@@ -3087,4 +3087,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "ade0f60187739756e10114afdcd9ca6e559967f4f4b7a53cc428e99847adedca"
+content-hash = "f9ae6e482fb4316f46b33c70b39da3ae940495d55bf61a22557af9a9a91dc176"
