@@ -395,7 +395,9 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
             )
 
         jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
+        confluence = Confluence(
+            CONFLUENCE_URL, username="bot.eps_releasebot", password=CONFLUENCE_TOKEN
+        )
         github_auth = Auth.Token(str(GITHUB_TOKEN))
         gh = Github(auth=github_auth)
         repo_name = event["repoName"]
