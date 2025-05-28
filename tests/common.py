@@ -69,9 +69,12 @@ def mocked_jira_get_issue(*args, **kwargs):
 
 
 def mocked_get_tags(*args, **kwargs):
-    tag_1 = Tag.Tag(None, None, {"name": "tag_1", "commit": {"sha": "sha_1"}}, True)
-    tag_2 = Tag.Tag(None, None, {"name": "tag_2", "commit": {"sha": "sha_2"}}, True)
-    tag_3 = Tag.Tag(None, None, {"name": "tag_3", "commit": {"sha": "sha_3"}}, True)
+    requestor = Requester.Requester(
+        "foo", "https://a.com", "a", "a", "a", "a", "a", "a"
+    )
+    tag_1 = Tag.Tag(requestor, None, {"name": "tag_1", "commit": {"sha": "sha_1"}})
+    tag_2 = Tag.Tag(requestor, None, {"name": "tag_2", "commit": {"sha": "sha_2"}})
+    tag_3 = Tag.Tag(requestor, None, {"name": "tag_3", "commit": {"sha": "sha_3"}})
     tags = [tag_1, tag_2, tag_3]
     return tags
 
