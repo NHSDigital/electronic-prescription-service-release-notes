@@ -9,7 +9,7 @@ RUN apt-get update \
     openjdk-8-jdk jq apt-transport-https ca-certificates gnupg-agent \
     software-properties-common bash-completion python3-pip make libbz2-dev \
     libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev \
-    xz-utils tk-dev liblzma-dev netcat
+    xz-utils tk-dev liblzma-dev netcat direnv
 
 # install aws stuff
 RUN wget -O /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" && \
@@ -18,14 +18,18 @@ RUN wget -O /tmp/awscliv2.zip "https://awscli.amazonaws.com/awscli-exe-linux-x86
     rm tmp/awscliv2.zip && \
     rm -rf /tmp/aws-cli
 
-USER vscode
 
 # Install ASDF
-RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0; \
-    echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc; \
-    echo '. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc;
 
-ENV PATH="$PATH:/home/vscode/.asdf/bin/:/workspaces/electronic-prescription-service-release-notes/node_modules/.bin:/workspaces/electronic-prescription-service-release-notes/.venv/bin"
+
+RUN wget -O /tmp/asdf.tar.gz https://github.com/asdf-vm/asdf/releases/download/v0.17.0/asdf-v0.17.0-linux-amd64.tar.gz; \
+    tar -xvzf /tmp/asdf.tar.gz -C /tmp/; \
+    mv /tmp/asdf /usr/bin
+
+USER vscode
+
+
+ENV PATH="$PATH:/home/vscode/.asdf/shims/:/workspaces/electronic-prescription-service-release-notes/node_modules/.bin:/workspaces/electronic-prescription-service-release-notes/.venv/bin"
 
 
 # Install ASDF plugins
@@ -33,7 +37,7 @@ RUN asdf plugin add python; \
     asdf plugin add poetry https://github.com/asdf-community/asdf-poetry.git; \
     asdf plugin add shellcheck https://github.com/luizm/asdf-shellcheck.git; \
     asdf plugin add actionlint; \
-    asdf plugin-add jq; 
+    asdf plugin add jq; 
 
 
 WORKDIR /workspaces/electronic-prescription-service-release-notes
