@@ -251,7 +251,7 @@ def create_release_notes(
             )  # noqa: E501
         else:
             tag_output.append(
-                f"<br/>jira link               : {jira_link}</a>",
+                f"<br/>jira link               : {jira_link}",
             )  # noqa: E501
         tag_output.append(
             f"<br/>jira title              : {escape(jira_details.jira_title)}"
