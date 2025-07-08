@@ -167,7 +167,7 @@ expected_release_notes_with_no_tag = [
     "<h1 id='Currentreleasenotestag_3-plannedreleasetotagtag_3'>EPS FHIR API planned release to INT of tag tag_3</h1>",
     "<h2 id='Currentreleasenotestag_3-Changessincecurrentlyreleasedtagtag_1'>Changes since currently released tag tag_1</h2>",
     "<p>***",
-    "<br/>jira link               : <a class='external-link' href='https://nhsd-jira.digital.nhs.uk/browse/AEA-123' rel='nofollow'>https://nhsd-jira.digital.nhs.uk/browse/AEA-123</a>",
+    '<br/>jira link               : <a class=\'external-link\' href=\'\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            \' rel=\'nofollow\'>\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            </a>',
     "<br/>jira title              : Test Summary",
     "<br/>user story              : Test User Story",
     "<br/>commit title            : AEA-123",
@@ -189,17 +189,7 @@ expected_release_notes_with_no_tag = [
     "<br/>Business/Service Impact : n/a",
     "</p>",
     "<p>***",
-    """<br/>jira link               : <img class="editor-inline-macro"
-src="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"
-data-macro-name="jira"
-data-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"
-role="button"
-tabindex="0"
-aria-haspopup="true"
-aria-label="jira macro"
-data-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"
-data-macro-schema-version="1">
-""",
+    '<br/>jira link               : <a class=\'external-link\' href=\'\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            \' rel=\'nofollow\'>\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            </a>',
     "<br/>jira title              : Test Summary",
     "<br/>user story              : can not find user story",
     "<br/>commit title            : AEA-124",
@@ -210,17 +200,7 @@ data-macro-schema-version="1">
     "<br/>Business/Service Impact : Service Impact",
     "</p>",
     "<p>***",
-    """<br/>jira link               : <img class="editor-inline-macro"
-src="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"
-data-macro-name="jira"
-data-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"
-role="button"
-tabindex="0"
-aria-haspopup="true"
-aria-label="jira macro"
-data-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"
-data-macro-schema-version="1">
-""",
+    '<br/>jira link               : <a class=\'external-link\' href=\'\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            \' rel=\'nofollow\'>\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            </a>',
     "<br/>jira title              : Test Summary",
     "<br/>user story              : Test User Story",
     "<br/>commit title            : AEA-123",
@@ -239,17 +219,7 @@ expected_rc_release_notes_with_release_run_link = [
     "<h2 id='Currentreleasenotestag_3-Changessincecurrentlyreleasedtagtag_1'>Changes since currently released tag tag_1</h2>",
     "<h3 id='jira_changes'>Changes with jira tickets</h3>",
     "<p>***",
-    """<br/>jira link               : <img class="editor-inline-macro"
-src="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"
-data-macro-name="jira"
-data-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"
-role="button"
-tabindex="0"
-aria-haspopup="true"
-aria-label="jira macro"
-data-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"
-data-macro-schema-version="1">
-""",
+    '<br/>jira link               : <a class=\'external-link\' href=\'\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            \' rel=\'nofollow\'>\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-123|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            </a>',
     "<br/>jira title              : Test Summary",
     "<br/>user story              : Test User Story",
     "<br/>commit title            : AEA-123",
@@ -260,17 +230,7 @@ data-macro-schema-version="1">
     "<br/>Business/Service Impact : Service Impact",
     "</p>",
     "<p>***",
-    """<br/>jira link               : <img class="editor-inline-macro"
-src="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"
-data-macro-name="jira"
-data-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"
-role="button"
-tabindex="0"
-aria-haspopup="true"
-aria-label="jira macro"
-data-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"
-data-macro-schema-version="1">
-""",
+    '<br/>jira link               : <a class=\'external-link\' href=\'\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            \' rel=\'nofollow\'>\n<img class="editor-inline-macro"\nsrc="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"\ndata-macro-name="jira"\ndata-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"\nrole="button"\ntabindex="0"\naria-haspopup="true"\naria-label="jira macro"\ndata-macro-parameters="key=AEA-124|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"\ndata-macro-schema-version="1">\n            </a>',
     "<br/>jira title              : Test Summary",
     "<br/>user story              : can not find user story",
     "<br/>commit title            : AEA-124",
@@ -294,7 +254,6 @@ data-macro-schema-version="1">
     "<br/>Business/Service Impact : n/a",
     "</p>",
 ]
-
 expected_rc_release_notes_with_no_release_run_link = [
     "<h1 id='Currentreleasenotestag_3-plannedreleasetotagtag_3'>EPS FHIR API planned release to INT of tag tag_3</h1>",
     "<h2 id='Currentreleasenotestag_3-Changessincecurrentlyreleasedtagtag_1'>Changes since currently released tag tag_1</h2>",
