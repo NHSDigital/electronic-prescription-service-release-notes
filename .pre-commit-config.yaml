@@ -49,4 +49,4 @@ repos:
         language: system
 
 fail_fast: true
-default_stages: [commit]
+default_stages: [pre-commit]

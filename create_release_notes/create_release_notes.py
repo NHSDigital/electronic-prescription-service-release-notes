@@ -209,7 +209,7 @@ def create_release_notes(
         if match:
             found_jira = True
             ticket_number = match.group(1).replace(" ", "-").upper()
-            jira_link = f"https://nhsd-jira.digital.nhs.uk/browse/{ticket_number}"
+            jira_link = f"""<ac:structured-macro ac:name="jira" ac:schema-version="1" ac:macro-id="03fd4693-8cb5-4cb9-870f-52b1f767ea16"><ac:parameter ac:name="server">CDT JIRA</ac:parameter><ac:parameter ac:name="serverId">70ab845d-752a-35ef-b114-db6a6f17d958</ac:parameter><ac:parameter ac:name="key">{ticket_number}</ac:parameter></ac:structured-macro>"""  # noqa: E501
             jira_details = get_jira_details(jira, ticket_number)
             if create_release_candidate:
                 try:
@@ -251,7 +251,7 @@ def create_release_notes(
             )  # noqa: E501
         else:
             tag_output.append(
-                f"<br/>jira link               : <a class='external-link' href='{jira_link}' rel='nofollow'>{jira_link}</a>",
+                f"<br/>jira link               : {jira_link}",
             )  # noqa: E501
         tag_output.append(
             f"<br/>jira title              : {escape(jira_details.jira_title)}"
@@ -271,20 +271,16 @@ def create_release_notes(
         )
         tag_output.append("</p>")
 
-        if create_release_candidate and found_jira:
+        if found_jira:
             tags_with_jira = tags_with_jira + tag_output
         else:
             tags_without_jira = tags_without_jira + tag_output
 
-    if create_release_candidate:
-        tags_with_jira_header = ["<h3 id='jira_changes'>Changes with jira tickets</h3>"]
-        tags_withouut_jira_header = [
-            "<p>***</p>",
-            "<h3 id='non_jira_changes'>Changes without jira tickets</h3>",
-        ]
-    else:
-        tags_with_jira_header = []
-        tags_withouut_jira_header = []
+    tags_with_jira_header = ["<h3 id='jira_changes'>Changes with jira tickets</h3>"]
+    tags_withouut_jira_header = [
+        "<p>***</p>",
+        "<h3 id='non_jira_changes'>Changes without jira tickets</h3>",
+    ]
     output = (
         header
         + tags_with_jira_header
