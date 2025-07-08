@@ -209,7 +209,18 @@ def create_release_notes(
         if match:
             found_jira = True
             ticket_number = match.group(1).replace(" ", "-").upper()
-            jira_link = f"https://nhsd-jira.digital.nhs.uk/browse/{ticket_number}"
+            jira_link = f"""
+<img class="editor-inline-macro"
+src="/plugins/servlet/confluence/placeholder/macro?definition=e2ppcmE6a2V5PUFFQS0zNjIyfQ==&amp;locale=en_GB"
+data-macro-name="jira"
+data-macro-id="9ae368ec-86dc-4a07-9cdf-925b33915668"
+role="button"
+tabindex="0"
+aria-haspopup="true"
+aria-label="jira macro"
+data-macro-parameters="key={ticket_number}|server=CDT JIRA|serverId=70ab845d-752a-35ef-b114-db6a6f17d958"
+data-macro-schema-version="1">
+            """
             jira_details = get_jira_details(jira, ticket_number)
             if create_release_candidate:
                 try:
