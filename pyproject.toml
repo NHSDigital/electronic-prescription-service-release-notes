@@ -43,7 +43,7 @@ flake8 = "^7.3.0"
 pre-commit = "^4.1.0"
 semver = "^3.0.4"
 awscliv2 = "^2.3.1"
-gitpython = "^3.1.44"
+gitpython = "^3.1.45"
 coverage = "^7.9.2"
 
 
