@@ -2235,22 +2235,21 @@ files = [
 
 [[package]]
 name = "pygithub"
-version = "2.6.1"
+version = "2.7.0"
 description = "Use the full Github API v3"
 optional = false
 python-versions = ">=3.8"
 groups = ["main", "release_notes"]
 files = [
-    {file = "PyGithub-2.6.1-py3-none-any.whl", hash = "sha256:6f2fa6d076ccae475f9fc392cc6cdbd54db985d4f69b8833a28397de75ed6ca3"},
-    {file = "pygithub-2.6.1.tar.gz", hash = "sha256:b5c035392991cca63959e9453286b41b54d83bf2de2daa7d7ff7e4312cebf3bf"},
+    {file = "pygithub-2.7.0-py3-none-any.whl", hash = "sha256:40ecbfe26dc55cc34ab4b0ffa1d455e6f816ef9a2bc8d6f5ad18ce572f163700"},
+    {file = "pygithub-2.7.0.tar.gz", hash = "sha256:7cd6eafabb09b5369afba3586d86b1f1ad6f1326d2ff01bc47bb26615dce4cbb"},
 ]
 
 [package.dependencies]
-Deprecated = "*"
 pyjwt = {version = ">=2.4.0", extras = ["crypto"]}
 pynacl = ">=1.4.0"
 requests = ">=2.14.0"
-typing-extensions = ">=4.0.0"
+typing-extensions = ">=4.5.0"
 urllib3 = ">=1.26.0"
 
 [[package]]
@@ -3344,4 +3343,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "bec04ae17bfbe7f367387510fc5dd82315c8b95b276af78586d20fa805d72eb0"
+content-hash = "821d879ffb271cf5ff4b2b38f82f23ba63ae7a34cb5bc8746f785d345e6082ca"
