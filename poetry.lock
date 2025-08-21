@@ -34,14 +34,14 @@ test = ["dateparser (==1.*)", "pre-commit", "pytest", "pytest-cov", "pytest-mock
 
 [[package]]
 name = "atlassian-python-api"
-version = "4.0.4"
+version = "4.0.6"
 description = "Python Atlassian REST API Wrapper"
 optional = false
 python-versions = "*"
 groups = ["main", "mark_released", "release_notes"]
 files = [
-    {file = "atlassian_python_api-4.0.4-py3-none-any.whl", hash = "sha256:d5e61a4a6a69e9f9b0737f449fad6beb5e4dc39665ac4269f1f8fa8fa4246c3c"},
-    {file = "atlassian_python_api-4.0.4.tar.gz", hash = "sha256:351e378cf489f31c3fbf9e71670fa7ee2a7b68c20d616665d4e8bca17a3d2983"},
+    {file = "atlassian_python_api-4.0.6-py3-none-any.whl", hash = "sha256:04db747b175a245e49f38c913df9be6a22d8c9d349f9a8b9cc991fc18eab80f5"},
+    {file = "atlassian_python_api-4.0.6.tar.gz", hash = "sha256:0d58f55d828f07e94f9821159473912caee48e31dc2c34fc5751031ab401c907"},
 ]
 
 [package.dependencies]
@@ -3343,4 +3343,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "116b5d301233e3518b7a79e3d7abc7cf2dec4da9a7265ba62e80af3bd7982a99"
+content-hash = "6a78095b156388f28eab4bd7ec6d9805c15de30aaff9c76f425493ccb1cbb6a6"
