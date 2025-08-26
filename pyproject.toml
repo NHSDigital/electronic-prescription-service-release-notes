@@ -15,28 +15,28 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
-atlassian-python-api = "^4.0.6"
+atlassian-python-api = "4.0.7"
 pygithub = "^2.7.0"
 aws-lambda-powertools = "^3.19.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.group.release_notes.dependencies]
 python = "^3.12"
-atlassian-python-api = "^4.0.6"
+atlassian-python-api = "4.0.7"
 pygithub = "^2.7.0"
 aws-lambda-powertools = "^3.19.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.group.mark_released.dependencies]
 python = "^3.12"
-atlassian-python-api = "^4.0.6"
+atlassian-python-api = "4.0.7"
 aws-lambda-powertools = "^3.19.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.scripts]
 
 [tool.poetry.group.dev.dependencies]
-aws-sam-cli = "^1.142.1"
+aws-sam-cli = "^1.143.0"
 pip-licenses = "^5.0.0"
 black = "^25.1.0"
 flake8 = "^7.3.0"
@@ -44,7 +44,7 @@ pre-commit = "^4.3.0"
 semver = "^3.0.4"
 awscliv2 = "^2.3.1"
 gitpython = "^3.1.45"
-coverage = "^7.10.4"
+coverage = "^7.10.5"
 
 
 [build-system]
