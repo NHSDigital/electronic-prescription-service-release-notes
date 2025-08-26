@@ -11,6 +11,8 @@ from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities import parameters
 from html import escape
 
+import requests
+
 JIRA_URL = "https://nhsd-jira.digital.nhs.uk/"
 CONFLUENCE_URL = "https://nhsd-confluence.digital.nhs.uk/"
 logger = Logger()
@@ -390,8 +392,12 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
                 parameters.get_secret("account-resources-confluenceToken")
             )
 
-        jira = Jira(JIRA_URL, token=JIRA_TOKEN)
-        confluence = Confluence(CONFLUENCE_URL, token=CONFLUENCE_TOKEN)
+        jira_session = requests.Session()
+        confluence_session = requests.Session()
+        jira = Jira(JIRA_URL, token=JIRA_TOKEN, session=jira_session)
+        confluence = Confluence(
+            CONFLUENCE_URL, token=CONFLUENCE_TOKEN, session=confluence_session
+        )
         github_auth = Auth.Token(str(GITHUB_TOKEN))
         gh = Github(auth=github_auth)
         repo_name = event["repoName"]

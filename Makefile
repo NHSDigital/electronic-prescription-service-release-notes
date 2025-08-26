@@ -231,7 +231,7 @@ check-licenses:
 
 clean:
 	rm -rf .aws-sam
-	rm create_release_notes/requirements.txt
+	rm -f create_release_notes/requirements.txt
 
 deep-clean: clean
 	rm -rf .venv
