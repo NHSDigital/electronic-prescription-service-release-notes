@@ -16,14 +16,14 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 atlassian-python-api = "4.0.7"
-pygithub = "^2.7.0"
+pygithub = "^2.8.1"
 aws-lambda-powertools = "^3.19.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.group.release_notes.dependencies]
 python = "^3.12"
 atlassian-python-api = "4.0.7"
-pygithub = "^2.7.0"
+pygithub = "^2.8.1"
 aws-lambda-powertools = "^3.19.0"
 fastjsonschema = "^2.21.2"
 
