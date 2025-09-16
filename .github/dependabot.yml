@@ -9,7 +9,12 @@ updates:
     # default location of `.github/workflows`
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "friday"
+      time: "18:00" # UTC
+    open-pull-requests-limit: 20
+    commit-message:
+      prefix: "Upgrade: [dependabot] - "
 
   ###################################
   # Poetry  #########################
@@ -17,5 +22,10 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "friday"
+      time: "18:00" # UTC
+    open-pull-requests-limit: 20
+    commit-message:
+      prefix: "Upgrade: [dependabot] - "
     versioning-strategy: increase
