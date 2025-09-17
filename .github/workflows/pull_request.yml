@@ -8,6 +8,9 @@ env:
   BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
 
 jobs:
+  dependabot-auto-approve-and-merge:
+    uses: NHSDigital/eps-workflow-dependabot/.github/workflows/dependabot-auto-approve-and-merge.yml@4cb92ecad7c28e4b83f25a6d4433e8e8a0024f21
+
   quality_checks:
     uses: NHSDigital/eps-workflow-quality-checks/.github/workflows/quality-checks.yml@v4.1.1
     secrets:
