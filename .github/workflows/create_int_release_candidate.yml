@@ -39,6 +39,9 @@ on:
 jobs:
   create-release-candidate:
     runs-on: ubuntu-22.04
+    environment: ${{ inputs.TARGET_ENV }}
+    permissions:
+      id-token: write
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
