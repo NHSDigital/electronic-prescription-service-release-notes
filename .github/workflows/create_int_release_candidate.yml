@@ -51,7 +51,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: eu-west-2
-          role-to-assume: ${{ inputs.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+          role-to-assume: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
           role-session-name: ${{ inputs.RELEASE_PREFIX }}-release-notes-run-lambda
           unset-current-credentials: true
 
