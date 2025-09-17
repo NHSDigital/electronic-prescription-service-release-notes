@@ -8,6 +8,32 @@ env:
   BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
 
 jobs:
+  test_create_release_candidate:
+    uses: ./.github/workflows/create_int_release_candidate.yml
+    with:
+      CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
+      RELEASE_TAG: "test_release_tag"
+      REPO_NAME: "test_repo_name"
+      TARGET_ENV: "test_target_env"
+      PRODUCT_NAME: "test product name"
+      PAGE_ID: "1177984551"
+      RELEASE_PREFIX: "test-prefix"
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+
+  test_update_release_notes:
+    uses: ./.github/workflows/update_release_notes.yml
+    with:
+      CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
+      RELEASE_TAG: "test_release_tag"
+      REPO_NAME: "test_repo_name"
+      TARGET_ENV: "test_target_env"
+      PRODUCT_NAME: "test product name"
+      PAGE_ID: "1177984545"
+      RELEASE_PREFIX: "test-prefix"
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+
   dependabot-auto-approve-and-merge:
     uses: NHSDigital/eps-workflow-dependabot/.github/workflows/dependabot-auto-approve-and-merge.yml@4cb92ecad7c28e4b83f25a6d4433e8e8a0024f21
 
