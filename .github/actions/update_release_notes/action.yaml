@@ -1,0 +1,56 @@
+name: "Update confluence release notes"
+description: "Update release notes in confluence"
+
+inputs:
+  DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE:
+    description: "The role to assume in the dev account to execute the lambda"
+    required: true
+
+  CURRENT_DEPLOYED_TAG:
+    description: "The current deployed tag in INT. Eg. 'v1.2.3'"
+    required: true
+  RELEASE_TAG:
+    description: "The tag deployed to DEV. Eg. 'v1.2.4'"
+    required: true
+  REPO_NAME:
+    description: "The name of the repository."
+    required: true
+  TARGET_ENV:
+    description: "The target environment for the release notes. Eg. 'INT'"
+    required: true
+  PRODUCT_NAME:
+    description: "The name of the product. Eg. 'Prescriptions for Patients AWS layer'"
+    required: true
+  PAGE_ID:
+    description: "The confluence page ID to update the release notes on"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Checkout"
+      uses: actions/checkout@v5
+      with:
+        repo: "NHSDigital/electronic-prescription-service-release-notes"
+        sparse-checkout: |
+          .github
+
+    - name: Connect to dev AWS account
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: eu-west-2
+        role-to-assume: ${{ inputs.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+        role-session-name: ${{ inputs.RELEASE_PREFIX }}-release-notes-run-lambda
+        unset-current-credentials: true
+
+    - name: "Update release notes"
+      shell: bash
+      working-directory: .github/scripts
+      env:
+        CURRENT_DEPLOYED_TAG: ${{ inputs.CURRENT_DEPLOYED_TAG }}
+        RELEASE_TAG: ${{ inputs.RELEASE_TAG }}
+        REPO_NAME: ${{ inputs.REPO_NAME }}
+        TARGET_ENV: ${{ inputs.TARGET_ENV }}
+        PRODUCT_NAME: ${{ inputs.PRODUCT_NAME }}
+        PAGE_ID: ${{ inputs.PAGE_ID }}
+      run: ./update_release_notes.sh
