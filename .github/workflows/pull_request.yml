@@ -11,8 +11,8 @@ jobs:
   test_create_release_candidate:
     uses: ./.github/workflows/create_int_release_candidate.yml
     with:
-      CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
-      RELEASE_TAG: "test_release_tag"
+      CURRENT_DEPLOYED_TAG: "v1.1.1"
+      RELEASE_TAG: "v1.1.2"
       REPO_NAME: "eps-workflow-semantic-release"
       TARGET_ENV: "test_target_env"
       PRODUCT_NAME: "test product name"
@@ -24,8 +24,8 @@ jobs:
   test_update_release_notes:
     uses: ./.github/workflows/update_release_notes.yml
     with:
-      CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
-      RELEASE_TAG: "test_release_tag"
+      CURRENT_DEPLOYED_TAG: "v1.1.1"
+      RELEASE_TAG: "v1.1.2"
       REPO_NAME: "eps-workflow-semantic-release"
       TARGET_ENV: "test_target_env"
       PRODUCT_NAME: "test product name"
