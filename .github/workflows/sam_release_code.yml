@@ -32,7 +32,7 @@ jobs:
       contents: read
     steps:
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838
         with:
           aws-region: eu-west-2
           role-to-assume: ${{ secrets.CLOUD_FORMATION_DEPLOY_ROLE }}
@@ -51,15 +51,15 @@ jobs:
           artifact_bucket=$(aws cloudformation list-exports --output json | \
             jq -r '.Exports[] | select(.Name == "account-resources:ArtifactsBucket") | .Value' |grep -o '[^:]*$')
           export artifact_bucket
-          
+
           artifact_bucket_prefix=release_notes/${{ inputs.ARTIFACT_BUCKET_PREFIX }}
           export artifact_bucket_prefix
-          
+
           export template_file=template.yaml
           export stack_name=${{ inputs.STACK_NAME }}
           export VERSION_NUMBER=${{ inputs.VERSION_NUMBER }}
           export PAT_GITHUB_TOKEN=${{ secrets.PAT_GITHUB_TOKEN }}
-          
+
           cloud_formation_execution_role=$(aws cloudformation list-exports --output json | \
               jq -r '.Exports[] | select(.Name == "ci-resources:CloudFormationExecutionRole") | .Value' )
           export cloud_formation_execution_role
