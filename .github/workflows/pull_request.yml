@@ -13,7 +13,7 @@ jobs:
     with:
       CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
       RELEASE_TAG: "test_release_tag"
-      REPO_NAME: "eps-storage-terraform"
+      REPO_NAME: "eps-workflow-semantic-release"
       TARGET_ENV: "test_target_env"
       PRODUCT_NAME: "test product name"
       PAGE_ID: "1177984551"
@@ -26,7 +26,7 @@ jobs:
     with:
       CURRENT_DEPLOYED_TAG: "test_current_deployed_tag"
       RELEASE_TAG: "test_release_tag"
-      REPO_NAME: "eps-storage-terraform"
+      REPO_NAME: "eps-workflow-semantic-release"
       TARGET_ENV: "test_target_env"
       PRODUCT_NAME: "test product name"
       PAGE_ID: "1177984545"
