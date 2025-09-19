@@ -1,10 +1,10 @@
-name: "Create confluence release candidate for INT"
+name: "Create confluence release candidate"
 
 on:
   workflow_call:
     inputs:
       CURRENT_DEPLOYED_TAG:
-        description: "The current deployed tag in INT. Eg. 'v1.2.3'"
+        description: "The current deployed tag. Eg. 'v1.2.3'"
         required: true
         type: string
       RELEASE_TAG:
@@ -58,7 +58,7 @@ jobs:
           role-session-name: ${{ inputs.RELEASE_PREFIX }}-release-notes-run-lambda
           unset-current-credentials: true
 
-      - name: "Create INT release candidate"
+      - name: "Create release candidate"
         shell: bash
         working-directory: .github/scripts
         env:
