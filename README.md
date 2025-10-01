@@ -2,7 +2,7 @@
 
 ![Build](https://github.com/NHSDigital/electronic-prescription-service-release-notes/actions/workflows/release.yml/badge.svg)
 
-This is the code for managing release notes in confluence and releases versions in jira.  
+This is the code and workflows for managing release notes in confluence and releases versions in jira.  
 It contains a lambda function to create or update a release notes on confluence for EPS repos. This lambda can also create releases in jira and mark jira tickets with the release version.  
 It also has a lambda to mark the release version as released in jira.  
 It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted.  
@@ -14,6 +14,121 @@ For descriptions and examples of parameters passed to the lambdas, see the schem
 - `SAMtemplates/` Contains the SAM templates used to define the stack
 - `.github` Contains github workflows that are used for building and deploying from pull requests and releases
 - `.devcontainer` Contains a dockerfile and vscode devcontainer definition
+
+## Workflows
+
+### Create Release Candidate
+
+The workflow `create_int_release_candidate.yml` is used to create a release candidate confluence page for the integration environment.
+
+#### Inputs
+
+- `CURRENT_DEPLOYED_TAG`: The current deployed tag in the integration environment.
+- `RELEASE_TAG`: The new release tag to be created.
+- `REPO_NAME`: The name of the repository for which the release notes are to be generated.
+- `TARGET_ENV`: The target environment for the release notes.
+- `PRODUCT_NAME`: The readable name of the product for which the release notes are to be generated.
+- `PAGE_ID`: The id of the confluence page to be used as a parent for the release notes.
+- `RELEASE_PREFIX`: A prefix to be prepended to the version tag when creating the release notes.
+
+#### Secrets
+
+- `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
+
+#### Example
+
+```yaml
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create_int_release_candidate:
+    uses: NHSDigital/electronic-prescription-service-release-notes/.github/workflows/create_release_candidate.yml@v1.0.0
+    with:
+      CURRENT_DEPLOYED_TAG: 'v1.2.3'
+      RELEASE_TAG: 'v1.2.4'
+      REPO_NAME: 'prescriptionsforpatients'
+      TARGET_ENV: 'INT'
+      PRODUCT_NAME: 'Prescription for Patients AWS Layer'
+      PAGE_ID: '123456789'
+      RELEASE_PREFIX: 'pfp-aws'
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+```
+
+### Update Release Notes
+
+The workflow `update_release_notes.yml` is used to update the release notes confluence page for a given environment.
+
+#### Inputs
+
+- `CURRENT_DEPLOYED_TAG`: The current deployed tag in the target environment.
+- `RELEASE_TAG`: The new release tag to be created.
+- `REPO_NAME`: The name of the repository for which the release notes are to be generated.
+- `TARGET_ENV`: The target environment for the release notes.
+- `PRODUCT_NAME`: The readable name of the product for which the release notes are to be generated.
+- `PAGE_ID`: The id of the confluence page to be used as a parent for the release notes.
+- `RELEASE_PREFIX`: A prefix to be prepended to the version tag when creating the release notes.
+
+#### Secrets
+
+- `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
+
+#### Example
+
+```yaml
+name: INT CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  update_release_notes:
+    uses: NHSDigital/electronic-prescription-service-release-notes/.github/workflows/update_release_notes.yml@v1.0.0
+    with:
+      CURRENT_DEPLOYED_TAG: 'v1.2.3'
+      RELEASE_TAG: 'v1.2.4'
+      REPO_NAME: 'prescriptionsforpatients'
+      TARGET_ENV: 'INT'
+      PRODUCT_NAME: 'Prescription for Patients AWS Layer'
+      PAGE_ID: '123456789'
+      RELEASE_PREFIX: 'pfp-aws'
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+```
+
+### Mark Jira Version as Released
+
+Marks Jira issues with a given fix version as released.
+
+#### Inputs
+
+- `RELEASE_TAG`: The release tag to be marked as released.
+- `RELEASE_PREFIX`: A prefix to be prepended to the version tag when marking the release as released.
+
+#### Secrets
+
+- `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
+
+#### Example
+
+```yaml
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  mark_jira_version_as_released:
+    uses: NHSDigital/electronic-prescription-service-release-notes/.github/workflows/mark_jira_version_as_released.yml@v1.0.0
+    with:
+      RELEASE_TAG: 'v1.2.4'
+      RELEASE_PREFIX: 'pfp-aws'
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+```
 
 ## Contributing
 

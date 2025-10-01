@@ -1,0 +1,46 @@
+name: "Mark Jira issues as released"
+
+on:
+  workflow_call:
+    inputs:
+      RELEASE_TAG:
+        description: "The release tag to create the release candidate for. Eg. 'v1.2.4'"
+        required: true
+        type: string
+      RELEASE_PREFIX:
+        description: "The release candidate prefix to prepend to the version tag. Eg. 'PfP-AWS' for 'PfP-AWS-v1.2.3'"
+        required: true
+        type: string
+    secrets:
+      DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE:
+        description: "The role to assume in the dev account to execute the lambda"
+        required: true
+
+jobs:
+  mark-jira-released:
+    runs-on: ubuntu-22.04
+    permissions:
+      id-token: write
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+        with:
+          repository: "NHSDigital/electronic-prescription-service-release-notes"
+          sparse-checkout: |
+            .github
+
+      - name: Connect to dev AWS account
+        uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838
+        with:
+          aws-region: eu-west-2
+          role-to-assume: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+          role-session-name: ${{ inputs.RELEASE_PREFIX }}-mark-jira-run-lambda
+          unset-current-credentials: true
+
+      - name: "Mark Jira issues as released"
+        shell: bash
+        working-directory: .github/scripts
+        env:
+          RELEASE_TAG: ${{ inputs.RELEASE_TAG }}
+          RELEASE_PREFIX: ${{ inputs.RELEASE_PREFIX }}
+        run: ./mark_jira_released.sh
