@@ -9,10 +9,15 @@ env:
 
 jobs:
   dependabot-auto-approve-and-merge:
-    uses: NHSDigital/eps-workflow-dependabot/.github/workflows/dependabot-auto-approve-and-merge.yml@4cb92ecad7c28e4b83f25a6d4433e8e8a0024f21
+    uses: NHSDigital/eps-workflow-dependabot/.github/workflows/dependabot-auto-approve-and-merge.yml@5dd998ea44b2e412ea51544b565be3d67f54dc41
+    secrets:
+      AUTOMERGE_APP_ID: ${{ secrets.AUTOMERGE_APP_ID }}
+      AUTOMERGE_PEM: ${{ secrets.AUTOMERGE_PEM }}
 
   quality_checks:
     uses: NHSDigital/eps-workflow-quality-checks/.github/workflows/quality-checks.yml@v4.1.3
+    with:
+      reinstall_poetry: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
