@@ -11,6 +11,8 @@ env:
 jobs:
   quality_checks:
     uses: NHSDigital/eps-workflow-quality-checks/.github/workflows/quality-checks.yml@v4.1.3
+    with:
+      reinstall_poetry: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
