@@ -38,7 +38,6 @@ jobs:
           PYTHON_CONFIGURE_OPTS: --enable-shared
 
       - name: Reinstall poetry
-        if: ${{ inputs.reinstall_poetry }}
         run: |
           poetry_tool_version=$(cat .tool-versions | grep poetry)
           poetry_version=${poetry_tool_version//"poetry "}
