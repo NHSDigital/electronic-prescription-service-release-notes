@@ -39,9 +39,9 @@ jobs:
 
       - name: Reinstall poetry
         run: |
-          poetry_tool_version=$(cat .tool-versions | grep poetry)
+          poetry_tool_version=$(< .tool-versions grep poetry)
           poetry_version=${poetry_tool_version//"poetry "}
-          asdf uninstall poetry $poetry_version
+          asdf uninstall poetry "$poetry_version"
           asdf install poetry
 
       - name: make install
