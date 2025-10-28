@@ -181,6 +181,14 @@ aws-configure:
 sam-build: sam-validate
 	poetry export --without-hashes --only release_notes > create_release_notes/requirements.txt
 	poetry export --without-hashes --only mark_released > mark_jira_released/requirements.txt
+	if [ ! -s create_release_notes/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' create_release_notes/requirements.txt | wc -l)" -eq 0 ]; then \
+		echo "Error: create_release_notes/requirements.txt is empty or contains only blank lines"; \
+		exit 1; \
+	fi
+	if [ ! -s mark_jira_released/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' mark_jira_released/requirements.txt | wc -l)" -eq 0 ]; then \
+		echo "Error: mark_jira_released/requirements.txt is empty or contains only blank lines"; \
+		exit 1; \
+	fi
 	sam build --template-file SAMtemplates/main_template.yaml --region eu-west-2
 
 sam-run-local: sam-build
