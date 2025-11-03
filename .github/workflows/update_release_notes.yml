@@ -39,7 +39,6 @@ on:
 jobs:
   update-release-notes:
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.TARGET_ENV }}
     permissions:
       id-token: write
     steps:
