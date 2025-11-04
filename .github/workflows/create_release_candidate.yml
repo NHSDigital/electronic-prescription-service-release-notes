@@ -46,6 +46,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: "NHSDigital/electronic-prescription-service-release-notes"
+          ref: 6090ed99c3ad13dbc798b847635cb7af2a3e38f3
           sparse-checkout: |
             .github
 
