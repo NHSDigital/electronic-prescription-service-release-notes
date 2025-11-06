@@ -216,6 +216,7 @@ The GitHub Actions require the following secrets to be added
 
 - AUTOMERGE_PAT. This is a Github personal access token with repo permissions used to auto approve and auto merge dependabot updates
 - DEV_CLOUD_FORMATION_DEPLOY_ROLE. This is the cloud formation deploy role ARN in the dev account where the lambda is deployed
+- PAT_GITHUB_TOKEN. This is a Github personal access token used by the lambda to avoid rate limits on Github api. It does not need any special permissions and is used as a fallback when the LAMBDA_GITHUB_TOKEN isn't passed to the workflow.
 - SONAR_TOKEN. This can be obtained from [SonarCloud](https://sonarcloud.io/)
   as described [here](https://docs.sonarsource.com/sonarqube/latest/user-guide/user-account/generating-and-using-tokens/).
   You will need the "Execute Analysis" permission for the project (NHSDigital_electronic-prescription-service-release-notes) in order for the token to work.
