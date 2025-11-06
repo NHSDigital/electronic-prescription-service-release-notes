@@ -8,7 +8,8 @@ cat <<EOF > payload.json
   "targetEnvironment": "$TARGET_ENV",
   "productName": "$PRODUCT_NAME",
   "releaseNotesPageId": "$PAGE_ID",
-  "releaseNotesPageTitle": "Current $REPO_NAME release notes - $TARGET_ENV"
+  "releaseNotesPageTitle": "Current $REPO_NAME release notes - $TARGET_ENV",
+  "gitHubToken": "$GITHUB_TOKEN"
 }
 EOF
 cat payload.json
