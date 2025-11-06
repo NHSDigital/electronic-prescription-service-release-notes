@@ -6,7 +6,7 @@ This is the code and workflows for managing release notes in confluence and rele
 It contains a lambda function to create or update a release notes on confluence for EPS repos. This lambda can also create releases in jira and mark jira tickets with the release version.  
 It also has a lambda to mark the release version as released in jira.  
 It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted.  
-For descriptions and examples of parameters passed to the lambdas, see the schema in the source code, and the publish\* targets in the Makefile
+For descriptions and examples of parameters passed to the lambdas, see the schema in the source code, and the publish\* targets in the Makefile.
 
 - `create_release_notes/` Lambda code to create the release notes.
 - `mark_jira_released/` Lambda code to mark a jira version as released.
@@ -34,6 +34,7 @@ The workflow `create_int_release_candidate.yml` is used to create a release cand
 #### Secrets
 
 - `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
+- `GITHUB_TOKEN`: GitHub token used for API access.
 
 #### Example
 
@@ -56,6 +57,7 @@ jobs:
       RELEASE_PREFIX: 'pfp-aws'
     secrets:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Update Release Notes
@@ -75,6 +77,7 @@ The workflow `update_release_notes.yml` is used to update the release notes conf
 #### Secrets
 
 - `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
+- `GITHUB_TOKEN`: A GitHub personal access token used for API access.
 
 #### Example
 
@@ -97,6 +100,7 @@ jobs:
       RELEASE_PREFIX: 'pfp-aws'
     secrets:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Mark Jira Version as Released
@@ -212,7 +216,6 @@ The GitHub Actions require the following secrets to be added
 
 - AUTOMERGE_PAT. This is a Github personal access token with repo permissions used to auto approve and auto merge dependabot updates
 - DEV_CLOUD_FORMATION_DEPLOY_ROLE. This is the cloud formation deploy role ARN in the dev account where the lambda is deployed
-- PAT_GITHUB_TOKEN. This is a Github personal access token used by the lambda to avoid rate limits on Github api. It does not need any special permissions
 - SONAR_TOKEN. This can be obtained from [SonarCloud](https://sonarcloud.io/)
   as described [here](https://docs.sonarsource.com/sonarqube/latest/user-guide/user-account/generating-and-using-tokens/).
   You will need the "Execute Analysis" permission for the project (NHSDigital_electronic-prescription-service-release-notes) in order for the token to work.
