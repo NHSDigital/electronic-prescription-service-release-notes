@@ -392,6 +392,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
         GITHUB_TOKEN = event.get("gitHubToken") or os.getenv("GITHUB_TOKEN")
+        logger.info(f"Event: {event}")
 
         if JIRA_TOKEN is None:
             JIRA_TOKEN = str(parameters.get_secret("account-resources-jiraToken"))
