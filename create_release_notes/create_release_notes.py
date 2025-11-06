@@ -44,6 +44,7 @@ INPUT_SCHEMA = {
         "productName",
         "releaseNotesPageId",
         "releaseNotesPageTitle",
+        "gitHubToken",
     ],
     "properties": {
         "currentTag": {

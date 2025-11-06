@@ -24,8 +24,8 @@ class LambdaContext:
 context = LambdaContext()
 
 
-def get_event(update={}):
-    event = {
+def get_event(github_token=""):
+    return {
         "createReleaseCandidate": "true",
         "releasePrefix": "PfP-AWS-",
         "currentTag": "tag_1",
@@ -36,9 +36,8 @@ def get_event(update={}):
         "releaseNotesPageId": "734733361",
         "releaseNotesPageTitle": "TEST PfP-AWS-v1.0.442-beta - Deployed to [INT] on 29-01-24",
         "releaseURL": "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696",
+        "gitHubToken": github_token,
     }
-    event.update(update)
-    return event
 
 
 class TestLambdaHandler(unittest.TestCase):
@@ -47,24 +46,10 @@ class TestLambdaHandler(unittest.TestCase):
     def test_create_release_notes_success(self, _mock_process_event, _mock_github):
         os.environ["JIRA_TOKEN"] = "JIRA_TOKEN"
         os.environ["CONFLUENCE_TOKEN"] = "CONFLUENCE_TOKEN"
-        os.environ["GITHUB_TOKEN"] = "GITHUB_TOKEN"
-        response = create_release_notes.lambda_handler(
-            event=get_event(), context=context
-        )
-
-        self.assertEqual(response, {"status": "OK", "statusCode": 200})
-
-    @patch("create_release_notes.create_release_notes.process_event")
-    @patch("create_release_notes.create_release_notes.Github")
-    def test_create_release_notes_success_github_token(
-        self, _mock_process_event, _mock_github
-    ):
-        os.environ["JIRA_TOKEN"] = "JIRA_TOKEN"
-        os.environ["CONFLUENCE_TOKEN"] = "CONFLUENCE_TOKEN"
 
         events = [
-            get_event({"gitHubToken": ""}),
-            get_event({"gitHubToken": "mocked_github_token"}),
+            get_event(),
+            get_event("mocked_github_token"),
         ]
 
         for event in events:
