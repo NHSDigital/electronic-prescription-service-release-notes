@@ -34,7 +34,7 @@ The workflow `create_int_release_candidate.yml` is used to create a release cand
 #### Secrets
 
 - `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
-- `GITHUB_TOKEN`: GitHub token used for API access.
+- `LAMBDA_GITHUB_TOKEN`: GitHub token used for API access. This must be a Personal Access Token with repo scope, set as a secret in the calling repo (e.g., `RELEASE_NOTES_PAT`).
 
 #### Example
 
@@ -57,7 +57,7 @@ jobs:
       RELEASE_PREFIX: 'pfp-aws'
     secrets:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      LAMBDA_GITHUB_TOKEN: ${{ secrets.RELEASE_NOTES_PAT }}
 ```
 
 ### Update Release Notes
@@ -77,7 +77,7 @@ The workflow `update_release_notes.yml` is used to update the release notes conf
 #### Secrets
 
 - `DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE`: The ARN of the role that allows the lambda to be executed in the development AWS account.
-- `GITHUB_TOKEN`: A GitHub personal access token used for API access.
+- `LAMBDA_GITHUB_TOKEN`: GitHub token used for API access. This must be a Personal Access Token with repo scope, set as a secret in the calling repo (e.g., `RELEASE_NOTES_PAT`).
 
 #### Example
 
@@ -100,7 +100,7 @@ jobs:
       RELEASE_PREFIX: 'pfp-aws'
     secrets:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      LAMBDA_GITHUB_TOKEN: ${{ secrets.RELEASE_NOTES_PAT }}
 ```
 
 ### Mark Jira Version as Released
