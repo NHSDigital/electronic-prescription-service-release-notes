@@ -9,7 +9,7 @@ cat <<EOF > payload.json
   "productName": "$PRODUCT_NAME",
   "releaseNotesPageId": "$PAGE_ID",
   "releaseNotesPageTitle": "Current $REPO_NAME release notes - $TARGET_ENV",
-  "gitHubToken": "$GITHUB_TOKEN"
+  "gitHubToken": "$LAMBDA_GITHUB_TOKEN"
 }
 EOF
 cat payload.json | jq '.gitHubToken = "***REDACTED***"'

@@ -35,7 +35,7 @@ on:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE:
         description: "The role to assume in the dev account to execute the lambda"
         required: true
-      GITHUB_TOKEN:
+      LAMBDA_GITHUB_TOKEN:
         description: "GitHub token with permissions to access the repository"
         required: false
 
@@ -70,5 +70,5 @@ jobs:
           TARGET_ENV: ${{ inputs.TARGET_ENV }}
           PRODUCT_NAME: ${{ inputs.PRODUCT_NAME }}
           PAGE_ID: ${{ inputs.PAGE_ID }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LAMBDA_GITHUB_TOKEN: ${{ secrets.LAMBDA_GITHUB_TOKEN }}
         run: ./update_release_notes.sh

@@ -11,7 +11,7 @@ cat <<EOF > payload.json
   "releaseNotesPageTitle": "$RELEASE_PREFIX-$RELEASE_TAG - Deployed to [$TARGET_ENV] on $(date +'%d-%m-%y')",
   "createReleaseCandidate": "true",
   "releasePrefix": "$RELEASE_PREFIX-",
-  "gitHubToken": "$GITHUB_TOKEN"
+  "gitHubToken": "$LAMBDA_GITHUB_TOKEN"
 }
 EOF
 cat payload.json | jq '.gitHubToken = "***REDACTED***"'
