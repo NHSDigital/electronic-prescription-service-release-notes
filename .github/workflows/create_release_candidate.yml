@@ -35,6 +35,9 @@ on:
       DEV_CLOUD_FORMATION_EXECUTE_LAMBDA_ROLE:
         description: "The role to assume in the dev account to execute the lambda"
         required: true
+      GITHUB_TOKEN:
+        description: "GitHub token with permissions to access the repository"
+        required: false
 
 jobs:
   create-release-candidate:
@@ -68,4 +71,5 @@ jobs:
           PRODUCT_NAME: ${{ inputs.PRODUCT_NAME }}
           PAGE_ID: ${{ inputs.PAGE_ID }}
           RELEASE_PREFIX: ${{ inputs.RELEASE_PREFIX }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./create_release_candidate.sh
