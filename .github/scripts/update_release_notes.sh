@@ -12,7 +12,7 @@ cat <<EOF > payload.json
   "gitHubToken": "$GITHUB_TOKEN"
 }
 EOF
-cat payload.json
+cat payload.json | jq '.gitHubToken = "***REDACTED***"'
 
 function_arn=$(aws cloudformation list-exports --query "Exports[?Name=='release-notes:CreateReleaseNotesLambdaArn'].Value" --output text)
 aws lambda invoke --function-name "${function_arn}" --cli-binary-format raw-in-base64-out --payload file://payload.json out.txt
