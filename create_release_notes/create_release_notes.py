@@ -33,6 +33,7 @@ INPUT_SCHEMA = {
             "releaseNotesPageId": "693750029",
             "releaseNotesPageTitle": "Current PfP AWS layer release notes - PROD",
             "releaseURL": "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7081875172",
+            "gitHubToken": "<github_personal_access_token>",
         }
     ],
     "required": [
@@ -43,6 +44,7 @@ INPUT_SCHEMA = {
         "productName",
         "releaseNotesPageId",
         "releaseNotesPageTitle",
+        "gitHubToken",
     ],
     "properties": {
         "currentTag": {
@@ -114,6 +116,14 @@ INPUT_SCHEMA = {
             "examples": [
                 "https://github.com/NHSDigital/prescriptionsforpatients/actions/runs/7692810696"
             ],
+        },
+        "gitHubToken": {
+            "$id": "#/properties/gitHubToken",
+            "type": "string",
+            "title": """
+            The GitHub personal access token for authentication.
+            If omitted from the workflow call (in the calling repo), it will be an empty string and the GITHUB_TOKEN environment variable will be used.
+            """,
         },
     },
 }
@@ -279,7 +289,7 @@ def create_release_notes(
             tags_without_jira = tags_without_jira + tag_output
 
     tags_with_jira_header = ["<h3 id='jira_changes'>Changes with jira tickets</h3>"]
-    tags_withouut_jira_header = [
+    tags_without_jira_header = [
         "<p>***</p>",
         "<h3 id='non_jira_changes'>Changes without jira tickets</h3>",
     ]
@@ -287,7 +297,7 @@ def create_release_notes(
         header
         + tags_with_jira_header
         + tags_with_jira
-        + tags_withouut_jira_header
+        + tags_without_jira_header
         + tags_without_jira
     )
     return output
@@ -383,7 +393,7 @@ def lambda_handler(event: dict, context: LambdaContext) -> dict:
 
         JIRA_TOKEN = os.getenv("JIRA_TOKEN")
         CONFLUENCE_TOKEN = os.getenv("CONFLUENCE_TOKEN")
-        GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+        GITHUB_TOKEN = event.get("gitHubToken") or os.getenv("GITHUB_TOKEN")
 
         if JIRA_TOKEN is None:
             JIRA_TOKEN = str(parameters.get_secret("account-resources-jiraToken"))
