@@ -120,8 +120,10 @@ INPUT_SCHEMA = {
         "gitHubToken": {
             "$id": "#/properties/gitHubToken",
             "type": "string",
-            "title": "The GitHub personal access token for authentication",
-            "examples": ["<github_personal_access_token>"],
+            "title": """
+            The GitHub personal access token for authentication.
+            If omitted from the workflow call (in the calling repo), it will be an empty string and the GITHUB_TOKEN environment variable will be used.
+            """,
         },
     },
 }
