@@ -15,7 +15,7 @@ jobs:
       tag_format: ${{ steps.load-config.outputs.TAG_FORMAT }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
 
       - name: Get asdf version
         id: asdf-version
@@ -33,7 +33,7 @@ jobs:
       AUTOMERGE_PEM: ${{ secrets.AUTOMERGE_PEM }}
 
   quality_checks:
-    uses: NHSDigital/eps-workflow-quality-checks/.github/workflows/quality-checks.yml@1d101ac0e5290dc65e3a55742728450f6fa73cb6
+    uses: NHSDigital/eps-common-workflows/.github/workflows/quality-checks.yml@a7daff06de7b695f601d9b1723ca184daca7d898
     needs: [get_asdf_version]
     with:
       reinstall_poetry: true
@@ -42,7 +42,7 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   pr_title_format_check:
-    uses: NHSDigital/eps-workflow-semantic-release/.github/workflows/pr_title_check.yml@f3d071da30cd01dc0e4472ac0e2d7452db78d1c7
+    uses: NHSDigital/eps-common-workflows/.github/workflows/pr_title_check.yml@a7daff06de7b695f601d9b1723ca184daca7d898
 
   get_issue_number:
     runs-on: ubuntu-22.04
@@ -51,7 +51,7 @@ jobs:
       issue_number: ${{steps.get_issue_number.outputs.result}}
 
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
         name: get issue number
         id: get_issue_number
         with:
