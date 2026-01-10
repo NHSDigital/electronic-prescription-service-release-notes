@@ -33,7 +33,7 @@ jobs:
       AUTOMERGE_PEM: ${{ secrets.AUTOMERGE_PEM }}
 
   quality_checks:
-    uses: NHSDigital/eps-common-workflows/.github/workflows/quality-checks.yml@2fe6bc6cd974efb4d55a2a7b665385f7a2d28950
+    uses: NHSDigital/eps-common-workflows/.github/workflows/quality-checks.yml@9791a77de7b005056b4ddfb9789306f5179f53da
     needs: [get_asdf_version]
     with:
       reinstall_poetry: true
