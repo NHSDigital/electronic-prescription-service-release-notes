@@ -27,13 +27,13 @@ jobs:
           echo "TAG_FORMAT=$TAG_FORMAT" >> "$GITHUB_OUTPUT"
 
   dependabot-auto-approve-and-merge:
-    uses: NHSDigital/eps-common-workflows/.github/workflows/dependabot-auto-approve-and-merge.yml@e31e25273fb87450be4ef763ddbed4f531c45f8e
+    uses: NHSDigital/eps-common-workflows/.github/workflows/dependabot-auto-approve-and-merge.yml@5ccebbf821beef2de6abdce9e392b3cbeb4999e3
     secrets:
       AUTOMERGE_APP_ID: ${{ secrets.AUTOMERGE_APP_ID }}
       AUTOMERGE_PEM: ${{ secrets.AUTOMERGE_PEM }}
 
   quality_checks:
-    uses: NHSDigital/eps-common-workflows/.github/workflows/quality-checks.yml@e31e25273fb87450be4ef763ddbed4f531c45f8e
+    uses: NHSDigital/eps-common-workflows/.github/workflows/quality-checks.yml@5ccebbf821beef2de6abdce9e392b3cbeb4999e3
     needs: [get_asdf_version]
     with:
       reinstall_poetry: true
