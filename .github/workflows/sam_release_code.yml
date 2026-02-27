@@ -38,7 +38,7 @@ jobs:
           role-to-assume: ${{ secrets.CLOUD_FORMATION_DEPLOY_ROLE }}
           role-session-name: release-notes-repo-releaese-code
 
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3
         name: download build artifact
         with:
           name: ${{ inputs.BUILD_ARTIFACT }}
