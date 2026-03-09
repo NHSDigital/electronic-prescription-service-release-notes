@@ -1,0 +1,10 @@
+vulnerabilities:
+licenses:
+  - id: LGPL-2.1-only
+    filepath: .venv/lib/python3.12/site-packages/pygithub-2.8.1.dist-info/METADATA
+  - id: LGPL-2.0-or-later
+    filepath: .venv/lib/python3.12/site-packages/chardet-5.2.0.dist-info/METADATA
+  - id: GPL-3.0-or-later
+    filepath: .venv/lib/python3.12/site-packages/text_unidecode-1.3.dist-info/METADATA
+  - id: GPL-2.0-or-later
+    filepath: .venv/lib/python3.12/site-packages/text_unidecode-1.3.dist-info/METADATA
