@@ -17,20 +17,20 @@ package-mode = false
 python = "^3.12"
 atlassian-python-api = "4.0.7"
 pygithub = "^2.8.1"
-aws-lambda-powertools = "^3.24.0"
+aws-lambda-powertools = "^3.25.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.group.release-notes.dependencies]
 python = "^3.12"
 atlassian-python-api = "4.0.7"
 pygithub = "^2.8.1"
-aws-lambda-powertools = "^3.24.0"
+aws-lambda-powertools = "^3.25.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.group.mark-released.dependencies]
 python = "^3.12"
 atlassian-python-api = "4.0.7"
-aws-lambda-powertools = "^3.24.0"
+aws-lambda-powertools = "^3.25.0"
 fastjsonschema = "^2.21.2"
 
 [tool.poetry.scripts]
@@ -38,7 +38,7 @@ fastjsonschema = "^2.21.2"
 [tool.poetry.group.dev.dependencies]
 aws-sam-cli = "^1.151.0"
 pip-licenses = "^5.5.1"
-black = "^26.1.0"
+black = "^26.3.0"
 flake8 = "^7.3.0"
 pre-commit = "^4.5.1"
 semver = "^3.0.4"
