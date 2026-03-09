@@ -32,7 +32,7 @@ repos:
       - id: lint-samtemplatess
         name: Lint sam templates
         entry: make
-        args: ["lint-samtemplates"]
+        args: ["cfn-lint"]
         language: system
         files: ^SAMtemplates
         pass_filenames: false
@@ -45,7 +45,7 @@ repos:
         entry: bash
         args:
           - -c
-          - 'docker run -v "$LOCAL_WORKSPACE_FOLDER:/src" git-secrets --pre_commit_hook'
+          - "git-secrets --pre_commit_hook"
         language: system
 
 fail_fast: true
