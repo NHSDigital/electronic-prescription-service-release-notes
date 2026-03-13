@@ -81,6 +81,28 @@ Resources:
           - LAMBDA_INSIDE_VPC
           - LAMBDA_CONCURRENCY_CHECK
 
+  ReleaseCutResources:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location: lambda_resources.yaml
+      Parameters:
+        LambdaName: !Sub "${AWS::StackName}-releaseCut"
+        LogRetentionInDays: "30"
+
+  ReleaseCut:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-releaseCut"
+      CodeUri: ../release_cut
+      Handler: release_cut.lambda_handler
+      Role: !GetAtt ReleaseCutResources.Outputs.LambdaRoleArn
+    Metadata:
+      guard:
+        SuppressedRules:
+          - LAMBDA_DLQ_CHECK
+          - LAMBDA_INSIDE_VPC
+          - LAMBDA_CONCURRENCY_CHECK
+
   LambdaExecutionPolicyDeployRole:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
@@ -94,6 +116,7 @@ Resources:
             Resource:
               - !GetAtt CreateReleaseNotes.Arn
               - !GetAtt MarkJiraReleased.Arn
+              - !GetAtt ReleaseCut.Arn
       Roles:
         - !ImportValue ci-resources:CloudFormationDeployRoleName
 
@@ -138,3 +161,13 @@ Outputs:
     Value: !GetAtt MarkJiraReleased.Arn
     Export:
       Name: !Join [":", [!Ref "AWS::StackName", "MarkJiraReleasedLambdaArn"]]
+  ReleaseCutLambdaName:
+    Description: Name of the release cut lambda
+    Value: !Ref ReleaseCut
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "ReleaseCutLambdaName"]]
+  ReleaseCutLambdaArn:
+    Description: Arn of the release cut lambda
+    Value: !GetAtt ReleaseCut.Arn
+    Export:
+      Name: !Join [":", [!Ref "AWS::StackName", "ReleaseCutLambdaArn"]]
