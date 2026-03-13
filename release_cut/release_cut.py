@@ -1,6 +1,6 @@
 import os
 from atlassian import Jira  # type: ignore
-from typing import List, NamedTuple
+from typing import List
 import traceback
 import sys
 from aws_lambda_powertools.utilities.typing import LambdaContext
@@ -61,14 +61,6 @@ INPUT_SCHEMA = {
 }
 
 
-class JiraDetails(NamedTuple):
-    jira_title: str
-    user_story: str
-    components: list[str]
-    impact: str
-    business_service_impact: str
-
-
 def add_fix_version_to_jira(
     jira: Jira,
     release_name: str,
@@ -82,7 +74,6 @@ def add_fix_version_to_jira(
                 issue_id_or_key=ticket,
                 fields=fields,
             )
-            logger.info(f"Setting status of ticket {ticket} to Ready for Acceptance")
         except:  # noqa: E722
             logger.error(traceback.format_exception(*sys.exc_info()))
             logger.error(f"problem adding fix version for {ticket}")
