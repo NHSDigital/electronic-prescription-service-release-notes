@@ -23,7 +23,7 @@ export class Functions extends Construct {
       functionName: `${props.stackName}-CreateReleaseNotesFunction`,
       projectBaseDir: resolve(__dirname, "../../.."),
       packageBasePath: "packages/create_release_notes",
-      handler: "app.handler.handler",
+      handler: "app.create_release_notes.lambda_handler",
       logRetentionInDays: props.logRetentionInDays,
       logLevel: props.logLevel,
       dependencyLocation: ".dependencies/create_release_notes"
@@ -34,7 +34,7 @@ export class Functions extends Construct {
       functionName: `${props.stackName}-MarkJiraReleasedFunction`,
       projectBaseDir: resolve(__dirname, "../../.."),
       packageBasePath: "packages/mark_jira_released",
-      handler: "app.handler.handler",
+      handler: "app.mark_jira_released.lambda_handler",
       logRetentionInDays: props.logRetentionInDays,
       logLevel: props.logLevel,
       dependencyLocation: ".dependencies/mark_jira_released"
@@ -45,7 +45,7 @@ export class Functions extends Construct {
       functionName: `${props.stackName}-ReleaseCutFunction`,
       projectBaseDir: resolve(__dirname, "../../.."),
       packageBasePath: "packages/release_cut",
-      handler: "app.handler.handler",
+      handler: "app.release_cut.lambda_handler",
       logRetentionInDays: props.logRetentionInDays,
       logLevel: props.logLevel,
       dependencyLocation: ".dependencies/release_cut"
