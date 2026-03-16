@@ -40,9 +40,10 @@ compile:
 	echo "Does nothing"
 clean:
 	rm -rf .aws-sam
-	rm -f packages/create_release_notes/app/requirements.txt
-	rm -f packages/mark_jira_released/app/requirements.txt
-	rm -f packages/release_cut/app/requirements.txt
+	find . -name 'coverage' -type d -prune -exec rm -rf '{}' +
+	rm -rf .dependencies/
+	rm -rf cdk.out/
+	rm -rf .trivy_out/
 
 deep-clean: clean
 	rm -rf .venv
@@ -52,12 +53,12 @@ test:
 	mkdir -p packages/create_release_notes/coverage
 	mkdir -p packages/mark_jira_released/coverage
 	mkdir -p packages/release_cut/coverage
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/create_release_notes/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
-	poetry run python -m coverage xml --data-file=packages/create_release_notes/coverage/.coverage -o packages/create_release_notes/coverage/coverage.xml
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/mark_jira_released/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/mark_jira_released/test -p "test_*.py"
-	poetry run python -m coverage xml --data-file=packages/mark_jira_released/coverage/.coverage -o packages/mark_jira_released/coverage/coverage.xml
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/release_cut/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/release_cut/test -p "test_*.py"
-	poetry run python -m coverage xml --data-file=packages/release_cut/coverage/.coverage -o packages/release_cut/coverage/coverage.xml
+	cd packages/create_release_notes && PYTHONPATH=app:../mark_jira_released/app:../release_cut/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/create_release_notes && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
+	cd packages/mark_jira_released && PYTHONPATH=app:../create_release_notes/app:../release_cut/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/mark_jira_released && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
+	cd packages/release_cut && PYTHONPATH=app:../create_release_notes/app:../mark_jira_released/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/release_cut && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
 
 cdk-synth:
 	mkdir -p .dependencies/create_release_notes
