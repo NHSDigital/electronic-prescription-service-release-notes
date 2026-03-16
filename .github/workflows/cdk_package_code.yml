@@ -19,6 +19,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      packages: read
     steps:
       - name: copy .tool-versions
         run: |
