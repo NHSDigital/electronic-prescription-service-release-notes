@@ -1,7 +1,7 @@
 import unittest
 import os
 from unittest.mock import patch
-from mark_jira_released import mark_jira_released
+import mark_jira_released
 
 
 class LambdaContext:
@@ -25,7 +25,7 @@ context = LambdaContext()
 
 
 class TestLambdaHandler(unittest.TestCase):
-    @patch("mark_jira_released.mark_jira_released.process_event")
+    @patch("mark_jira_released.process_event")
     def test_mark_jira_released_success(self, mock_process_event):
         event = {
             "releaseVersion": "test_release",
@@ -35,7 +35,7 @@ class TestLambdaHandler(unittest.TestCase):
 
         self.assertEqual(response, {"status": "OK", "statusCode": 200})
 
-    @patch("mark_jira_released.mark_jira_released.process_event")
+    @patch("mark_jira_released.process_event")
     def test_mark_jira_released_bad_event(self, mock_process_event):
         event = {
             "bad_event": "test_release",

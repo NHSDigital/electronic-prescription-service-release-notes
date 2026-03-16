@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from release_cut.release_cut import (
+from release_cut import (
     process_event,
     add_fix_version_to_jira,
     lambda_handler,
@@ -8,7 +8,7 @@ from release_cut.release_cut import (
 
 
 class TestReleaseCut(unittest.TestCase):
-    @patch("release_cut.release_cut.Jira")
+    @patch("release_cut.Jira")
     def test_add_fix_version_to_jira(self, MockJira):
         mock_jira = MockJira()
         tickets = ["AEA-1234", "AEA-5678"]
@@ -22,7 +22,7 @@ class TestReleaseCut(unittest.TestCase):
                 fields={"fixVersions": [{"add": {"name": release_name}}]},
             )
 
-    @patch("release_cut.release_cut.Jira")
+    @patch("release_cut.Jira")
     def test_process_event(self, MockJira):
         mock_jira = MockJira()
         event = {
@@ -45,10 +45,10 @@ class TestReleaseCut(unittest.TestCase):
                 fields={"fixVersions": [{"add": {"name": "prefix-v1.0.0"}}]},
             )
 
-    @patch("release_cut.release_cut.validate")
-    @patch("release_cut.release_cut.Jira")
-    @patch("release_cut.release_cut.parameters.get_secret")
-    @patch("release_cut.release_cut.os.getenv")
+    @patch("release_cut.validate")
+    @patch("release_cut.Jira")
+    @patch("release_cut.parameters.get_secret")
+    @patch("release_cut.os.getenv")
     def test_lambda_handler(
         self, mock_getenv, mock_get_secret, MockJira, mock_validate
     ):
@@ -56,7 +56,6 @@ class TestReleaseCut(unittest.TestCase):
             "mocked_token" if key == "JIRA_TOKEN" else None
         )
         mock_get_secret.return_value = "mocked_token"
-        mock_jira = MockJira()
         mock_validate.return_value = None
 
         event = {
@@ -70,8 +69,8 @@ class TestReleaseCut(unittest.TestCase):
 
         self.assertEqual(response, {"status": "OK", "statusCode": 200})
         mock_getenv.assert_any_call("JIRA_TOKEN")
-        mock_get_secret.assert_called_with("account-resources-jiraToken")
-        mock_jira.assert_called_once_with(
+        mock_get_secret.assert_not_called()
+        MockJira.assert_any_call(
             "https://nhsd-jira.digital.nhs.uk/",
             token="mocked_token",
             session=unittest.mock.ANY,

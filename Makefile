@@ -26,23 +26,19 @@ mark-jira-released: guard-release_version
 
 
 sam-build: sam-validate
-	poetry export --without-hashes --only release-notes > create_release_notes/requirements.txt
-	poetry export --without-hashes --only mark-released > mark_jira_released/requirements.txt
-	poetry export --without-hashes --only release-cut > release_cut/requirements.txt
-	if [ ! -s create_release_notes/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' create_release_notes/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: create_release_notes/requirements.txt is empty or contains only blank lines"; \
+	poetry export --without-hashes --only release-notes > packages/create_release_notes/app/requirements.txt
+	poetry export --without-hashes --only mark-released > packages/mark_jira_release/app/requirements.txt
+	poetry export --without-hashes --only release-cut > packages/release_cut/app/requirements.txt
+	if [ ! -s packages/create_release_notes/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/create_release_notes/app/requirements.txt | wc -l)" -eq 0 ]; then \
+		echo "Error: packages/create_release_notes/app/requirements.txt is empty or contains only blank lines"; \
 		exit 1; \
 	fi
-	if [ ! -s mark_jira_released/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' mark_jira_released/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: mark_jira_released/requirements.txt is empty or contains only blank lines"; \
+	if [ ! -s packages/mark_jira_release/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/mark_jira_release/app/requirements.txt | wc -l)" -eq 0 ]; then \
+		echo "Error: packages/mark_jira_release/app/requirements.txt is empty or contains only blank lines"; \
 		exit 1; \
 	fi
-	if [ ! -s mark_jira_released/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' mark_jira_released/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: mark_jira_released/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	if [ ! -s release_cut/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' release_cut/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: release_cut/requirements.txt is empty or contains only blank lines"; \
+	if [ ! -s packages/release_cut/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/release_cut/app/requirements.txt | wc -l)" -eq 0 ]; then \
+		echo "Error: packages/release_cut/app/requirements.txt is empty or contains only blank lines"; \
 		exit 1; \
 	fi
 	sam build --template-file SAMtemplates/main_template.yaml --region eu-west-2
@@ -72,30 +68,34 @@ sam-validate:
 	sam validate --template-file SAMtemplates/main_template.yaml --region eu-west-2
 
 sam-sync: guard-AWS_DEFAULT_PROFILE guard-stack_name
-	poetry export --without-hashes > create_release_notes/requirements.txt
-	poetry export --without-hashes --only mark-released > mark_jira_released/requirements.txt
-	poetry export --without-hashes --only release-cut > release_cut/requirements.txt
+	poetry export --without-hashes > packages/create_release_notes/app/requirements.txt
+	poetry export --without-hashes --only mark-released > packages/mark_jira_release/app/requirements.txt
+	poetry export --without-hashes --only release-cut > packages/release_cut/app/requirements.txt
 	sam sync \
 		--stack-name $$stack_name \
 		--watch \
 		--template-file SAMtemplates/main_template.yaml
 
 lint-python:
-	poetry run black --check create_release_notes
-	poetry run flake8 create_release_notes
+	poetry run black --check packages
+	poetry run flake8 packages
 
 lint: lint-python cfn-lint
 
 
 clean:
 	rm -rf .aws-sam
-	rm -f create_release_notes/requirements.txt
+	rm -f packages/create_release_notes/app/requirements.txt
+	rm -f packages/mark_jira_release/app/requirements.txt
+	rm -f packages/release_cut/app/requirements.txt
 
 deep-clean: clean
 	rm -rf .venv
 
 test:
-	poetry run python -m coverage run -m unittest
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/mark_jira_release/test -p "test_*.py"
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/release_cut/test -p "test_*.py"
 	poetry run python -m coverage xml
 
 %:

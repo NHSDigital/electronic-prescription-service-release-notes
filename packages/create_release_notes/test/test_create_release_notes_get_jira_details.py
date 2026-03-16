@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
-from create_release_notes import create_release_notes
-from tests.common import mocked_jira_get_issue
+import create_release_notes
+from packages.common.test.common import mocked_jira_get_issue
 
 
 class TestGetJiraDetails(unittest.TestCase):
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_success(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -17,7 +17,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "High")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_user_story_separate_field_populated(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -32,7 +32,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "High")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_user_story_separate_field_blank(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -47,7 +47,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "High")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_user_story_separate_field_none(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -62,7 +62,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "High")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_no_user_story(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -74,7 +74,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "High")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_no_impact(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 
@@ -86,7 +86,7 @@ class TestGetJiraDetails(unittest.TestCase):
         self.assertEqual(jira_details.impact, "")
         self.assertEqual(jira_details.business_service_impact, "Service Impact")
 
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_get_jira_details_exception(self, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue
 

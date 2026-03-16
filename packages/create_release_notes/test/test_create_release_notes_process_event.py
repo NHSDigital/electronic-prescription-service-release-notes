@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
-from create_release_notes import create_release_notes
-from tests.common import (
+import create_release_notes
+from packages.common.test.common import (
     mocked_jira_get_issue,
     expected_rc_release_notes_with_release_run_link,
     expected_rc_release_notes_with_no_release_run_link,
@@ -12,8 +12,8 @@ from tests.common import (
 
 
 class TestProcessEvent(unittest.TestCase):
-    @patch("create_release_notes.create_release_notes.Jira")
-    @patch("create_release_notes.create_release_notes.Confluence")
+    @patch("create_release_notes.Jira")
+    @patch("create_release_notes.Confluence")
     @patch("github.Repository.Repository")
     def test_create_rc_release_notes_with_run_link(
         self, mock_repository, mock_confluence, mock_jira
@@ -56,8 +56,8 @@ class TestProcessEvent(unittest.TestCase):
         self.assertEqual(mock_jira.edit_issue.call_count, 2)
         self.assertEqual(mock_jira.issue_transition.call_count, 2)
 
-    @patch("create_release_notes.create_release_notes.Jira")
-    @patch("create_release_notes.create_release_notes.Confluence")
+    @patch("create_release_notes.Jira")
+    @patch("create_release_notes.Confluence")
     @patch("github.Repository.Repository")
     def test_create_rc_release_notes_with_no_run_link(
         self, mock_repository, mock_confluence, mock_jira
@@ -99,8 +99,8 @@ class TestProcessEvent(unittest.TestCase):
         self.assertEqual(mock_jira.edit_issue.call_count, 2)
         self.assertEqual(mock_jira.issue_transition.call_count, 2)
 
-    @patch("create_release_notes.create_release_notes.Jira")
-    @patch("create_release_notes.create_release_notes.Confluence")
+    @patch("create_release_notes.Jira")
+    @patch("create_release_notes.Confluence")
     @patch("github.Repository.Repository")
     def test_create_release_notes(self, mock_repository, mock_confluence, mock_jira):
         mock_jira.get_issue.side_effect = mocked_jira_get_issue

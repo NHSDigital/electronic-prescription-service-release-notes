@@ -20,8 +20,9 @@ release_notes
 .aws-sam
 lib/
 *.tsbuildinfo
-create_release_notes/requirements.txt
-mark_jira_released/requirements.txt
+packages/create_release_notes/app/requirements.txt
+packages/mark_jira_release/app/requirements.txt
+packages/release_cut/app/requirements.txt
 .coverage
 coverage.xml
 cfn_guard_output/

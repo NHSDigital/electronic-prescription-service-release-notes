@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-createReleaseNotes"
-      CodeUri: ../create_release_notes
+      CodeUri: ../packages/create_release_notes/app
       Handler: create_release_notes.lambda_handler
       Role: !GetAtt CreateReleaseNotesResources.Outputs.LambdaRoleArn
       Environment:
@@ -72,7 +72,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-markJiraReleased"
-      CodeUri: ../mark_jira_released
+      CodeUri: ../packages/mark_jira_release/app
       Handler: mark_jira_released.lambda_handler
       Role: !GetAtt MakrJiraReleasedResources.Outputs.LambdaRoleArn
     Metadata:
@@ -94,7 +94,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub "${AWS::StackName}-releaseCut"
-      CodeUri: ../release_cut
+      CodeUri: ../packages/release_cut/app
       Handler: release_cut.lambda_handler
       Role: !GetAtt ReleaseCutResources.Outputs.LambdaRoleArn
     Metadata:
