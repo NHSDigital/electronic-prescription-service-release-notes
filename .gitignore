@@ -21,7 +21,7 @@ release_notes
 lib/
 *.tsbuildinfo
 packages/create_release_notes/app/requirements.txt
-packages/mark_jira_release/app/requirements.txt
+packages/mark_jira_released/app/requirements.txt
 packages/release_cut/app/requirements.txt
 .coverage
 coverage.xml

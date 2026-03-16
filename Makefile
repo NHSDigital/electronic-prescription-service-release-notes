@@ -40,7 +40,7 @@ lint: lint-node lint-python cfn-lint
 clean:
 	rm -rf .aws-sam
 	rm -f packages/create_release_notes/app/requirements.txt
-	rm -f packages/mark_jira_release/app/requirements.txt
+	rm -f packages/mark_jira_released/app/requirements.txt
 	rm -f packages/release_cut/app/requirements.txt
 
 deep-clean: clean
@@ -48,9 +48,9 @@ deep-clean: clean
 	find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
 
 test:
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/mark_jira_release/test -p "test_*.py"
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/release_cut/test -p "test_*.py"
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/mark_jira_released/test -p "test_*.py"
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/release_cut/test -p "test_*.py"
 	poetry run python -m coverage xml
 
 cdk-synth:

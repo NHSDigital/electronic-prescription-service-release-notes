@@ -9,7 +9,7 @@ It is intended to be called from github actions as these run outside the UK and 
 For descriptions and examples of parameters passed to the lambdas, see the schema in the source code, and the publish\* targets in the Makefile.
 
 - `packages/create_release_notes/app/` Lambda code to create the release notes.
-- `packages/mark_jira_release/app/` Lambda code to mark a jira version as released.
+- `packages/mark_jira_released/app/` Lambda code to mark a jira version as released.
 - `packages/release_cut/app/` Lambda code to create a release and update fix versions.
 - `packages/*/test/` Package-level unit tests.
 - `scripts/` Utilities helpful to developers of this specification.
