@@ -5,3 +5,4 @@
 .*JIRA_TOKEN.*
 .*CONFLUENCE_TOKEN.*
 .*id-token: write.*
+token="mocked_token"
