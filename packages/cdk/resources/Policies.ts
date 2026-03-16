@@ -1,7 +1,7 @@
 import {Construct} from "constructs"
 import {PythonLambdaFunction} from "@nhsdigital/eps-cdk-constructs"
 import {IRole, ManagedPolicy, PolicyStatement} from "aws-cdk-lib/aws-iam"
-import { ISecret } from "aws-cdk-lib/aws-secretsmanager"
+import {ISecret} from "aws-cdk-lib/aws-secretsmanager"
 
 export interface PoliciesProps {
   readonly jiraToken: ISecret
@@ -24,9 +24,9 @@ export class Policies extends Construct {
       resources: [
         props.jiraToken.secretArn,
         props.confluenceToken.secretArn
-      ],
+      ]
     })
-    const getSecretValuePolicy = new ManagedPolicy(this, "GetSecretValuePolicy", {
+    new ManagedPolicy(this, "GetSecretValuePolicy", {
       description: "Policy to get secrets for Jira and Confluence tokens",
       statements: [
         getSecretValue
@@ -54,7 +54,7 @@ export class Policies extends Construct {
       ],
       resources: ["*"]
     })
-    const executeLambdasManagedPolicy = new ManagedPolicy(this, "ExecuteLambdasManagedPolicy", {
+    new ManagedPolicy(this, "ExecuteLambdasManagedPolicy", {
       description: "Policy to allow invoking of release notes related Lambdas",
       statements: [
         executeLambdasPolicy,

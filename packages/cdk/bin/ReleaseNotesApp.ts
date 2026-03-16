@@ -1,7 +1,4 @@
-import {
-  createApp,
-  getConfigFromEnvVar,
-} from "@nhsdigital/eps-cdk-constructs"
+import {createApp, getConfigFromEnvVar} from "@nhsdigital/eps-cdk-constructs"
 import {ReleaseNotes} from "../stacks/releaseNotes.ts"
 
 async function main() {
@@ -12,9 +9,9 @@ async function main() {
     driftDetectionGroup: "releaseNotes"
   })
 
-  const releaseNotesStack = new ReleaseNotes(app, "ReleaseNotes", {
+  new ReleaseNotes(app, "ReleaseNotes", {
     ...props,
-    stackName: getConfigFromEnvVar("stackName"),
+    stackName: getConfigFromEnvVar("stackName")
   })
 
 }

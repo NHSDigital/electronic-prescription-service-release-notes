@@ -25,62 +25,13 @@ mark-jira-released: guard-release_version
 	cat /tmp/out.txt
 
 
-sam-build: sam-validate
-	poetry export --without-hashes --only release-notes > packages/create_release_notes/app/requirements.txt
-	poetry export --without-hashes --only mark-released > packages/mark_jira_release/app/requirements.txt
-	poetry export --without-hashes --only release-cut > packages/release_cut/app/requirements.txt
-	if [ ! -s packages/create_release_notes/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/create_release_notes/app/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: packages/create_release_notes/app/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	if [ ! -s packages/mark_jira_release/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/mark_jira_release/app/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: packages/mark_jira_release/app/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	if [ ! -s packages/release_cut/app/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' packages/release_cut/app/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: packages/release_cut/app/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	sam build --template-file SAMtemplates/main_template.yaml --region eu-west-2
-
-sam-run-local: sam-build
-	sam local start-lambda
-
-sam-deploy-package: guard-artifact_bucket guard-artifact_bucket_prefix guard-stack_name guard-template_file guard-cloud_formation_execution_role
-	sam deploy \
-		--template-file $$template_file \
-		--stack-name $$stack_name \
-		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
-		--region eu-west-2 \
-		--s3-bucket $$artifact_bucket \
-		--s3-prefix $$artifact_bucket_prefix \
-		--config-file samconfig_package_and_deploy.toml \
-		--no-fail-on-empty-changeset \
-		--role-arn $$cloud_formation_execution_role \
-		--no-confirm-changeset \
-		--force-upload \
-		--tags "version=$$VERSION_NUMBER" \
-		--parameter-overrides \
-			GithubToken=$$PAT_GITHUB_TOKEN
-
-
-sam-validate: 
-	sam validate --template-file SAMtemplates/main_template.yaml --region eu-west-2
-
-sam-sync: guard-AWS_DEFAULT_PROFILE guard-stack_name
-	poetry export --without-hashes > packages/create_release_notes/app/requirements.txt
-	poetry export --without-hashes --only mark-released > packages/mark_jira_release/app/requirements.txt
-	poetry export --without-hashes --only release-cut > packages/release_cut/app/requirements.txt
-	sam sync \
-		--stack-name $$stack_name \
-		--watch \
-		--template-file SAMtemplates/main_template.yaml
-
 lint-python:
 	poetry run black --check packages
 	poetry run flake8 packages
 
-lint: lint-python cfn-lint
+lint-node:
+	npm run lint --workspace packages/cdk
+lint: lint-node lint-python cfn-lint
 
 
 clean:

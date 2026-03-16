@@ -1,7 +1,7 @@
-import {safeAddNagSuppressionGroup, safeAddNagSuppression} from "@nhsdigital/eps-cdk-constructs"
-import { Stack } from "aws-cdk-lib"
+import {safeAddNagSuppression} from "@nhsdigital/eps-cdk-constructs"
+import {Stack} from "aws-cdk-lib"
 
-export const nagSuppressions = (stack: Stack, account: string) => {
+export const nagSuppressions = (stack: Stack) => {
   // Suppress wildcard log permissions for SyncKnowledgeBase Lambda
   safeAddNagSuppression(
     stack,

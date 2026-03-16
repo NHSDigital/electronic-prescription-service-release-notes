@@ -2,12 +2,12 @@ import {
   App,
   Fn,
   Stack,
-  StackProps,
+  StackProps
 } from "aws-cdk-lib"
-import { Functions } from "../resources/Functions"
-import { Policies } from "../resources/Policies"
-import { Role } from "aws-cdk-lib/aws-iam"
-import { Secret } from "aws-cdk-lib/aws-secretsmanager"
+import {Functions} from "../resources/Functions"
+import {Policies} from "../resources/Policies"
+import {Role} from "aws-cdk-lib/aws-iam"
+import {Secret} from "aws-cdk-lib/aws-secretsmanager"
 
 import {nagSuppressions} from "../nagSuppressions"
 
@@ -28,7 +28,8 @@ export class ReleaseNotes extends Stack {
     const confluenceTokenSecretImport = Fn.importValue("account-resources:ConfluenceToken")
 
     const deploymentRole = Role.fromRoleArn(this, "deploymentRole", deploymentRoleImport)
-    const releaseNotesExecuteLambdaRole = Role.fromRoleArn(this, "releaseNotesExecuteLambdaRole", releaseNotesExecuteLambdaRoleImport)
+    const releaseNotesExecuteLambdaRole = Role.fromRoleArn(this,
+      "releaseNotesExecuteLambdaRole", releaseNotesExecuteLambdaRoleImport)
     const jiraToken = Secret.fromSecretCompleteArn(this, "jiraToken", jiraTokenSecretImport)
     const confluenceToken = Secret.fromSecretCompleteArn(this, "confluenceToken", confluenceTokenSecretImport)
 
@@ -37,13 +38,7 @@ export class ReleaseNotes extends Stack {
       version: props.version,
       commitId: props.commitId,
       logRetentionInDays: 7,
-      logLevel: "INFO",
-      syncKnowledgeBaseManagedPolicy: undefined as any,
-      preprocessingManagedPolicy: undefined as any,
-      knowledgeBaseId: "",
-      dataSourceId: "",
-      region: "",
-      account: "",
+      logLevel: "INFO"
     })
 
     new Policies(this, "Policies", {
@@ -56,6 +51,6 @@ export class ReleaseNotes extends Stack {
       releaseNotesExecuteLambdaRole: releaseNotesExecuteLambdaRole
     })
 
-    nagSuppressions(this, this.account)
+    nagSuppressions(this)
   }
 }

@@ -1,6 +1,5 @@
 import {Construct} from "constructs"
 import {PythonLambdaFunction} from "@nhsdigital/eps-cdk-constructs"
-import {ManagedPolicy} from "aws-cdk-lib/aws-iam"
 import {resolve} from "path"
 
 export interface FunctionsProps {
@@ -9,12 +8,6 @@ export interface FunctionsProps {
   readonly commitId: string
   readonly logRetentionInDays: number
   readonly logLevel: string
-  readonly syncKnowledgeBaseManagedPolicy: ManagedPolicy
-  readonly preprocessingManagedPolicy: ManagedPolicy
-  readonly knowledgeBaseId: string
-  readonly dataSourceId: string
-  readonly region: string
-  readonly account: string
 }
 
 export class Functions extends Construct {
