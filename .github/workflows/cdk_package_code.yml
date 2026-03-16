@@ -1,0 +1,83 @@
+name: cdk package code
+
+on:
+  workflow_call:
+    inputs:
+      pinned_image:
+        type: string
+        required: true
+
+jobs:
+  cdk_package_code:
+    runs-on: ubuntu-22.04
+    container:
+      image: ${{ inputs.pinned_image }}
+      options: --user 1001:1001 --group-add 128
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: copy .tool-versions
+        run: |
+          cp /home/vscode/.tool-versions "$HOME/.tool-versions"
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ env.BRANCH_NAME }}
+      - name: Setting up .npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+          echo "@nhsdigital:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+      - name: make install
+        run: |
+          make install
+
+      - name: Build Python Lambda Functions
+        run: |
+          poetry show --only=create_release_notes | grep -E "^[a-zA-Z]" | awk '{print $1"=="$2}' > requirements_create_release_notes
+          poetry show --only=mark_jira_released | grep -E "^[a-zA-Z]" | awk '{print $1"=="$2}' > requirements_mark_jira_released
+          poetry show --only=release_cut | grep -E "^[a-zA-Z]" | awk '{print $1"=="$2}' > requirements_release_cut
+          if [ ! -s requirements_create_release_notes ] || [ "$(grep -c -v '^[[:space:]]*$' requirements_create_release_notes)" -eq 0 ]; then \
+            echo "Error: requirements_create_release_notes is empty or contains only blank lines"; \
+            exit 1; \
+          fi
+          if [ ! -s requirements_mark_jira_released ] || [ "$(grep -c -v '^[[:space:]]*$' requirements_mark_jira_released)" -eq 0 ]; then \
+            echo "Error: requirements_mark_jira_released is empty or contains only blank lines"; \
+            exit 1; \
+          fi
+          if [ ! -s requirements_release_cut ] || [ "$(grep -c -v '^[[:space:]]*$' requirements_release_cut)" -eq 0 ]; then \
+            echo "Error: requirements_release_cut is empty or contains only blank lines"; \
+            exit 1; \
+          fi
+          mkdir -p .dependencies/create_release_notes/python
+          mkdir -p .dependencies/mark_jira_released/python
+          mkdir -p .dependencies/release_cut/python
+          pip3 install -r requirements_create_release_notes -t .dependencies/create_release_notes/python
+          pip3 install -r requirements_mark_jira_released -t .dependencies/mark_jira_released/python
+          pip3 install -r requirements_release_cut -t .dependencies/release_cut/python
+
+          pip3 install -r requirements_create_release_notes -t .dependencies/create_release_notes/python
+          pip3 install -r requirements_mark_jira_released -t .dependencies/mark_jira_released/python
+          pip3 install -r requirements_release_cut -t .dependencies/release_cut/python
+      - name: "Tar files"
+        run: |
+          tar -rf artifact.tar \
+            packages \
+            node_modules \
+            package.json \
+            package-lock.json \
+            tsconfig.defaults.json \
+            Makefile \
+            .dependencies
+
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        name: upload build artifact
+        with:
+          name: packaged_code
+          path: artifact.tar

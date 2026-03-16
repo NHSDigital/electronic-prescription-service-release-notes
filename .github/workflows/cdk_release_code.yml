@@ -1,0 +1,73 @@
+name: cdk release code
+
+on:
+  workflow_call:
+    inputs:
+      STACK_NAME:
+        required: true
+        type: string
+      VERSION_NUMBER:
+        required: true
+        type: string
+      COMMIT_ID:
+        required: true
+        type: string
+      IS_PULL_REQUEST:
+        required: true
+        type: boolean
+      pinned_image:
+        type: string
+        required: true
+    secrets:
+      CLOUD_FORMATION_DEPLOY_ROLE:
+        required: true
+      PAT_GITHUB_TOKEN:
+        required: true
+
+jobs:
+  cdk_release_code:
+    runs-on: ubuntu-22.04
+    container:
+      image: ${{ inputs.pinned_image }}
+      options: --user 1001:1001 --group-add 128
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: copy .tool-versions
+        run: |
+          cp /home/vscode/.tool-versions "$HOME/.tool-versions"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7
+        with:
+          aws-region: eu-west-2
+          role-to-assume: ${{ secrets.CLOUD_FORMATION_DEPLOY_ROLE }}
+          role-session-name: release-notes-repo-releaese-code
+
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c
+        name: download build artifact
+        with:
+          name: build_artifact
+
+      - name: extract build_artifact
+        run: |
+          mkdir -p .build
+          tar -xf artifact.tar
+
+      - name: Deploy app
+        run: npm run cdk-deploy --workspace packages/cdk
+        shell: bash
+        env:
+          CDK_APP_NAME: "ReleaseNotesApp"
+          CDK_STACK_NAME: "ReleaseNotes"
+          CDK_CONFIG_stackName: "${{ inputs.STACK_NAME }}"
+          CDK_CONFIG_versionNumber: "${{ inputs.VERSION_NUMBER }}"
+          CDK_CONFIG_commitId: "${{ inputs.COMMIT_ID }}"
+          CDK_CONFIG_isPullRequest: "${{ inputs.IS_PULL_REQUEST }}"
+          CDK_CONFIG_environment: "dev"
+          CDK_CONFIG_logRetentionInDays: 30
+          CDK_CONFIG_logLevel: "DEBUG"
+          REQUIRE_APPROVAL: "never"

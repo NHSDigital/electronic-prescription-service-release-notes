@@ -27,3 +27,5 @@ packages/release_cut/app/requirements.txt
 coverage.xml
 cfn_guard_output/
 .trivy_out/
+cdk.out/
+.npmrc

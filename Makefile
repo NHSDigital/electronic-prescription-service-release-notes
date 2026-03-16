@@ -98,5 +98,22 @@ test:
 	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/release_cut/test -p "test_*.py"
 	poetry run python -m coverage xml
 
+cdk-synth:
+	mkdir -p .dependencies/create_release_notes
+	mkdir -p .dependencies/mark_jira_released
+	mkdir -p .dependencies/release_cut
+	CDK_APP_NAME=ReleaseNotesApp \
+	CDK_CONFIG_versionNumber=undefined \
+	CDK_CONFIG_commitId=undefined \
+	CDK_CONFIG_isPullRequest=false \
+	CDK_CONFIG_environment=dev \
+	CDK_CONFIG_LOG_RETENTION_IN_DAYS=30 \
+	CDK_CONFIG_stackName=ReleaseNotes \
+	npm run cdk-synth --workspace packages/cdk/
+	
+create-npmrc:
+	gh auth login --scopes "read:packages"; \
+	echo "//npm.pkg.github.com/:_authToken=$$(gh auth token)" > .npmrc
+	echo "@nhsdigital:registry=https://npm.pkg.github.com" >> .npmrc
 %:
 	@$(MAKE) -f /usr/local/share/eps/Mk/common.mk $@
