@@ -36,7 +36,8 @@ lint-node:
 	npm run lint --workspace packages/cdk
 lint: lint-node lint-python cfn-lint
 
-
+compile:
+	echo "Does nothing"
 clean:
 	rm -rf .aws-sam
 	rm -f packages/create_release_notes/app/requirements.txt
