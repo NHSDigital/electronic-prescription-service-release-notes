@@ -11,10 +11,13 @@ install-python:
 install-hooks: install-python
 	poetry run pre-commit install --install-hooks --overwrite
 
+install-node:
+	npm ci
+
 build:
 	echo "Does nothing"
 
-install: install-python install-hooks
+install: install-python install-hooks install-node
 
 mark-jira-released: guard-release_version
 	echo { \"releaseVersion\": \"$$release_version\" } > /tmp/payload.json
@@ -42,6 +45,7 @@ clean:
 
 deep-clean: clean
 	rm -rf .venv
+	find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
 
 test:
 	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_release/app:packages/release_cut/app:. poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
