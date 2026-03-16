@@ -49,10 +49,15 @@ deep-clean: clean
 	find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
 
 test:
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/mark_jira_released/test -p "test_*.py"
-	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. poetry run python -m coverage run --append -m unittest discover -s packages/release_cut/test -p "test_*.py"
-	poetry run python -m coverage xml
+	mkdir -p packages/create_release_notes/coverage
+	mkdir -p packages/mark_jira_released/coverage
+	mkdir -p packages/release_cut/coverage
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/create_release_notes/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/create_release_notes/test -p "test_*.py"
+	poetry run python -m coverage xml --data-file=packages/create_release_notes/coverage/.coverage -o packages/create_release_notes/coverage/coverage.xml
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/mark_jira_released/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/mark_jira_released/test -p "test_*.py"
+	poetry run python -m coverage xml --data-file=packages/mark_jira_released/coverage/.coverage -o packages/mark_jira_released/coverage/coverage.xml
+	PYTHONPATH=packages/create_release_notes/app:packages/mark_jira_released/app:packages/release_cut/app:. COVERAGE_FILE=packages/release_cut/coverage/.coverage poetry run python -m coverage run -m unittest discover -s packages/release_cut/test -p "test_*.py"
+	poetry run python -m coverage xml --data-file=packages/release_cut/coverage/.coverage -o packages/release_cut/coverage/coverage.xml
 
 cdk-synth:
 	mkdir -p .dependencies/create_release_notes
