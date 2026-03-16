@@ -84,7 +84,7 @@ def process_event(event: dict, jira: Jira) -> None:
     release_prefix = event.get("releasePrefix")
     tickets = event["tickets"]
 
-    release_name = f"{release_prefix}{release_tag}"
+    release_name = f"{release_prefix}-{release_tag}"
     try:
         logger.info(f"creating release {release_name} in JIRA")
         jira.add_version(
