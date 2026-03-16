@@ -1,7 +1,7 @@
 import unittest
 import os
 from unittest.mock import patch
-from create_release_notes import create_release_notes
+import create_release_notes
 
 
 class LambdaContext:
@@ -41,8 +41,8 @@ def get_event(github_token=""):
 
 
 class TestLambdaHandler(unittest.TestCase):
-    @patch("create_release_notes.create_release_notes.process_event")
-    @patch("create_release_notes.create_release_notes.Github")
+    @patch("create_release_notes.process_event")
+    @patch("create_release_notes.Github")
     def test_create_release_notes_success(self, _mock_process_event, _mock_github):
         os.environ["JIRA_TOKEN"] = "JIRA_TOKEN"
         os.environ["CONFLUENCE_TOKEN"] = "CONFLUENCE_TOKEN"
@@ -56,8 +56,8 @@ class TestLambdaHandler(unittest.TestCase):
             response = create_release_notes.lambda_handler(event=event, context=context)
             self.assertEqual(response, {"status": "OK", "statusCode": 200})
 
-    @patch("create_release_notes.create_release_notes.process_event")
-    @patch("create_release_notes.create_release_notes.Github")
+    @patch("create_release_notes.process_event")
+    @patch("create_release_notes.Github")
     def test_create_release_notes_bad_event(self, _mock_process_event, _mock_github):
         event = {
             "bad_event": "test_release",

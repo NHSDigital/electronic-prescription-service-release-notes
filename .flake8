@@ -2,4 +2,4 @@
 max-line-length = 160
 per-file-ignores =
     # line too long
-    tests/common.py: E501,
+    packages/common/test/common.py: E501,

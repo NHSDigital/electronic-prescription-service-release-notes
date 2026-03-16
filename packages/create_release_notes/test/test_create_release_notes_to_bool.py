@@ -1,5 +1,5 @@
 import unittest
-from create_release_notes.create_release_notes import to_boolean
+from create_release_notes import to_boolean
 
 
 class TestToBoolFunction(unittest.TestCase):

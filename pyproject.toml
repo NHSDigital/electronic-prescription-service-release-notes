@@ -33,6 +33,12 @@ atlassian-python-api = "4.0.7"
 aws-lambda-powertools = "^3.25.0"
 fastjsonschema = "^2.21.2"
 
+[tool.poetry.group.release-cut.dependencies]
+python = "^3.12"
+atlassian-python-api = "4.0.7"
+aws-lambda-powertools = "^3.25.0"
+fastjsonschema = "^2.21.2"
+
 [tool.poetry.scripts]
 
 [tool.poetry.group.dev.dependencies]
@@ -44,6 +50,16 @@ semver = "^3.0.4"
 awscliv2 = "^2.3.1"
 gitpython = "^3.1.46"
 coverage = "^7.13.4"
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.coverage.xml]
+output = "coverage/coverage.xml"
 
 
 [build-system]

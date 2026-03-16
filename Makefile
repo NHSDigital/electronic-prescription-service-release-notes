@@ -1,4 +1,4 @@
-.PHONY: install-python install-hooks build install mark-jira-released sam-build sam-run-local sam-deploy-package sam-validate sam-sync lint-python lint clean deep-clean test
+.PHONY: install-python install-hooks build install mark-jira-released sam-build sam-run-local sam-deploy-package sam-validate sam-sync lint-python lint clean deep-clean test install-node
 guard-%:
 	@ if [ "${${*}}" = "" ]; then \
 		echo "Environment variable $* not set"; \
@@ -11,10 +11,13 @@ install-python:
 install-hooks: install-python
 	poetry run pre-commit install --install-hooks --overwrite
 
+install-node:
+	npm ci
+
 build:
 	echo "Does nothing"
 
-install: install-python install-hooks
+install: install-python install-hooks install-node
 
 mark-jira-released: guard-release_version
 	echo { \"releaseVersion\": \"$$release_version\" } > /tmp/payload.json
@@ -25,67 +28,54 @@ mark-jira-released: guard-release_version
 	cat /tmp/out.txt
 
 
-sam-build: sam-validate
-	poetry export --without-hashes --only release-notes > create_release_notes/requirements.txt
-	poetry export --without-hashes --only mark-released > mark_jira_released/requirements.txt
-	if [ ! -s create_release_notes/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' create_release_notes/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: create_release_notes/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	if [ ! -s mark_jira_released/requirements.txt ] || [ "$$(grep -v '^[[:space:]]*$$' mark_jira_released/requirements.txt | wc -l)" -eq 0 ]; then \
-		echo "Error: mark_jira_released/requirements.txt is empty or contains only blank lines"; \
-		exit 1; \
-	fi
-	sam build --template-file SAMtemplates/main_template.yaml --region eu-west-2
-
-sam-run-local: sam-build
-	sam local start-lambda
-
-sam-deploy-package: guard-artifact_bucket guard-artifact_bucket_prefix guard-stack_name guard-template_file guard-cloud_formation_execution_role
-	sam deploy \
-		--template-file $$template_file \
-		--stack-name $$stack_name \
-		--capabilities CAPABILITY_NAMED_IAM CAPABILITY_AUTO_EXPAND \
-		--region eu-west-2 \
-		--s3-bucket $$artifact_bucket \
-		--s3-prefix $$artifact_bucket_prefix \
-		--config-file samconfig_package_and_deploy.toml \
-		--no-fail-on-empty-changeset \
-		--role-arn $$cloud_formation_execution_role \
-		--no-confirm-changeset \
-		--force-upload \
-		--tags "version=$$VERSION_NUMBER" \
-		--parameter-overrides \
-			GithubToken=$$PAT_GITHUB_TOKEN
-
-
-sam-validate: 
-	sam validate --template-file SAMtemplates/main_template.yaml --region eu-west-2
-
-sam-sync: guard-AWS_DEFAULT_PROFILE guard-stack_name
-	poetry export --without-hashes > create_release_notes/requirements.txt
-	sam sync \
-		--stack-name $$stack_name \
-		--watch \
-		--template-file SAMtemplates/main_template.yaml
-
 lint-python:
-	poetry run black --check create_release_notes
-	poetry run flake8 create_release_notes
+	poetry run black --check packages
+	poetry run flake8 packages
 
-lint: lint-python cfn-lint
+lint-node:
+	npm run lint --workspace packages/cdk
+lint: lint-node lint-python cfn-lint
 
-
+compile:
+	echo "Does nothing"
 clean:
 	rm -rf .aws-sam
-	rm -f create_release_notes/requirements.txt
+	find . -name 'coverage' -type d -prune -exec rm -rf '{}' +
+	rm -rf .dependencies/
+	rm -rf cdk.out/
+	rm -rf .trivy_out/
 
 deep-clean: clean
 	rm -rf .venv
+	find . -name 'node_modules' -type d -prune -exec rm -rf '{}' +
 
 test:
-	poetry run python -m coverage run -m unittest
-	poetry run python -m coverage xml
+	mkdir -p packages/create_release_notes/coverage
+	mkdir -p packages/mark_jira_released/coverage
+	mkdir -p packages/release_cut/coverage
+	cd packages/create_release_notes && PYTHONPATH=app:../mark_jira_released/app:../release_cut/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/create_release_notes && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
+	cd packages/mark_jira_released && PYTHONPATH=app:../create_release_notes/app:../release_cut/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/mark_jira_released && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
+	cd packages/release_cut && PYTHONPATH=app:../create_release_notes/app:../mark_jira_released/app:../.. COVERAGE_FILE=coverage/.coverage COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage run -m unittest discover -s test -p "test_*.py"
+	cd packages/release_cut && COVERAGE_RCFILE=../../pyproject.toml poetry run python -m coverage xml --data-file=coverage/.coverage
 
+cdk-synth:
+	mkdir -p .dependencies/create_release_notes
+	mkdir -p .dependencies/mark_jira_released
+	mkdir -p .dependencies/release_cut
+	CDK_APP_NAME=ReleaseNotesApp \
+	CDK_CONFIG_versionNumber=undefined \
+	CDK_CONFIG_commitId=undefined \
+	CDK_CONFIG_isPullRequest=false \
+	CDK_CONFIG_environment=dev \
+	CDK_CONFIG_LOG_RETENTION_IN_DAYS=30 \
+	CDK_CONFIG_stackName=ReleaseNotes \
+	npm run cdk-synth --workspace packages/cdk/
+	
+create-npmrc:
+	gh auth login --scopes "read:packages"; \
+	echo "//npm.pkg.github.com/:_authToken=$$(gh auth token)" > .npmrc
+	echo "@nhsdigital:registry=https://npm.pkg.github.com" >> .npmrc
 %:
 	@$(MAKE) -f /usr/local/share/eps/Mk/common.mk $@

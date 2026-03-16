@@ -1,0 +1,34 @@
+{
+    "name": "eps-release-notes",
+    "version": "1.0.0",
+    "description": "![Build](https://github.com/NHSDigital/electronic-prescription-service-release-notes/workflows/Build/badge.svg?branch=main)",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/NHSDigital/electronic-prescription-service-release-notes"
+    },
+    "keywords": [],
+    "author": "NHS Digital",
+    "license": "MIT",
+    "workspaces": [
+        "packages/cdk"
+    ],
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@types/aws-lambda": "^8.10.160",
+        "@types/node": "^25.4.0",
+        "@typescript-eslint/eslint-plugin": "^8.56.1",
+        "@typescript-eslint/parser": "^8.56.1",
+        "eslint": "^10.0.2",
+        "eslint-plugin-import-newlines": "^2.0.0",
+        "globals": "^17.4.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "cdk": "^0.1.0",
+        "esbuild": "^0.27.3"
+    }
+}

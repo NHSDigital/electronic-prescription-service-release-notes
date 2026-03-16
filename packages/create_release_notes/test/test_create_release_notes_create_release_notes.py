@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
-from create_release_notes import create_release_notes
-from tests.common import (
+import create_release_notes
+from packages.common.test.common import (
     mocked_jira_get_issue,
     expected_release_notes,
     expected_release_notes_with_no_tag,
@@ -44,7 +44,7 @@ param_list = [
 
 
 class TestCreateReleaseNotes(unittest.TestCase):
-    @patch("create_release_notes.create_release_notes.Jira")
+    @patch("create_release_notes.Jira")
     def test_create_release_notes(self, mock_jira):
         tags = mocked_get_tags()
         for (

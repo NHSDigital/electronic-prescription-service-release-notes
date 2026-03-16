@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import patch
 from datetime import datetime
-from mark_jira_released import mark_jira_released
+import mark_jira_released
 
 
 class TestProcessEvent(unittest.TestCase):
-    @patch("mark_jira_released.mark_jira_released.Jira")
+    @patch("mark_jira_released.Jira")
     def test_mark_jira_released_success(self, mock_jira):
         mock_jira.get_project_versions.return_value = [
             {"name": "test_release", "id": "1234"},
@@ -24,7 +24,7 @@ class TestProcessEvent(unittest.TestCase):
             release_date=datetime.today().strftime("%Y-%m-%d"),
         )
 
-    @patch("mark_jira_released.mark_jira_released.Jira")
+    @patch("mark_jira_released.Jira")
     def test_mark_jira_released_no_release(self, mock_jira):
         mock_jira.get_project_versions.return_value = [
             {"name": "test_release", "id": "1234"},

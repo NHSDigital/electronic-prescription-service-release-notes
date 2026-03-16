@@ -44,18 +44,18 @@ jobs:
 
   package_code:
     needs: [tag_release, get_config_values]
-    uses: ./.github/workflows/sam_package_code.yml
+    uses: ./.github/workflows/cdk_package_code.yml
     with:
       pinned_image: ${{ needs.get_config_values.outputs.pinned_image }}
 
   release_dev:
     needs: [tag_release, package_code, get_commit_id, get_config_values]
-    uses: ./.github/workflows/sam_release_code.yml
+    uses: ./.github/workflows/cdk_release_code.yml
     with:
       STACK_NAME: release-notes
-      ARTIFACT_BUCKET_PREFIX: ${{needs.tag_release.outputs.version_tag}}
-      BUILD_ARTIFACT: packaged_code
       VERSION_NUMBER: ${{needs.tag_release.outputs.version_tag}}
+      COMMIT_ID: ${{ needs.get_commit_id.outputs.commit_id }}
+      IS_PULL_REQUEST: false
       pinned_image: ${{ needs.get_config_values.outputs.pinned_image }}
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_DEPLOY_ROLE }}

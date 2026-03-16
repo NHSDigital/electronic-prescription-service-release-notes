@@ -8,8 +8,10 @@ It also has a lambda to mark the release version as released in jira.
 It is intended to be called from github actions as these run outside the UK and access to NHS confluence and jira is geo restricted.  
 For descriptions and examples of parameters passed to the lambdas, see the schema in the source code, and the publish\* targets in the Makefile.
 
-- `create_release_notes/` Lambda code to create the release notes.
-- `mark_jira_released/` Lambda code to mark a jira version as released.
+- `packages/create_release_notes/app/` Lambda code to create the release notes.
+- `packages/mark_jira_released/app/` Lambda code to mark a jira version as released.
+- `packages/release_cut/app/` Lambda code to create a release and update fix versions.
+- `packages/*/test/` Package-level unit tests.
 - `scripts/` Utilities helpful to developers of this specification.
 - `SAMtemplates/` Contains the SAM templates used to define the stack
 - `.github` Contains github workflows that are used for building and deploying from pull requests and releases
