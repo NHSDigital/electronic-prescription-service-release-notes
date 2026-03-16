@@ -33,6 +33,7 @@ Resources:
       Roles:
         - !GetAtt CreateReleaseNotesResources.Outputs.LambdaRole
         - !GetAtt MakrJiraReleasedResources.Outputs.LambdaRole
+        - !GetAtt ReleaseCutResources.Outputs.LambdaRole
 
   CreateReleaseNotesResources:
     Type: AWS::Serverless::Application
