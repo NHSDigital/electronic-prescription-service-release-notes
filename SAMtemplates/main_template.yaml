@@ -133,6 +133,7 @@ Resources:
             Resource:
               - !GetAtt CreateReleaseNotes.Arn
               - !GetAtt MarkJiraReleased.Arn
+              - !GetAtt ReleaseCut.Arn
           - Effect: Allow
             Action:
               - cloudformation:ListExports
