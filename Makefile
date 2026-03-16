@@ -1,4 +1,4 @@
-.PHONY: install-python install-hooks build install mark-jira-released sam-build sam-run-local sam-deploy-package sam-validate sam-sync lint-python lint clean deep-clean test
+.PHONY: install-python install-hooks build install mark-jira-released sam-build sam-run-local sam-deploy-package sam-validate sam-sync lint-python lint clean deep-clean test install-node
 guard-%:
 	@ if [ "${${*}}" = "" ]; then \
 		echo "Environment variable $* not set"; \
