@@ -1,5 +1,6 @@
 import {
   App,
+  CfnOutput,
   Fn,
   Stack,
   StackProps
@@ -50,7 +51,36 @@ export class ReleaseNotes extends Stack {
       deployRole: deploymentRole,
       releaseNotesExecuteLambdaRole: releaseNotesExecuteLambdaRole
     })
-
+    new CfnOutput(this, "CreateReleaseNotesLambdaName", {
+      description: "Name of the create release notes lambda",
+      value: functions.createReleaseNotesFunction.function.functionName,
+      exportName: `${props.stackName}:CreateReleaseNotesLambdaName`
+    })
+    new CfnOutput(this, "CreateReleaseNotesLambdaArn", {
+      description: "ARN of the create release notes lambda",
+      value: functions.createReleaseNotesFunction.function.functionArn,
+      exportName: `${props.stackName}:CreateReleaseNotesLambdaArn`
+    })
+    new CfnOutput(this, "MarkJiraReleasedLambdaName", {
+      description: "Name of the mark jira released lambda",
+      value: functions.markJiraReleasedFunction.function.functionName,
+      exportName: `${props.stackName}:MarkJiraReleasedLambdaName`
+    })
+    new CfnOutput(this, "MarkJiraReleasedLambdaArn", {
+      description: "ARN of the mark jira released lambda",
+      value: functions.markJiraReleasedFunction.function.functionArn,
+      exportName: `${props.stackName}:MarkJiraReleasedLambdaArn`
+    })
+    new CfnOutput(this, "ReleaseCutLambdaName", {
+      description: "Name of the release cut lambda",
+      value: functions.releaseCutFunction.function.functionName,
+      exportName: `${props.stackName}:ReleaseCutLambdaName`
+    })
+    new CfnOutput(this, "ReleaseCutLambdaArn", {
+      description: "ARN of the release cut lambda",
+      value: functions.releaseCutFunction.function.functionArn,
+      exportName: `${props.stackName}:ReleaseCutLambdaArn`
+    })
     nagSuppressions(this)
   }
 }
