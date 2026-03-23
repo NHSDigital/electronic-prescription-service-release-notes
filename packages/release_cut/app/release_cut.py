@@ -68,6 +68,7 @@ def add_fix_version_to_jira(
 ) -> list[str]:
     for ticket in tickets:
         try:
+            ticket = ticket.strip("[]")  # Remove square brackets if present
             logger.info(f"Adding fix version {release_name} to ticket {ticket}")
             fields = {"fixVersions": [{"add": {"name": str(release_name)}}]}
             jira.edit_issue(
