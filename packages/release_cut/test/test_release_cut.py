@@ -11,14 +11,14 @@ class TestReleaseCut(unittest.TestCase):
     @patch("release_cut.Jira")
     def test_add_fix_version_to_jira(self, MockJira):
         mock_jira = MockJira()
-        tickets = ["AEA-1234", "AEA-5678"]
+        tickets = ["[AEA-1234]", "[AEA-5678]"]
         release_name = "v1.0.0"
 
         add_fix_version_to_jira(mock_jira, release_name, tickets)
 
         for ticket in tickets:
             mock_jira.edit_issue.assert_any_call(
-                issue_id_or_key=ticket,
+                issue_id_or_key=ticket.strip("[]"),
                 fields={"fixVersions": [{"add": {"name": release_name}}]},
             )
 
@@ -28,7 +28,7 @@ class TestReleaseCut(unittest.TestCase):
         event = {
             "releaseTag": "v1.0.0",
             "releasePrefix": "prefix",
-            "tickets": ["AEA-1234", "AEA-5678"],
+            "tickets": ["[AEA-1234]", "[AEA-5678]"],
         }
 
         process_event(event, mock_jira)
@@ -41,7 +41,7 @@ class TestReleaseCut(unittest.TestCase):
 
         for ticket in event["tickets"]:
             mock_jira.edit_issue.assert_any_call(
-                issue_id_or_key=ticket,
+                issue_id_or_key=ticket.strip("[]"),
                 fields={"fixVersions": [{"add": {"name": "prefix-v1.0.0"}}]},
             )
 
@@ -61,7 +61,7 @@ class TestReleaseCut(unittest.TestCase):
         event = {
             "releaseTag": "v1.0.0",
             "releasePrefix": "prefix",
-            "tickets": ["AEA-1234", "AEA-5678"],
+            "tickets": ["[AEA-1234]", "[AEA-5678]"],
         }
         context = MagicMock()
 

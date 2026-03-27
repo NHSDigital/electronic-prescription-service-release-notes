@@ -1,4 +1,10 @@
 vulnerabilities:
+  - id: CVE-2026-27459
+    statement: downstream dependency for pyopenssl
+    expired_at: 2026-06-01
+  - id: CVE-2026-33036
+    statement: downstream dependency for fast-xml-parser
+    expired_at: 2026-06-01
 licenses:
   - id: LGPL-2.1-only
     filepath: .venv/lib/python3.12/site-packages/pygithub-2.8.1.dist-info/METADATA
