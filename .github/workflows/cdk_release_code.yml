@@ -21,8 +21,8 @@ on:
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE:
         required: true
-      PAT_GITHUB_TOKEN:
-        required: true
+
+permissions: {}
 
 jobs:
   cdk_release_code:

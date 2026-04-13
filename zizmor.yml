@@ -1,0 +1,11 @@
+rules:
+  unpinned-images:
+    # these workflows use unpinned images because they are using a full image passed in that contains the tag
+    ignore:
+      - cdk_release_code.yml:33:7
+      - cdk_package_code.yml:16:7
+  secrets-outside-env:
+    # these are ignored because they are using known secrets
+    ignore:
+      - delete_old_cloudformation_stacks.yml:28:31
+      - cdk_release_code.yml:49:31
