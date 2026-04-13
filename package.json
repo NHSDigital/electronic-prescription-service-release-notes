@@ -29,6 +29,6 @@
     },
     "dependencies": {
         "cdk": "^0.1.0",
-        "esbuild": "^0.27.3"
+        "esbuild": "^0.28.0"
     }
 }
