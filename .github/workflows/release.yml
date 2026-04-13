@@ -77,4 +77,3 @@ jobs:
       pinned_image: ${{ needs.get_config_values.outputs.pinned_image }}
     secrets:
       CLOUD_FORMATION_DEPLOY_ROLE: ${{ secrets.DEV_CLOUD_FORMATION_DEPLOY_ROLE }}
-      PAT_GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
