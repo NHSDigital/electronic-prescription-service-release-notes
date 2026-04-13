@@ -29,3 +29,4 @@ cfn_guard_output/
 .trivy_out/
 cdk.out/
 .npmrc
+.sbom/

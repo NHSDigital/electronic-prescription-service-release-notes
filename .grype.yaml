@@ -1,0 +1,9 @@
+ignore:
+  # poetry 2.3.2
+  - vulnerability: GHSA-2599-h6xx-hpxp
+  # jaraco
+  - vulnerability: GHSA-58pv-8j8x-9vj2
+  # gostdlib
+  - vulnerability: CVE-2026-32280
+  # python wheel
+  - vulnerability: GHSA-8rrh-rw8j-w5fx

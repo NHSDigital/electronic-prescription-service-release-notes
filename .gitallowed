@@ -6,3 +6,5 @@
 .*CONFLUENCE_TOKEN.*
 .*id-token: write.*
 token="mocked_token"
+token: \$\{\{secrets\.DEPENDABOT_TOKEN\}\}
+.gitallowed

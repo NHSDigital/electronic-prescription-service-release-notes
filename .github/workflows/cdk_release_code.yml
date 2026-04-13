@@ -24,6 +24,8 @@ on:
       PAT_GITHUB_TOKEN:
         required: true
 
+permissions: {}
+
 jobs:
   cdk_release_code:
     runs-on: ubuntu-22.04
