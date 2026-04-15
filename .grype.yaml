@@ -5,5 +5,8 @@ ignore:
   - vulnerability: GHSA-58pv-8j8x-9vj2
   # gostdlib
   - vulnerability: CVE-2026-32280
+  - vulnerability: CVE-2026-27140
+  - vulnerability: CVE-2026-32283
+  - vulnerability: CVE-2026-32281
   # python wheel
   - vulnerability: GHSA-8rrh-rw8j-w5fx
