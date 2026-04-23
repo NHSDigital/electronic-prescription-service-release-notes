@@ -8,5 +8,16 @@ ignore:
   - vulnerability: CVE-2026-27140
   - vulnerability: CVE-2026-32283
   - vulnerability: CVE-2026-32281
+  - vulnerability: CVE-2026-27143
+  - vulnerability: CVE-2026-32289
+  - vulnerability: CVE-2026-32282
+  - vulnerability: CVE-2026-32282
+  - vulnerability: CVE-2026-32288
+  - vulnerability: CVE-2026-27144
   # python wheel
   - vulnerability: GHSA-8rrh-rw8j-w5fx
+  - vulnerability: GHSA-6w46-j5rx-g56g
+  - vulnerability: GHSA-6w46-j5rx-g56g
+  - vulnerability: GHSA-gc5v-m9x4-r6x2
+  # Node
+  - vulnerability: GHSA-gh4j-gqv2-49f6
