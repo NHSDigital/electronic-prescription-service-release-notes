@@ -1,4 +1,5 @@
-from github import Tag, Comparison, Requester
+from unittest.mock import MagicMock
+from github import Comparison, Requester
 
 
 def mocked_jira_get_issue(*args, **kwargs):
@@ -69,12 +70,15 @@ def mocked_jira_get_issue(*args, **kwargs):
 
 
 def mocked_get_tags(*args, **kwargs):
-    requestor = Requester.Requester(
-        "foo", "https://a.com", "a", "a", "a", "a", "a", "a"
-    )
-    tag_1 = Tag.Tag(requestor, None, {"name": "tag_1", "commit": {"sha": "sha_1"}})
-    tag_2 = Tag.Tag(requestor, None, {"name": "tag_2", "commit": {"sha": "sha_2"}})
-    tag_3 = Tag.Tag(requestor, None, {"name": "tag_3", "commit": {"sha": "sha_3"}})
+    def mock_tag(name, sha):
+        tag = MagicMock()
+        tag.name = name
+        tag.commit.sha = sha
+        return tag
+
+    tag_1 = mock_tag("tag_1", "sha_1")
+    tag_2 = mock_tag("tag_2", "sha_2")
+    tag_3 = mock_tag("tag_3", "sha_3")
     tags = [tag_1, tag_2, tag_3]
     return tags
 
